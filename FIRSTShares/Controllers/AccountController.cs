@@ -113,22 +113,27 @@ namespace FIRSTShares.Controllers
 
         private Time RetornarTime(string numero)
         {
-            var time = new Time();
-            var retornarTime = time.RetornarTimePorNumero(numero, Bd.Times.ToList());
-
-            if (retornarTime == null)
+            if (numero != null)
             {
-                var timeTheBlueAlliance = time.RetornarTimeTheBlueAlliance(numero);
+                var time = new Time();
+                var retornarTime = time.RetornarTimePorNumero(numero, Bd.Times.ToList());
 
-                time.Nome = timeTheBlueAlliance.Nome;
-                time.Numero = numero;
-                time.Pais = timeTheBlueAlliance.Pais;
-                time.CodPais = time.RetornarCodPais(time.Pais);
+                if (retornarTime == null)
+                {
+                    var timeTheBlueAlliance = time.RetornarTimeTheBlueAlliance(numero);
 
-                return time;
+                    time.Nome = timeTheBlueAlliance.Nome;
+                    time.Numero = numero;
+                    time.Pais = timeTheBlueAlliance.Pais;
+                    time.CodPais = time.RetornarCodPais(time.Pais);
+
+                    return time;
+                }
+
+                return retornarTime;
             }
 
-            return retornarTime;
+            return null;
         }
 
         private void SalvarFoto(IFormFile foto, string email)
