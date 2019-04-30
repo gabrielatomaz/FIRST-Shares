@@ -1,0 +1,87 @@
+﻿@{
+    ViewData["Title"] = "Mapa";
+    Layout = "_Layout";
+    var size = 5;
+}
+@model FIRSTShares.Entities.Time;
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <h1 class="text-center"><i class="fas fa-map-marked-alt" style="color:#2E698C"></i> Times da América Sul</h1>
+            <br />
+            <div class="map" style="width: 600px; height: 400px"></div>
+            <script>
+
+                $(function () {
+                    $.getJSON('/Map/RetonarTimesJson', function (data) {
+                        $('.map').vectorMap({
+                            map: 'south_america_mill',
+                            scaleColors: ['#C8EEFF', '071A4'],
+                            normalizeFunction: 'polynomial',
+                            hoverOpacity: 0.7,
+                            hoverColor: false,
+                            regionStyle: {
+                                initial: {
+                                    fill: '#316B5A',
+                                    "fill-opacity": 1,
+                                    stroke: 'none',
+                                    "stroke-width": 0,
+                                    "stroke-opacity": 1
+                                }
+                            },
+                            onRegionTipShow: function (event, label, code) {
+                                label.html(
+                                    '<b>' + label.html() + '</b></br>' +
+                                    data.countries[code]
+                                );
+                            },
+                            backgroundColor: 'white'
+                        });
+                    });
+                });
+            </script>
+        </div>
+        <div class="col-sm">
+            @if (ViewBag.Mensagem != null)
+            {
+                size = 3;
+                var tipoAlert = "danger";
+                @if (ViewBag.Mensagem.Contains("sucesso"))
+                {
+                    tipoAlert = "success";
+                }
+
+                <div class="alert alert-@tipoAlert alert-dismissible fade show mt-lg-5" role="alert">
+                    @ViewBag.Mensagem
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            }
+            else
+            {
+                <br />
+            }
+            <div class="card w-100 mt-lg-@size">
+                <div class="card-header text-center">
+                    Registre seu time!
+                </div>
+                <div class="card-body">
+                    <form action="/Map/CadastrarTime" method="POST">
+                        <div class="form-group">
+                            <label>Número</label>
+                            <input type="text" name="numero" class="form-control" placeholder="Ex.: 1772">
+                        </div>
+                        <div class="form-check">
+                        </div>
+                        <input type="submit" value="Registrar" class="btn btn-block btn-primary" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
