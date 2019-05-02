@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace FIRSTShares.Models
 {
-    public class PaisModel
+    public class PostagemModel
     {
-        public string Codigo { get; set; }
-        public List<string> Infos { get; set; } = new List<string>();
+        public string Conteudo { get; set; }
     }
 }

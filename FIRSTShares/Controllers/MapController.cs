@@ -81,35 +81,32 @@ namespace FIRSTShares.Controllers
         {
             var paises = new List<string>();
 
-            foreach (var time in times)
-            {
-                if (!paises.Contains(time.CodPais))
+            times.ForEach(time => {
+                if (!paises.Contains(time.CodPais)) {
                     paises.Add(time.CodPais);
-            }
+                }
+            });
 
             return paises;
         }
 
         private Dictionary<string, List<string>> RetornarPaisTimes(List<Time> times)
         {
-            var paisesModel = new List<PaisModel>();
+            var paisesModel = new List<TimeModel>();
             var dictionaryPais = new Dictionary<string, List<string>>();
 
-            foreach (var pais in RetornarListaPaisesDeTimes(times))
-            {
-                var paisModel = new PaisModel();
-                foreach (var time in times)
-                {
-                    if (time.CodPais == pais)
-                    {
-                        paisModel.Codigo = time.CodPais;
+            RetornarListaPaisesDeTimes(times).ForEach(pais => {
+                var paisModel = new TimeModel();
+                times.ForEach(time => {
+                    if (time.CodPais == pais) {
+                        paisModel.CodigoPais = time.CodPais;
                         paisModel.Infos.Add(time.Nome + " - " + time.Numero);
                     }
 
-                    if (paisModel.Codigo != null && !dictionaryPais.Keys.Any(key => key.Equals(pais)))
-                        dictionaryPais.Add(paisModel.Codigo, paisModel.Infos);
-                }
-            }
+                    if (paisModel.CodigoPais != null && !dictionaryPais.Keys.Any(key => key.Equals(pais)))
+                        dictionaryPais.Add(paisModel.CodigoPais, paisModel.Infos);
+                });
+            });
 
             return dictionaryPais;
         }

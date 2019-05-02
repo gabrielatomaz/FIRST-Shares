@@ -3,8 +3,10 @@ using System.IO;
 using System.Linq;
 using FIRSTShares.Data;
 using FIRSTShares.Entities;
+using FIRSTShares.Util;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace FIRSTShares.Controllers
 {
@@ -48,7 +50,7 @@ namespace FIRSTShares.Controllers
                 return View("Register");
             }
 
-            var usuarioDb = new Usuario()
+            var usuarioDb = new Usuario
             {
                 Nome = string.Format("{0} {1}", usuario.Nome, sobrenome),
                 Email = usuario.Email,
@@ -56,10 +58,10 @@ namespace FIRSTShares.Controllers
                 Time = RetornarTime(numero),
                 CargoTime = usuario.CargoTime,
                 DataCriacao = DateTime.Now,
-                Cargo = Bd.Cargos.ToList().Find(cargo => cargo.Tipo == CargoTipo.Usuario)
+                Cargo = Bd.Cargos.Include(p => p.Permissoes).ToList().Find(cargo => cargo.Tipo == CargoTipo.Usuario)
             };
 
-            SalvarUsuario(usuario);
+            SalvarUsuario(usuarioDb);
 
             SalvarFoto(foto, usuario.Email);
 
@@ -87,6 +89,8 @@ namespace FIRSTShares.Controllers
 
                 return RedirectToAction("Index", "Home");
             }
+
+            ViewBag.Mensagem = "Senha e/ou e-mail incorretos!";
 
             return View("Login");
         }

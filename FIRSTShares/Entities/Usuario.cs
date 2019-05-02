@@ -13,9 +13,9 @@ namespace FIRSTShares.Entities
         public string Senha { get; set; }
         public CargoTime CargoTime { get; set; }
         public DateTime DataCriacao { get; set; }
+        public bool Excluido { get; set; } = false;
         public Time Time { get; set; }
         public Cargo Cargo { get; set; }
-        public bool Excluido { get; set; } = false;
     }
 
     public enum CargoTime

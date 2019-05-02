@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FIRSTShares.Data
+namespace FIRSTShares.Util
 {
     public static class SessionExtensions
     {

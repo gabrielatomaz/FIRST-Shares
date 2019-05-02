@@ -1,6 +1,6 @@
 ﻿using CryptSharp;
 
-namespace FIRSTShares.Data
+namespace FIRSTShares.Util
 {
     public static class Criptografia
     {
