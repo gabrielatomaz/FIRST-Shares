@@ -4,14 +4,16 @@ using FIRSTShares.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FIRSTShares.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20190504001834_updatenovo4")]
+    partial class updatenovo4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -114,13 +116,11 @@ namespace FIRSTShares.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("CategoriaID");
-
                     b.Property<string>("Conteudo");
 
                     b.Property<DateTime>("DataCriacao");
 
-                    b.Property<int?>("DiscussaoID");
+                    b.Property<int>("DiscussaoID");
 
                     b.Property<bool>("Excluido");
 
@@ -132,9 +132,8 @@ namespace FIRSTShares.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("CategoriaID");
-
-                    b.HasIndex("DiscussaoID");
+                    b.HasIndex("DiscussaoID")
+                        .IsUnique();
 
                     b.HasIndex("PostagemPaiID");
 
@@ -182,8 +181,6 @@ namespace FIRSTShares.Migrations
 
                     b.Property<string>("Nome");
 
-                    b.Property<string>("NomeUsuario");
-
                     b.Property<string>("Senha");
 
                     b.Property<int?>("TimeID");
@@ -217,13 +214,10 @@ namespace FIRSTShares.Migrations
 
             modelBuilder.Entity("FIRSTShares.Entities.Postagem", b =>
                 {
-                    b.HasOne("FIRSTShares.Entities.Categoria", "Categoria")
-                        .WithMany()
-                        .HasForeignKey("CategoriaID");
-
                     b.HasOne("FIRSTShares.Entities.Discussao", "Discussao")
-                        .WithMany("Postagens")
-                        .HasForeignKey("DiscussaoID");
+                        .WithOne("Postagem")
+                        .HasForeignKey("FIRSTShares.Entities.Postagem", "DiscussaoID")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("FIRSTShares.Entities.Postagem", "PostagemPai")
                         .WithMany("Postagens")

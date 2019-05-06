@@ -21,31 +21,44 @@ namespace FIRSTShares.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Cargo>()
-                .HasMany(p => p.Permissoes);
+            modelBuilder.Entity<Permissao>()
+                .HasOne(c => c.Cargo)
+                .WithMany(p => p.Permissoes);
 
             modelBuilder.Entity<Usuario>()
-                .HasOne( t => t.Time);
+                .HasOne( t => t.Time)
+                .WithMany(u => u.Usuarios);
 
             modelBuilder.Entity<Usuario>()
-                .HasOne(c => c.Cargo);
+                .HasOne(c => c.Cargo)
+                .WithMany(u => u.Usuarios);
 
             modelBuilder.Entity<Curtida>()
-                .HasOne(p => p.Postagem);
+                .HasOne(u => u.Usuario)
+                .WithMany(c => c.Curtidas);
+
             modelBuilder.Entity<Curtida>()
-                .HasOne(u => u.Usuario);
+                .HasOne(p => p.Postagem)
+                .WithMany(c => c.Curtidas);
 
             modelBuilder.Entity<Postagem>()
-                .HasOne(d => d.Discussao);
+                .HasOne(d => d.Discussao)
+                .WithMany(p => p.Postagens);
+
             modelBuilder.Entity<Postagem>()
-                .HasOne(u => u.Usuario);
+                .HasOne(u => u.Usuario)
+                .WithMany(p => p.Postagens);
+
             modelBuilder.Entity<Postagem>()
                 .HasMany(p => p.Postagens);
-            modelBuilder.Entity<Postagem>()
-                .HasMany(c => c.Curtidas);
+
             modelBuilder.Entity<Postagem>()
                 .HasOne(p => p.PostagemPai);
-             
+
+            modelBuilder.Entity<Postagem>()
+                .HasOne(d => d.Discussao)
+                .WithMany(p => p.Postagens);
+
         }
     }
 }

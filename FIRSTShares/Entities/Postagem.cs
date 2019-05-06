@@ -14,6 +14,7 @@ namespace FIRSTShares.Entities
         public bool PostagemOficial { get; set; }
         public DateTime DataCriacao { get; set; }
         public List<Curtida> Curtidas { get; set; }
+        public Categoria Categoria { get; set; }
         public bool Excluido { get; set; }
     }
 }

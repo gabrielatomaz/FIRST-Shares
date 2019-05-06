@@ -2576,11 +2576,12 @@ textarea.form-control {
 .btn:hover {
     color: #212529;
     text-decoration: none;
+    border: 1px #e0e0eb solid;
 }
 
 .btn:focus, .btn.focus {
     outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    box-shadow: 0 0 0 0.2rem #f0f5f5;
 }
 
 .btn.disabled, .btn:disabled {
@@ -2707,7 +2708,8 @@ fieldset:disabled a.btn {
         border-color: #316B5A;
     }
 
-    .btn-info:focus, .btn-info.focus {
+    .
+    -info:focus, .btn-info.focus {
         box-shadow: 0 0 0 0.2rem #316B5A;
     }
 

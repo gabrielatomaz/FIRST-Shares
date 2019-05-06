@@ -7,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Threading.Tasks;
 
 namespace FIRSTShares
 {
@@ -34,6 +36,18 @@ namespace FIRSTShares
 
             services.AddSession();
 
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            })
+            .AddCookie(options =>
+            {
+                options.LoginPath = "/account/acessarconta";
+                options.LogoutPath = "/account/sair";
+            });
+
             var connection = "Data Source=(localdb)\\ProjectsV13;Initial Catalog=Db_FirstShares;Integrated Security=True";
             services.AddDbContext<DatabaseContext>
                 (options => options.UseSqlServer(connection));
@@ -53,9 +67,16 @@ namespace FIRSTShares
                 app.UseHsts();
             }
 
+            var cookiePolicyOptions = new CookiePolicyOptions
+            {
+                MinimumSameSitePolicy = SameSiteMode.Strict,
+            };
+
+            app.UseCookiePolicy(cookiePolicyOptions);
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+            app.UseAuthentication();
             app.UseSession();
 
             app.UseMvc(routes =>

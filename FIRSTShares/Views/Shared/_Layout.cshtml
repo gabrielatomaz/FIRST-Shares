@@ -17,6 +17,7 @@
     </environment>
     <link rel="stylesheet" href="~/css/site.css" />
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <link href="~/lib/fontawesome/css/all.css" rel="stylesheet" />
 </head>
 <body>
     <header>
@@ -35,14 +36,35 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Map" asp-action="Index">Mapa</a>
                         </li>
                     </ul>
-                    <ul class="navbar-nav ml-0">
-                        <li class="nav-item">
-                            <a asp-area="" asp-controller="Account" asp-action="Login" class="btn btn-outline-primary">Entrar</a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-area="" asp-controller="Account" asp-action="Register" class="btn btn-outline-primary">Cadastre-se</a>
-                        </li>
-                    </ul>
+
+                    @if (!User.Identity.IsAuthenticated)
+                    {
+                        <ul class="navbar-nav ml-0">
+                            <li class="nav-item">
+                                <a asp-area="" asp-controller="Account" asp-action="Login" class="btn btn-outline-primary">Entrar</a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-area="" asp-controller="Account" asp-action="Register" class="btn btn-outline-primary">Cadastre-se</a>
+                            </li>
+                        </ul>
+                    }
+                    else
+                    {
+                        {
+                            var user = (System.Security.Claims.ClaimsIdentity)User.Identity;
+                            var photo = user.Claims.ToList().Find(t => t.Type == "Foto");
+
+                            <div class="dropdown">
+                                <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <img width="35" style="        border-radius: 5px;" src="~/img/usuarios/@photo.Value" />
+                                </button>
+                                <div class="dropdown-menu" style="min-width:50px;" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i> Perfil</a>
+                                    <a asp-area="" asp-controller="Account" asp-action="Logout" class="dropdown-item"><i class="fas fa-sign-out-alt mr-2"></i> Sair</a>
+                                </div>
+                            </div>
+                        }
+                    }
                 </div>
             </div>
         </nav>
@@ -83,7 +105,7 @@
     <link rel="stylesheet" href="~/lib/jvectormap/jquery-jvectormap-2.0.3.css" type="text/css" media="screen" />
     <script src="~/lib/jvectormap/jquery-jvectormap-2.0.3.min.js"></script>
     <script src="~/lib/jvectormap/jquery-jvectormap-south_america-mill.js"></script>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <script defer src="~/lib/fontawesome/js/all.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

@@ -13,6 +13,7 @@ namespace FIRSTShares.Entities
         public string Pais { get; set; }
         public string CodPais { get; set; }
         public bool Excluido { get; set; }
+        public List<Usuario> Usuarios { get; set; }
 
         public TimeTheBlueAlliance RetornarTimeTheBlueAlliance(string numero)
         {

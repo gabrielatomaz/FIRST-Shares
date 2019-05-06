@@ -1,12 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Claims;
+using System.Threading;
+using System.Threading.Tasks;
 using FIRSTShares.Data;
 using FIRSTShares.Entities;
+using FIRSTShares.Models;
 using FIRSTShares.Util;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 namespace FIRSTShares.Controllers
 {
@@ -30,6 +37,13 @@ namespace FIRSTShares.Controllers
             return View();
         }
 
+        public async Task<IActionResult> Logout()
+        { 
+            await HttpContext.SignOutAsync();
+
+            return RedirectToAction("Index", "Home");
+        }
+
         [HttpPost]
         public IActionResult CadastrarUsuario(Usuario usuario, string confirmaSenha,
             string numero, string sobrenome, IFormFile foto)
@@ -43,9 +57,9 @@ namespace FIRSTShares.Controllers
                 return View("Register");
             }
 
-            if (ChecarSeEmailEstaCadastrado(usuario.Email))
+            if (ChecarSeEmailOuUsuarioEstaCadastrado(usuario))
             {
-                ViewBag.Mensagem = "Este e-mail já está cadastrado.";
+                ViewBag.Mensagem = "Este e-mail ou usuário já está cadastrado.";
 
                 return View("Register");
             }
@@ -58,12 +72,13 @@ namespace FIRSTShares.Controllers
                 Time = RetornarTime(numero),
                 CargoTime = usuario.CargoTime,
                 DataCriacao = DateTime.Now,
-                Cargo = Bd.Cargos.Include(p => p.Permissoes).ToList().Find(cargo => cargo.Tipo == CargoTipo.Usuario)
+                Cargo = Bd.Cargos.Include(p => p.Permissoes).ToList().Find(cargo => cargo.Tipo == CargoTipo.Usuario),
+                NomeUsuario = usuario.NomeUsuario
             };
 
             SalvarUsuario(usuarioDb);
 
-            SalvarFoto(foto, usuario.Email);
+            SalvarFoto(foto, usuario.NomeUsuario);
 
             ViewBag.Mensagem = "Usuáro cadastrado com sucesso!";
 
@@ -72,20 +87,27 @@ namespace FIRSTShares.Controllers
 
 
         [HttpPost]
-        public IActionResult AcessarConta(string email, string senha)
+        public async Task<IActionResult> AcessarConta(UsuarioViewModel usuarioModel)
         {
-            var usuario = RetornarUsuarioPorEmail(email);
+            var usuario = RetornarUsuarioPorEmailOuUsuario(usuarioModel.UsuarioEmail);
 
-            if (usuario == null)
+            if (LoginUsuario(usuario, usuarioModel.Senha))
             {
-                ViewBag.Mensagem = "Não há nenhum usuário cadastrado com esse e-mail.";
+                var nomeUsuario = usuario.NomeUsuario;
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, usuario.Nome),
+                    new Claim(ClaimTypes.Email, usuario.Email),
+                    new Claim("NomeUsuario", nomeUsuario),
+                    new Claim("Foto", RetornarFoto(nomeUsuario))
+                };
 
-                return View("Login");
-            }
+                var userIdentity = new ClaimsIdentity(claims, "login");
+                var principal = new ClaimsPrincipal(userIdentity);
 
-            if (Criptografia.Compara(usuario.Senha, senha))
-            {
-                HttpContext.Session.SetObject("Usuario", usuario);
+                Thread.CurrentPrincipal = principal;
+
+                await HttpContext.SignInAsync(principal);
 
                 return RedirectToAction("Index", "Home");
             }
@@ -95,15 +117,19 @@ namespace FIRSTShares.Controllers
             return View("Login");
         }
 
-
-        private bool ChecarSeEmailEstaCadastrado(string email)
-        {
-            return Bd.Usuarios.ToList().Any(usuario => usuario.Email == email) ? true : false;
+        public bool LoginUsuario(Usuario usuario, string senha)
+        { 
+            return ((usuario == null) || (!Criptografia.Compara(usuario.Senha, senha))) ? false : true;
         }
 
-        private Usuario RetornarUsuarioPorEmail(string email)
+        private bool ChecarSeEmailOuUsuarioEstaCadastrado(Usuario usuario)
         {
-            return Bd.Usuarios.ToList().Find(usuario => usuario.Email == email);
+            return Bd.Usuarios.ToList().Any(u => u.Email == usuario.Email || u.NomeUsuario == usuario.NomeUsuario) ? true : false;
+        }
+
+        private Usuario RetornarUsuarioPorEmailOuUsuario(string emailUsuario)
+        {
+            return Bd.Usuarios.ToList().Find(usuario => (usuario.Email == emailUsuario) || (usuario.NomeUsuario == emailUsuario));
         }
 
         private string SalvarUsuario(Usuario usuario)
@@ -140,11 +166,28 @@ namespace FIRSTShares.Controllers
             return null;
         }
 
-        private void SalvarFoto(IFormFile foto, string email)
+        private string RetornarFoto(string nomeUsuario)
+        {
+            var folderName = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/usuarios");
+            var imgPadrao = "user.png";
+
+            foreach (var files in Directory.GetFiles(folderName))
+            {
+                var info = new FileInfo(files);
+                var fileName = Path.GetFileNameWithoutExtension(info.Name);
+
+                if (fileName == nomeUsuario)
+                    return Path.GetFileName(info.FullName);
+            }
+
+            return imgPadrao;
+        }
+
+        private void SalvarFoto(IFormFile foto, string nomeUsuario)
         {
             if (foto != null)
             {
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/usuarios", email + Path.GetExtension(foto.FileName));
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/usuarios", nomeUsuario + Path.GetExtension(foto.FileName));
 
                 if (foto.Length > 0)
                     using (var stream = new FileStream(filePath, FileMode.Create))

@@ -11,5 +11,6 @@ namespace FIRSTShares.Entities
         public string Assunto { get; set; }
         public DateTime DataCriacao { get; set; }
         public bool Excluido { get; set; }
+        public List<Postagem> Postagens { get; set; }
     }
 }

@@ -11,6 +11,7 @@ namespace FIRSTShares.Entities
         public CargoTipo Tipo { get; set; }
         public List<Permissao> Permissoes { get; set; }
         public bool Excluido { get; set; }
+        public List<Usuario> Usuarios { get; set; }
     }
 
     public enum CargoTipo

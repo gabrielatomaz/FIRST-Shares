@@ -20,55 +20,59 @@
                 </button>
             </div>
         }
-        <form action="/Account/CadastrarUsuario" enctype="multipart/form-data" class="form-row" method="POST">
-            <div class="form-group col-md-6">
-                <label>Nome</label>
-                <input type="text" name="nome" class="form-control" oninvalid="this.setCustomValidity('Por favor, preencha esse campo.')" placeholder="Ex.: Gabriela" required />
+    <form action="/Account/CadastrarUsuario" enctype="multipart/form-data" class="form-row" method="POST">
+        <div class="form-group col-md-6">
+            <label>Nome</label>
+            <input type="text" name="nome" class="form-control" oninvalid="this.setCustomValidity('Por favor, preencha esse campo.')" placeholder="Ex.: Gabriela" required />
+        </div>
+        <div class="form-group col-md-6">
+            <label>Sobrenome</label>
+            <input type="text" name="sobrenome" class="form-control" oninvalid="this.setCustomValidity('Por favor, preencha esse campo.')" placeholder="Ex.: Ribeiro" required />
+        </div>
+        <div class="form-group col-md-6">
+            <label>Usuário</label>
+            <input type="text" name="nomeusuario" class="form-control" oninvalid="this.setCustomValidity('Usuário inválido.')" min="5" max="40" placeholder="Nome de usuário" required />
+        </div>
+        <div class="form-group col-md-6">
+            <label>E-mail</label>
+            <input type="email" name="email" class="form-control" oninvalid="this.setCustomValidity('E-mail inválido.')" placeholder="email@email.com" required />
+        </div>
+        <div class="form-group col-md-6">
+            <label>Senha</label>
+            <input type="password" name="senha" class="form-control" min="5" max="50" oninvalid="this.setCustomValidity('Senha inválida! É necessário pelo menos 5 caracteres.')" placeholder="*******" required />
+        </div>
+        <div class="form-group col-md-6">
+            <label>Confirmar</label>
+            <input type="password" name="confirmaSenha" class="form-control" min="5" max="50" oninvalid="this.setCustomValidity('Senha inválida! É necessário pelo menos 5 caracteres.')" placeholder="*******" required />
+        </div>
+        <div class="form-group col-md-12">
+            <div class="custom-file">
+                <input type="file" name="foto" class="custom-file-input">
+                <label class="custom-file-label" for="customFileLangHTML" data-browse="Buscar arquivo">Escolha uma foto</label>
             </div>
-            <div class="form-group col-md-6">
-                <label>Sobrenome</label>
-                <input type="text" name="sobrenome" class="form-control" oninvalid="this.setCustomValidity('Por favor, preencha esse campo.')" placeholder="Ex.: Ribeiro" required />
-            </div>
-            <div class="form-group col-md-12">
-                <label>E-mail</label>
-                <input type="email" name="email" class="form-control" oninvalid="this.setCustomValidity('E-mail inválido.')" placeholder="email@email.com" required />
-            </div>
-            <div class="form-group col-md-6">
-                <label>Senha</label>
-                <input type="password" name="senha" class="form-control" min="5" max="50"  oninvalid="this.setCustomValidity('Senha inválida! É necessário pelo menos 5 caracteres.')" placeholder="*******" required />
-            </div>
-            <div class="form-group col-md-6">
-                <label>Confirmar</label>
-                <input type="password" name="confirmaSenha" class="form-control"  min="5" max="50" oninvalid="this.setCustomValidity('Senha inválida! É necessário pelo menos 5 caracteres.')" placeholder="*******" required />
-            </div>
-            <div class="form-group col-md-12">
-                <div class="custom-file">
-                    <input type="file" name="foto" class="custom-file-input">
-                    <label class="custom-file-label" for="customFileLangHTML" data-browse="Buscar arquivo">Escolha uma foto</label>
-                </div>
-            </div>
-            <div class="alert alert-secondary col-md-12 text-center" role="alert">
-                Informações sobre o seu time (opcional)
-            </div>
-            <div class="form-group col-md-6">
-                <label>Número do seu time</label>
-                <input type="number" name="numero" class="form-control" placeholder="Ex.: 1772">
-            </div>
-            <div class="form-group col-md-6">
-                <label for="exampleFormControlSelect1">Cargo</label>
-                <select name="cargoTime" class="form-control" id="exampleFormControlSelect1">
-                    <option value="Nenhum">Cargo</option>
-                    <option value="Coordenador">Coordenador</option>
-                    <option value="Mentor">Mentor</option>
-                    <option value="Aluno">Aluno</option>
-                    <option value="Voluntario">Voluntário</option>
-                </select>
-            </div>
+        </div>
+        <div class="alert alert-secondary col-md-12 text-center" role="alert">
+            Informações sobre o seu time (opcional)
+        </div>
+        <div class="form-group col-md-6">
+            <label>Número do seu time</label>
+            <input type="number" name="numero" class="form-control" placeholder="Ex.: 1772">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="exampleFormControlSelect1">Cargo</label>
+            <select name="cargoTime" class="form-control" id="exampleFormControlSelect1">
+                <option value="Nenhum">Cargo</option>
+                <option value="Coordenador">Coordenador</option>
+                <option value="Mentor">Mentor</option>
+                <option value="Aluno">Aluno</option>
+                <option value="Voluntario">Voluntário</option>
+            </select>
+        </div>
 
-            <div class="col-md-12">
-                <input type="submit" value="Cadastrar" class="btn btn-block btn-primary" />
-            </div>
-        </form>
+        <div class="col-md-12">
+            <input type="submit" value="Cadastrar" class="btn btn-block btn-primary" />
+        </div>
+    </form>
     </div>
 </div>
 

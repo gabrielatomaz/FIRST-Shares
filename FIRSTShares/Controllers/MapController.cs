@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Globalization;
 using FIRSTShares.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FIRSTShares.Controllers
 {
@@ -79,15 +80,9 @@ namespace FIRSTShares.Controllers
 
         private List<string> RetornarListaPaisesDeTimes(List<Time> times)
         {
-            var paises = new List<string>();
+            var paises = times.Select(time => time.CodPais).ToList();
 
-            times.ForEach(time => {
-                if (!paises.Contains(time.CodPais)) {
-                    paises.Add(time.CodPais);
-                }
-            });
-
-            return paises;
+            return paises.Distinct().ToList();
         }
 
         private Dictionary<string, List<string>> RetornarPaisTimes(List<Time> times)
