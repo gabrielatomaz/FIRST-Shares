@@ -9,9 +9,9 @@ namespace FIRSTShares.Entities
     {
         public int ID { get; set; }
         public CargoTipo Tipo { get; set; }
-        public List<Permissao> Permissoes { get; set; }
+        public virtual List<Permissao> Permissoes { get; set; }
         public bool Excluido { get; set; }
-        public List<Usuario> Usuarios { get; set; }
+        public virtual List<Usuario> Usuarios { get; set; }
     }
 
     public enum CargoTipo

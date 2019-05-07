@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FIRSTShares.Migrations
 {
     [DbContext(typeof(LazyContext))]
-    [Migration("20190504220751_updatecorrecao")]
-    partial class updatecorrecao
+    [Migration("20190506110805_addconteudohtml")]
+    partial class addconteudohtml
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -116,11 +116,15 @@ namespace FIRSTShares.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("CategoriaID");
+
                     b.Property<string>("Conteudo");
+
+                    b.Property<string>("ConteudoHtml");
 
                     b.Property<DateTime>("DataCriacao");
 
-                    b.Property<int>("DiscussaoID");
+                    b.Property<int?>("DiscussaoID");
 
                     b.Property<bool>("Excluido");
 
@@ -131,6 +135,8 @@ namespace FIRSTShares.Migrations
                     b.Property<int?>("UsuarioID");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("CategoriaID");
 
                     b.HasIndex("DiscussaoID");
 
@@ -215,10 +221,13 @@ namespace FIRSTShares.Migrations
 
             modelBuilder.Entity("FIRSTShares.Entities.Postagem", b =>
                 {
+                    b.HasOne("FIRSTShares.Entities.Categoria", "Categoria")
+                        .WithMany()
+                        .HasForeignKey("CategoriaID");
+
                     b.HasOne("FIRSTShares.Entities.Discussao", "Discussao")
                         .WithMany("Postagens")
-                        .HasForeignKey("DiscussaoID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("DiscussaoID");
 
                     b.HasOne("FIRSTShares.Entities.Postagem", "PostagemPai")
                         .WithMany("Postagens")

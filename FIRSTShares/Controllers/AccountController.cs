@@ -20,11 +20,11 @@ namespace FIRSTShares.Controllers
     public class AccountController : Controller
     {
 
-        private readonly DatabaseContext Bd;
+        private readonly LazyContext BD;
 
-        public AccountController(DatabaseContext bd)
+        public AccountController(LazyContext bd)
         {
-            Bd = bd;
+            BD = bd;
         }
 
         public IActionResult Register()
@@ -72,7 +72,7 @@ namespace FIRSTShares.Controllers
                 Time = RetornarTime(numero),
                 CargoTime = usuario.CargoTime,
                 DataCriacao = DateTime.Now,
-                Cargo = Bd.Cargos.Include(p => p.Permissoes).ToList().Find(cargo => cargo.Tipo == CargoTipo.Usuario),
+                Cargo = BD.Cargos.ToList().Find(cargo => cargo.Tipo == CargoTipo.Usuario),
                 NomeUsuario = usuario.NomeUsuario
             };
 
@@ -124,18 +124,20 @@ namespace FIRSTShares.Controllers
 
         private bool ChecarSeEmailOuUsuarioEstaCadastrado(Usuario usuario)
         {
-            return Bd.Usuarios.ToList().Any(u => u.Email == usuario.Email || u.NomeUsuario == usuario.NomeUsuario) ? true : false;
+            return BD.Usuarios.Where(u => u.Excluido == false)
+                .Any(u => u.Email == usuario.Email || u.NomeUsuario == usuario.NomeUsuario) ? true : false;
         }
 
         private Usuario RetornarUsuarioPorEmailOuUsuario(string emailUsuario)
         {
-            return Bd.Usuarios.ToList().Find(usuario => (usuario.Email == emailUsuario) || (usuario.NomeUsuario == emailUsuario));
+            return BD.Usuarios.Where(u => u.Excluido == false)
+                .Single(usuario => (usuario.Email == emailUsuario) || (usuario.NomeUsuario == emailUsuario));
         }
 
         private string SalvarUsuario(Usuario usuario)
         {
-            Bd.Usuarios.Add(usuario);
-            if (Bd.SaveChanges() > 0)
+            BD.Usuarios.Add(usuario);
+            if (BD.SaveChanges() > 0)
                 return ViewBag.Mensagem = "Usuário cadastrado com sucesso!";
 
             return ViewBag.Mensagem = "Falha ao cadastrar usuário.";
@@ -146,7 +148,7 @@ namespace FIRSTShares.Controllers
             if (numero != null)
             {
                 var time = new Time();
-                var retornarTime = time.RetornarTimePorNumero(numero, Bd.Times.ToList());
+                var retornarTime = time.RetornarTimePorNumero(numero, BD.Times.ToList());
 
                 if (retornarTime == null)
                 {

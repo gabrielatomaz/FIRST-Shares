@@ -1,25 +1,13 @@
 ﻿@{
     ViewData["Title"] = "Início";
 }
-@model Tuple<List<FIRSTShares.Entities.Categoria>, List<FIRSTShares.Entities.Postagem>>
+@model Tuple<List<FIRSTShares.Entities.Categoria>, PagingList<FIRSTShares.Entities.Postagem>>
+@using ReflectionIT.Mvc.Paging
 <partial name="~/Views/Home/_PartialAddPost.cshtml" />
 
 <div class="row">
     <div class="col-8">
-        @foreach (var postagem in Model.Item2.ToList()) { 
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title"><span class="badge badge-info p-2">@postagem.Categoria.Nome</span> @postagem.Discussao.Assunto</h5>
-                    <p class="card-text">@Html.Raw(postagem.Conteudo)</p>
-                    <a href="#" class="btn btn-info float-right" data-toggle="tooltip" data-placement="top" title="Ler mais"><i class="fab fa-readme"></i></a>
-                    <a href="#" class="btn btn-primary float-right" data-toggle="tooltip" data-placement="top" title="Comentar"><i class="fas fa-comments"></i></a>
-                </div>
-                <div class="card-footer text-muted">
-                    <span class="float-left">@postagem.Usuario.NomeUsuario</span>
-                    <span class="float-right">@postagem.DataCriacao</span>
-                </div>
-            </div>
-        }
+        <partial name="~/Views/Home/_PartialPost.cshtml" />
     </div>
     <div class="col-4">
         <div class="card bg-light mb-3 d-md-none d-lg-block d-none d-sm-block d-sm-none d-md-block" style="max-width: 22rem;">
@@ -114,25 +102,7 @@
 </div>
 <div class="row">
     <div class="col-8">
-        <nav>
-            <ul class="pagination justify-content-center">
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                </li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                        <span class="sr-only">Next</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+        <partial name="~/Views/Home/_PartialPagination.cshtml" />
     </div>
 </div>
 

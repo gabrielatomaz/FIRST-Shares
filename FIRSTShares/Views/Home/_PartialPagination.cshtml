@@ -1,0 +1,62 @@
+﻿@model Tuple<List<FIRSTShares.Entities.Categoria>, PagingList<FIRSTShares.Entities.Postagem>>
+@using ReflectionIT.Mvc.Paging
+@addTagHelper *, ReflectionIT.Mvc.Paging
+<nav>
+
+
+
+    @{
+        var start = this.Model.Item2.StartPageIndex;
+        var stop = this.Model.Item2.StopPageIndex;
+    }
+
+    @if (this.Model.Item2.PageCount > 1)
+    {
+        <ul class="pagination pagination-sm justify-content-end">
+
+            @if (start > 1)
+            {
+                <li class="page-item">
+                    <a href="@Url.Action(Model.Item2.Action, Model.Item2.GetRouteValueForPage(1))" aria-label="First" class="page-link">
+                        <span aria-hidden="true">1</span>
+                    </a>
+                </li>
+            }
+
+            @if (this.Model.Item2.PageIndex > 1)
+            {
+                <li class="page-item">
+                    <a href="@Url.Action(Model.Item2.Action, Model.Item2.GetRouteValueForPage(this.Model.Item2.PageIndex - 1))" aria-label="Previous" class="page-link">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+            }
+
+            @for (int i = start; i <= stop; i++)
+            {
+                <li class="page-item @((Model.Item2.PageIndex == i) ? "active" : null)">
+                    @Html.ActionLink(i.ToString(), Model.Item2.Action, Model.Item2.GetRouteValueForPage(i), new { @class = "page-link" })
+                </li>
+            }
+
+            @if (this.Model.Item2.PageIndex < this.Model.Item2.PageCount)
+            {
+                <li class="page-item">
+                    <a href="@Url.Action(Model.Item2.Action, Model.Item2.GetRouteValueForPage(this.Model.Item2.PageIndex + 1))" aria-label="Next" class="page-link">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            }
+
+            @if (stop < this.Model.Item2.PageCount)
+            {
+                <li class="page-item">
+                    <a href="@Url.Action(Model.Item2.Action, Model.Item2.GetRouteValueForPage(this.Model.Item2.PageCount))" aria-label="Last" class="page-link">
+                        <span aria-hidden="true">@this.Model.Item2.PageCount</span>
+                    </a>
+                </li>
+            }
+
+        </ul>
+    }
+</nav>

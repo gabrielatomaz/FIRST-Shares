@@ -10,6 +10,6 @@ namespace FIRSTShares.Entities
         public int ID { get; set; }
         public string Nome { get; set; }
         public bool Excluido { get; set; }
-        public Cargo Cargo { get; set; }
+        public virtual Cargo Cargo { get; set; }
     }
 }

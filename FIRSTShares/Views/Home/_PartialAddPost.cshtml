@@ -1,4 +1,5 @@
-﻿@model Tuple<List<FIRSTShares.Entities.Categoria>, List<FIRSTShares.Entities.Postagem>>
+﻿@model Tuple<List<FIRSTShares.Entities.Categoria>, PagingList<FIRSTShares.Entities.Postagem>>
+@using ReflectionIT.Mvc.Paging
 @if (User.Identity.IsAuthenticated)
 {
 
@@ -18,12 +19,11 @@
                 <div class="modal-header">
                     <div class="row">
                         <div class="col-6">
-                            <input type="text" class="form-control" id="assunto"
+                            <input type="text" class="form-control" maxlength="50" id="assunto"
                                    placeholder="Adicione um título" />
                         </div>
                         <div class="col-6">
                             <select class="form-control" id="categoria">
-                                <option>Categoria</option>
                                 @foreach (var categoria in Model.Item1.ToList())
                                 {
                                     <option value="@categoria.ID">@categoria.Nome</option>
@@ -83,14 +83,15 @@ $(function () {
     $("#publicar").on("click", function () {
         var assunto = $("#assunto");
         if (assunto.val() != "") {
-            var conteudo = quill.root.innerHTML;
+            var conteudoHtml = quill.root.innerHTML;
+            var conteudo = quill.getText();
             var categoria = $("#categoria").val();
-            var conteudo = { "conteudo": conteudo, "categoria": categoria, "assunto": assunto.val() };
+            var post = { "conteudoHtml": conteudoHtml, "categoria": categoria, "assunto": assunto.val(), "conteudo": conteudo };
             $.ajax({
                 type: "POST",
                 traditional: true,
                 url: "@Url.Action("AdicionarPostagem", "Home")",
-                data: JSON.stringify(conteudo),
+                data: JSON.stringify(post),
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 complete: function (data) {

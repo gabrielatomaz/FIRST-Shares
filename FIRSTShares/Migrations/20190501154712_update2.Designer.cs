@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FIRSTShares.Migrations
 {
-    [DbContext(typeof(DatabaseContext))]
+    [DbContext(typeof(LazyContext))]
     [Migration("20190501154712_update2")]
     partial class update2
     {

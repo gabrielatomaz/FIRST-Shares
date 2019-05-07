@@ -6,9 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using System.Threading.Tasks;
+using ReflectionIT.Mvc.Paging;
 
 namespace FIRSTShares
 {
@@ -31,6 +30,7 @@ namespace FIRSTShares
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddPaging();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddSessionStateTempDataProvider();
 
@@ -49,7 +49,7 @@ namespace FIRSTShares
             });
 
             var connection = "Data Source=(localdb)\\ProjectsV13;Initial Catalog=Db_FirstShares;Integrated Security=True";
-            services.AddDbContext<DatabaseContext>
+            services.AddDbContext<LazyContext>
                 (options => options.UseSqlServer(connection));
         }
 

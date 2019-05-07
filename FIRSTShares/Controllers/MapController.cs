@@ -13,7 +13,7 @@ namespace FIRSTShares.Controllers
 {
     public class MapController : Controller
     {
-        private readonly DatabaseContext Bd;
+        private readonly LazyContext BD;
 
         public IActionResult Index()
         {
@@ -21,9 +21,9 @@ namespace FIRSTShares.Controllers
         }
 
 
-        public MapController(DatabaseContext context)
+        public MapController(LazyContext context)
         {
-            Bd = context;
+            BD = context;
         }
 
         [HttpPost]
@@ -56,8 +56,8 @@ namespace FIRSTShares.Controllers
 
         private string SalvarTime(Time time)
         {
-            Bd.Times.Add(time);
-            if (Bd.SaveChanges() > 0)
+            BD.Times.Add(time);
+            if (BD.SaveChanges() > 0)
                 return ViewBag.Mensagem = "Time cadastrado com sucesso!";
 
             return ViewBag.Mensagem = "Falha ao cadastrar time.";
@@ -75,7 +75,7 @@ namespace FIRSTShares.Controllers
 
         private List<Time> RetornarTimes()
         {
-            return Bd.Times.ToList();
+            return BD.Times.ToList();
         }
 
         private List<string> RetornarListaPaisesDeTimes(List<Time> times)

@@ -8,8 +8,8 @@ namespace FIRSTShares.Entities
     public class Curtida
     {
         public int ID { get; set; }
-        public Usuario Usuario { get; set; }
-        public Postagem Postagem { get; set; }
+        public virtual Usuario Usuario { get; set; }
+        public virtual Postagem Postagem { get; set; }
         public bool Curtiu { get; set; }
         public bool Excluido { get; set; }
     }

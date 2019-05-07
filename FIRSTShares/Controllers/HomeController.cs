@@ -11,33 +11,32 @@ using FIRSTShares.Util;
 using System.Security.Claims;
 using System.Threading;
 using Microsoft.EntityFrameworkCore;
+using ReflectionIT.Mvc.Paging;
 
 namespace FIRSTShares.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly DatabaseContext Bd;
+        private readonly LazyContext BD;
+        private Usuario Usuario;
         public Categoria Categoria { get; set; }
-        public Usuario Usuario { get; set; }
 
-        public HomeController(DatabaseContext bd)
+        public HomeController(LazyContext bd)
         {
-            Bd = bd;
+            BD = bd;
 
-            Categoria = new Categoria(Bd);
+            Categoria = new Categoria(BD);
 
-            Usuario = new Usuario(Bd);
+            Usuario = new Usuario(BD);
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
-            var categorias = Bd.Categorias.Where(c => c.Excluido == false).ToList();
-            var postagens = Bd.Postagens.Include(p => p.Usuario)
-                .Include(p => p.Discussao)
-                .Include(p => p.Categoria)
-                .Where(p => p.Excluido == false).OrderByDescending(p => p.DataCriacao).ToList();
+            var categorias = BD.Categorias.Where(c => c.Excluido == false).ToList();
+            var postagens = BD.Postagens.Where(p => p.Excluido == false).OrderByDescending(p => p.DataCriacao);
+            var modelPostagens = await PagingList.CreateAsync(postagens, 5, page);
 
-            var modelTupleCategoriasPostagens = new Tuple<List<Categoria>, List<Postagem>>(categorias, postagens);
+            var modelTupleCategoriasPostagens = new Tuple<List<Categoria>, PagingList<Postagem>>(categorias, modelPostagens);
 
             return View(modelTupleCategoriasPostagens);
         }
@@ -60,6 +59,7 @@ namespace FIRSTShares.Controllers
             var postagem = new Postagem
             {
                 Discussao = AdicionarDiscussao(conteudo.Assunto, dataAtual),
+                ConteudoHtml = conteudo.ConteudoHtml,
                 Conteudo = conteudo.Conteudo,
                 DataCriacao = dataAtual,
                 Usuario = usuario,
@@ -69,15 +69,15 @@ namespace FIRSTShares.Controllers
             SalvarPostagem(postagem);
         }
 
-        public string SalvarPostagem(Postagem postagem)
+        private string SalvarPostagem(Postagem postagem)
         {
-            Bd.Postagens.Add(postagem);
+            BD.Postagens.Add(postagem);
 
-             return Bd.SaveChanges() > 0 ?
-                "Sucesso ao adicionar post" : ViewBag.Mensagem = "Falha ao adicionar post";
+            return BD.SaveChanges() > 0 ?
+               "Sucesso ao adicionar post" : ViewBag.Mensagem = "Falha ao adicionar post";
         }
 
-        public Discussao AdicionarDiscussao(string assunto, DateTime dataAtual)
+        private Discussao AdicionarDiscussao(string assunto, DateTime dataAtual)
         {
             var discussao = new Discussao
             {
@@ -85,12 +85,11 @@ namespace FIRSTShares.Controllers
                 DataCriacao = dataAtual
             };
 
-            Bd.Discussoes.Add(discussao);
+            BD.Discussoes.Add(discussao);
 
-            var salvar = Bd.SaveChanges() > 0 ? true : false;
+            var salvar = BD.SaveChanges() > 0 ? true : false;
 
             return salvar ? discussao : null;
         }
-
     }
 }

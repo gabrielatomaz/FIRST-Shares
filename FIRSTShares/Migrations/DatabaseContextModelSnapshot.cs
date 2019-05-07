@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FIRSTShares.Migrations
 {
-    [DbContext(typeof(DatabaseContext))]
+    [DbContext(typeof(LazyContext))]
     partial class DatabaseContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
@@ -117,6 +117,8 @@ namespace FIRSTShares.Migrations
                     b.Property<int?>("CategoriaID");
 
                     b.Property<string>("Conteudo");
+
+                    b.Property<string>("ConteudoHtml");
 
                     b.Property<DateTime>("DataCriacao");
 

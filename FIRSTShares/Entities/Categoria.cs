@@ -12,8 +12,8 @@ namespace FIRSTShares.Entities
         public string Nome { get; set; }
         public bool Excluido { get; set; }
 
-        public DatabaseContext Bd { get; set; }
-        public Categoria(DatabaseContext bd)
+        public LazyContext Bd { get; set; }
+        public Categoria(LazyContext bd)
         {
             Bd = bd;
         }

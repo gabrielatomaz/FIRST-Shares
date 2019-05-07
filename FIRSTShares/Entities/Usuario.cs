@@ -11,10 +11,10 @@ namespace FIRSTShares.Entities
 {
     public class Usuario
     {
-        public DatabaseContext Bd { get; set; }
-        public Usuario(DatabaseContext bd)
+        public LazyContext DB { get; set; }
+        public Usuario(LazyContext bd)
         {
-            Bd = bd;
+            DB = bd;
         }
         public Usuario() { }
 
@@ -26,14 +26,14 @@ namespace FIRSTShares.Entities
         public CargoTime CargoTime { get; set; }
         public DateTime DataCriacao { get; set; }
         public bool Excluido { get; set; } = false;
-        public Time Time { get; set; }
-        public Cargo Cargo { get; set; }
-        public List<Curtida> Curtidas { get; set; }
-        public List<Postagem> Postagens { get; set; }
+        public virtual Time Time { get; set; }
+        public virtual Cargo Cargo { get; set; }
+        public virtual List<Curtida> Curtidas { get; set; }
+        public virtual List<Postagem> Postagens { get; set; }
 
         public Usuario RetonarUsuarioPorNomeUsuario(string nomeUsuario)
         {
-            return Bd.Usuarios.Single(u => u.NomeUsuario == nomeUsuario);
+            return DB.Usuarios.Single(u => u.NomeUsuario == nomeUsuario);
         }
     }
 

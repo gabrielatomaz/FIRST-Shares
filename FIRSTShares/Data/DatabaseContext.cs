@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FIRSTShares.Data
 {
-    public class DatabaseContext : DbContext
+    public class LazyContext : DbContext
     {
-        public DatabaseContext(DbContextOptions<DatabaseContext> options = null) : base(options) { }
+        public LazyContext(DbContextOptions<LazyContext> options = null) : base(options) { }
 
         public DbSet<Time> Times { get; set; }
         public DbSet<Permissao> Permissoes { get; set; }
@@ -15,10 +15,12 @@ namespace FIRSTShares.Data
         public DbSet<Discussao> Discussoes { get; set; }
         public DbSet<Curtida> Curtidas { get; set; }
         public DbSet<Postagem> Postagens { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            
+            optionsBuilder.UseLazyLoadingProxies();
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Permissao>()
