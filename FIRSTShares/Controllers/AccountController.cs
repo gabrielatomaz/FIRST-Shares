@@ -38,7 +38,7 @@ namespace FIRSTShares.Controllers
         }
 
         public async Task<IActionResult> Logout()
-        { 
+        {
             await HttpContext.SignOutAsync();
 
             return RedirectToAction("Index", "Home");
@@ -73,12 +73,11 @@ namespace FIRSTShares.Controllers
                 CargoTime = usuario.CargoTime,
                 DataCriacao = DateTime.Now,
                 Cargo = BD.Cargos.ToList().Find(cargo => cargo.Tipo == CargoTipo.Usuario),
-                NomeUsuario = usuario.NomeUsuario
+                NomeUsuario = usuario.NomeUsuario,
+                Foto = SalvarFoto(foto, usuario.NomeUsuario)
             };
 
             SalvarUsuario(usuarioDb);
-
-            SalvarFoto(foto, usuario.NomeUsuario);
 
             ViewBag.Mensagem = "Usuáro cadastrado com sucesso!";
 
@@ -90,11 +89,12 @@ namespace FIRSTShares.Controllers
         public async Task<IActionResult> AcessarConta(UsuarioViewModel usuarioModel)
         {
             var usuario = RetornarUsuarioPorEmailOuUsuario(usuarioModel.UsuarioEmail);
-
-            if (LoginUsuario(usuario, usuarioModel.Senha))
+            if (usuario != null)
             {
-                var nomeUsuario = usuario.NomeUsuario;
-                var claims = new List<Claim>
+                if (LoginUsuario(usuario, usuarioModel.Senha))
+                {
+                    var nomeUsuario = usuario.NomeUsuario;
+                    var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, usuario.Nome),
                     new Claim(ClaimTypes.Email, usuario.Email),
@@ -102,14 +102,15 @@ namespace FIRSTShares.Controllers
                     new Claim("Foto", RetornarFoto(nomeUsuario))
                 };
 
-                var userIdentity = new ClaimsIdentity(claims, "login");
-                var principal = new ClaimsPrincipal(userIdentity);
+                    var userIdentity = new ClaimsIdentity(claims, "login");
+                    var principal = new ClaimsPrincipal(userIdentity);
 
-                Thread.CurrentPrincipal = principal;
+                    Thread.CurrentPrincipal = principal;
 
-                await HttpContext.SignInAsync(principal);
+                    await HttpContext.SignInAsync(principal);
 
-                return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Home");
+                }
             }
 
             ViewBag.Mensagem = "Senha e/ou e-mail incorretos!";
@@ -118,20 +119,18 @@ namespace FIRSTShares.Controllers
         }
 
         public bool LoginUsuario(Usuario usuario, string senha)
-        { 
+        {
             return ((usuario == null) || (!Criptografia.Compara(usuario.Senha, senha))) ? false : true;
         }
 
         private bool ChecarSeEmailOuUsuarioEstaCadastrado(Usuario usuario)
         {
-            return BD.Usuarios.Where(u => u.Excluido == false)
-                .Any(u => u.Email == usuario.Email || u.NomeUsuario == usuario.NomeUsuario) ? true : false;
+            return BD.Usuarios.Any(u => (u.Email == usuario.Email || u.NomeUsuario == usuario.NomeUsuario) && u.Excluido == false) ? true : false;
         }
 
         private Usuario RetornarUsuarioPorEmailOuUsuario(string emailUsuario)
         {
-            return BD.Usuarios.Where(u => u.Excluido == false)
-                .Single(usuario => (usuario.Email == emailUsuario) || (usuario.NomeUsuario == emailUsuario));
+            return BD.Usuarios.SingleOrDefault(usuario => ((usuario.Email == emailUsuario) || (usuario.NomeUsuario == emailUsuario)) && usuario.Excluido == false);
         }
 
         private string SalvarUsuario(Usuario usuario)
@@ -185,16 +184,24 @@ namespace FIRSTShares.Controllers
             return imgPadrao;
         }
 
-        private void SalvarFoto(IFormFile foto, string nomeUsuario)
+        private string SalvarFoto(IFormFile foto, string nomeUsuario)
         {
             if (foto != null)
             {
                 var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/usuarios", nomeUsuario + Path.GetExtension(foto.FileName));
 
-                if (foto.Length > 0)
+                if (foto.Length > 0) { 
                     using (var stream = new FileStream(filePath, FileMode.Create))
-                        foto.CopyToAsync(stream);
+                    {
+                        foto.CopyTo(stream);
+                        stream.Flush();
+                    }
+                }
+
+                return nomeUsuario + Path.GetExtension(foto.FileName);
             }
+
+            return "user.png";
         }
     }
 }

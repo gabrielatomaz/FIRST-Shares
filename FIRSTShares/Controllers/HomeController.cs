@@ -7,10 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using FIRSTShares.Models;
 using FIRSTShares.Data;
 using FIRSTShares.Entities;
-using FIRSTShares.Util;
 using System.Security.Claims;
-using System.Threading;
-using Microsoft.EntityFrameworkCore;
 using ReflectionIT.Mvc.Paging;
 
 namespace FIRSTShares.Controllers
@@ -33,7 +30,7 @@ namespace FIRSTShares.Controllers
         public async Task<IActionResult> Index(int page = 1)
         {
             var categorias = BD.Categorias.Where(c => c.Excluido == false).ToList();
-            var postagens = BD.Postagens.Where(p => p.Excluido == false).OrderByDescending(p => p.DataCriacao);
+            var postagens = BD.Postagens.Where(p => p.Excluido == false && p.PostagemPai == null).OrderByDescending(p => p.DataCriacao);
             var modelPostagens = await PagingList.CreateAsync(postagens, 5, page);
 
             var modelTupleCategoriasPostagens = new Tuple<List<Categoria>, PagingList<Postagem>>(categorias, modelPostagens);

@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Postagem";
+    var foto = Model.Usuario.Foto;
 }
 <div class="container">
     <div class="row">
@@ -9,9 +10,16 @@
         <div class="col-10">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title"><span class="badge badge-info p-2">@Model.Categoria.Nome</span> @Model.Discussao.Assunto</h5>
+                    <h5 class="card-title">
+                        <span class="badge badge-info mt-1 p-2">@Model.Categoria.Nome</span> @Model.Discussao.Assunto
+                        <img src="~/img/usuarios/@foto" align="left" class="img-fluid img-thumbnail mr-3 mb-1" width="120" />
+                    </h5>
                     <p class="card-text">@Html.Raw(@Model.ConteudoHtml)</p>
-                    <a href="#" class="float-right p-2 text-danger"><i class="fas fa-heart"></i></a>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a href="#" class="float-right p-2 text-danger mr-3"><i class="fas fa-heart"></i></a>
+                        <partial name="~/Views/Post/_PartialAddComentario.cshtml" model="@Model" />
+                    }
                 </div>
                 <div class="card-footer text-muted">
                     <span class="float-left">@Model.Usuario.NomeUsuario</span>
@@ -21,4 +29,6 @@
         </div>
         <div class="col-1"></div>
     </div>
+    <partial name="~/Views/Post/_PartialComentario.cshtml" model="@Model" />
 </div>
+

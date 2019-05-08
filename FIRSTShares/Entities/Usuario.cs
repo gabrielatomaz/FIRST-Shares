@@ -1,11 +1,7 @@
 ﻿using FIRSTShares.Data;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace FIRSTShares.Entities
 {
@@ -25,6 +21,7 @@ namespace FIRSTShares.Entities
         public string Senha { get; set; }
         public CargoTime CargoTime { get; set; }
         public DateTime DataCriacao { get; set; }
+        public string Foto { get; set; }
         public bool Excluido { get; set; } = false;
         public virtual Time Time { get; set; }
         public virtual Cargo Cargo { get; set; }
@@ -35,6 +32,7 @@ namespace FIRSTShares.Entities
         {
             return DB.Usuarios.Single(u => u.NomeUsuario == nomeUsuario);
         }
+
     }
 
     public enum CargoTime
