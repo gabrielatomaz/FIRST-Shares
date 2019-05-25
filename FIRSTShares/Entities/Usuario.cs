@@ -7,10 +7,10 @@ namespace FIRSTShares.Entities
 {
     public class Usuario
     {
-        public LazyContext DB { get; set; }
+        public LazyContext BD { get; set; }
         public Usuario(LazyContext bd)
         {
-            DB = bd;
+            BD = bd;
         }
         public Usuario() { }
 
@@ -30,7 +30,47 @@ namespace FIRSTShares.Entities
 
         public Usuario RetonarUsuarioPorNomeUsuario(string nomeUsuario)
         {
-            return DB.Usuarios.Single(u => u.NomeUsuario == nomeUsuario);
+            return BD.Usuarios.Single(u => u.NomeUsuario == nomeUsuario);
+        }
+
+        public List<Usuario> RetornarUsuarios()
+        {
+            return BD.Set<Usuario>().ToList();
+        }
+
+        public bool AlterarCargoUsuario(int idUsuario, int cargoId)
+        {
+            var usuario = BD.Usuarios.SingleOrDefault(u => u.ID == idUsuario);
+            var cargo = BD.Cargos.SingleOrDefault(c => c.ID == cargoId);
+
+            if (usuario != null && cargo != null)
+            {
+                usuario.Cargo = cargo;
+
+                BD.Usuarios.Update(usuario);
+                BD.SaveChanges();
+
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool Excluir(int idUsuario)
+        {
+            var usuario = BD.Usuarios.SingleOrDefault(u => u.ID == idUsuario);
+
+            if (usuario != null)
+            {
+                usuario.Excluido = true;
+
+                BD.Usuarios.Update(usuario);
+                BD.SaveChanges();
+
+                return true;
+            }
+
+            return false;
         }
 
     }

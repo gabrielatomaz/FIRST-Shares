@@ -5,11 +5,27 @@
 {
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title"><span class="badge badge-info p-2">@postagem.Categoria.Nome</span> @postagem.Discussao.Assunto</h5>
             @{
-                var pontinhos = (postagem.Conteudo.Length) < 200 ? "" : " [...]";
+                var pontinhosPost = (postagem.Conteudo.Length < 200) ? "" : " [...]";
+                var pontinhosTitulo = (postagem.Discussao.Assunto.Length < 45) ? "" : "...";
             }
-            <p class="card-text">@Html.Raw(postagem.Conteudo.Substring(0, Math.Min(postagem.Conteudo.Length, 200)) + pontinhos)</p>
+            <h5 class="card-title">
+                <span class="badge badge-info p-2">@postagem.Categoria.Nome</span> @postagem.Discussao.Assunto.Substring(0, Math.Min(postagem.Discussao.Assunto.Length, 45))@pontinhosTitulo
+                @{
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        var user = (System.Security.Claims.ClaimsIdentity)User.Identity;
+                        var nomeUsuario = user.Claims.ToList().Find(t => t.Type == "NomeUsuario").Value;
+                        if (postagem.Usuario.NomeUsuario == nomeUsuario)
+                        {
+                            <a href="@Url.Action("Excluir", "Post", new { id = postagem.ID } )" 
+                               onclick="return confirm('Você tem certeza que deseja excluir essa postagem?')"><i class="fas fa-trash-alt float-right text-secondary"></i></a>
+                            <a href="#"><i class="far fa-edit float-right text-secondary mr-2"></i></a>
+                        }
+                    }
+                }
+            </h5>
+            <p class="card-text">@Html.Raw(postagem.Conteudo.Substring(0, Math.Min(postagem.Conteudo.Length, 200)) + pontinhosPost)</p>
             <a href="@Url.Action("Index", "Post", new { id = postagem.ID } )" class="btn btn-info float-right" data-toggle="tooltip" data-placement="top" title="Ler mais"><i class="fab fa-readme"></i></a>
         </div>
         <div class="card-footer text-muted">

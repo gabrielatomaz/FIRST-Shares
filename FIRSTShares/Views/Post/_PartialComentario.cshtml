@@ -1,24 +1,56 @@
 ﻿@model FIRSTShares.Entities.Postagem
-@foreach (var comentario in @Model.Postagens)
+@foreach (var comentario in @Model.Postagens.OrderByDescending(c => c.DataCriacao))
 {
     var foto = comentario.Usuario.Foto;
     <div class="row">
         <div class="col-2"></div>
         <div class="col-9">
             <div class="card">
-                <div class="container mt-1">
-                    <img src="~/img/usuarios/@foto" class="img-fluid img-thumbnail mr-3 mt-2" align="left" width="80" />
-                    <span class="badge badge-secondary p-2 mt-3">
-                        @comentario.Usuario.Nome
-                    </span>
-                    <div class="card-body ml-3 mt-1">
-                        @Html.Raw(comentario.ConteudoHtml)
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <a href="#" class="float-right p-2 text-danger"><i class="fas fa-heart"></i></a>
-                            <partial name="~/Views/Post/_PartialAddComentario.cshtml" model="@Model" />
-                        }
+                <div class="card-body">
+                    <div class="card-title">
+                        <img src="~/img/usuarios/@foto" class="img-fluid img-thumbnail mr-3 mt-1" align="left" width="80" />
+                        <span class="badge badge-secondary p-2 mt-2">
+                            @comentario.Usuario.Nome
+                        </span>
                     </div>
+                    <p class="card-text">
+                        @Html.Raw(comentario.ConteudoHtml)
+                    </p>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        var user = (System.Security.Claims.ClaimsIdentity)User.Identity;
+                        var nomeUsuario = user.Claims.ToList().Find(t => t.Type == "NomeUsuario").Value;
+                        if (comentario.Curtidas.Any(c => c.Usuario.NomeUsuario == nomeUsuario && c.Excluido == false))
+                        {
+                            <a href="@Url.Action("Curtir", "Post", new { postId = comentario.ID, curtiu = false })" class="float-right p-2">
+                                <i class="fas fa-heart text-danger"></i>
+                                @if (comentario.Curtidas.Where(c => c.Excluido == false).Count() > 0)
+                                {
+                                    <span class="text-dark">@comentario.Curtidas.Where(c => c.Excluido == false).Count()</span>
+                                }
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Action("Curtir", "Post", new { postId = comentario.ID, curtiu = true })" class="float-right p-2 text-dark">
+                                <i class="far fa-heart"></i>
+                                @if (comentario.Curtidas.Where(c => c.Excluido == false).Count() > 0)
+                                {
+                                    <span>@comentario.Curtidas.Where(c => c.Excluido == false).Count()</span>
+                                }
+                            </a>
+                        }
+                    }
+                    else
+                    {
+                        @if (comentario.Curtidas.Where(c => c.Excluido == false).Count() > 0)
+                        {
+                            <a href="#" class="float-right p-2 text-dark">
+                                <i class="far fa-heart"></i>
+                                <span>@comentario.Curtidas.Where(c => c.Excluido == false).Count()</span>
+                            </a>
+                        }
+                    }
                 </div>
                 <div class="card-footer text-muted mt-2">
                     <span class="float-left">@comentario.Usuario.NomeUsuario</span>

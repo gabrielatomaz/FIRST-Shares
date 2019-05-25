@@ -48,7 +48,7 @@ namespace FIRSTShares
                 options.LogoutPath = "/account/sair";
             });
 
-            var connection = "Data Source=(localdb)\\ProjectsV13;Initial Catalog=Db_FirstShares;Integrated Security=True";
+            var connection = "Data Source=LAPTOP-65P53JE1\\SQLEXPRESS;Initial Catalog=Db_FirstShares;Integrated Security=True";
             services.AddDbContext<LazyContext>
                 (options => options.UseSqlServer(connection));
         }

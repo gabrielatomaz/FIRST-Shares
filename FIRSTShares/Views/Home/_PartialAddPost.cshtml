@@ -19,7 +19,7 @@
                 <div class="modal-header">
                     <div class="row">
                         <div class="col-6">
-                            <input type="text" class="form-control" maxlength="50" id="assunto"
+                            <input type="text" class="form-control" maxlength="200" id="assunto"
                                    placeholder="Adicione um título" />
                         </div>
                         <div class="col-6">
@@ -78,29 +78,35 @@ $(function () {
         theme: 'snow'
     });
 
+    
     $("#publicar").on("click", function () {
-        var assunto = $("#assunto");
-        if (assunto.val() != "") {
-            var conteudoHtml = quill.root.innerHTML;
-            var conteudo = quill.getText();
-            var categoria = $("#categoria").val();
-            var post = { "conteudoHtml": conteudoHtml, "categoria": categoria, "assunto": assunto.val(), "conteudo": conteudo };
-            $.ajax({
-                type: "POST",
-                traditional: true,
-                url: "@Url.Action("AdicionarPostagem", "Home")",
-                data: JSON.stringify(post),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                complete: function (data) {
-                    $('#modalPost').modal('toggle');
-                    location.reload();
-                }
-            });
+        if (quill.getText().length > 10) {
+            var assunto = $("#assunto");
+            if (assunto.val() != "") {
+                var conteudoHtml = quill.root.innerHTML;
+                var conteudo = quill.getText();
+                var categoria = $("#categoria").val();
+                var post = { "conteudoHtml": conteudoHtml, "categoria": categoria, "assunto": assunto.val(), "conteudo": conteudo };
+                $.ajax({
+                    type: "POST",
+                    traditional: true,
+                    url: "@Url.Action("AdicionarPostagem", "Home")",
+                    data: JSON.stringify(post),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    complete: function (data) {
+                        $('#modalPost').modal('toggle');
+                        location.reload();
+                    }
+                });
+            } else {
+                assunto.get(0).setCustomValidity('Por favor, preencha esse campo.');
+            }
         } else {
-            assunto.get(0).setCustomValidity('Por favor, preencha esse campo.');
+            alert('Uma postagem deve conter no mínimo 10 caracteres.');
         }
     });
+    
 });
 
 </script>

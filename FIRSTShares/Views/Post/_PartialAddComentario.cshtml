@@ -1,6 +1,9 @@
 ﻿@model FIRSTShares.Entities.Postagem
 
-<button class="btn float-right p-2 text-secondary" data-toggle="modal" data-target="#modalPost"><i class="fas fa-reply-all"></i></button>
+@if (User.Identity.IsAuthenticated)
+{
+    <button class="btn float-right p-2 text-secondary" data-toggle="modal" data-tt="tooltip" title="Comentar" data-target="#modalPost"><i class="fas fa-reply-all"></i></button>
+}
 <!-- Modal -->
 <div class="modal fade" id="modalPost" tabindex="-1" role="dialog" aria-labelledby="modalPostLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -51,23 +54,26 @@ $(function () {
         },
         theme: 'snow'
     });
-
     $("#publicar").on("click", function () {
-        var conteudoHtml = quill.root.innerHTML;
-        var post = { "conteudo": conteudoHtml, "idPostagemPai": "@Model.ID" };
-        console.log(post);
-        $.ajax({
-            type: "POST",
-            traditional: true,
-            url: "@Url.Action("AdicionarComentario", "Post")",
-            data: JSON.stringify(post),
-            contentType: "application/json; charset=utf-8",
-            dataType: "json",
-            complete: function (data) {
-                $('#modalPost').modal('toggle');
-                location.reload();
-            }
-        });
+        if (quill.getText().length > 10) {
+            var conteudoHtml = quill.root.innerHTML;
+            var post = { "conteudo": conteudoHtml, "idPostagemPai": "@Model.ID" };
+            console.log(post);
+            $.ajax({
+                type: "POST",
+                traditional: true,
+                url: "@Url.Action("AdicionarComentario", "Post")",
+                data: JSON.stringify(post),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                complete: function (data) {
+                    $('#modalPost').modal('toggle');
+                    location.reload();
+                }
+            });
+        } else {
+            alert('Um comentário deve conter no mínimo 10 caracteres.');
+        }
     });
 });
 

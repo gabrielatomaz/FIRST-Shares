@@ -45,7 +45,7 @@ namespace FIRSTShares.Controllers
         }
 
         [HttpPost]
-        public IActionResult CadastrarUsuario(Usuario usuario, string confirmaSenha,
+        public async Task<IActionResult> CadastrarUsuario(Usuario usuario, string confirmaSenha,
             string numero, string sobrenome, IFormFile foto)
         {
             if (usuario.Senha == confirmaSenha)
@@ -79,9 +79,23 @@ namespace FIRSTShares.Controllers
 
             SalvarUsuario(usuarioDb);
 
-            ViewBag.Mensagem = "Usuáro cadastrado com sucesso!";
+            var nomeUsuario = usuario.NomeUsuario;
+            var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, usuario.Nome),
+                    new Claim(ClaimTypes.Email, usuario.Email),
+                    new Claim("NomeUsuario", nomeUsuario),
+                    new Claim("Foto", RetornarFoto(nomeUsuario))
+                };
 
-            return View("Register");
+            var userIdentity = new ClaimsIdentity(claims, "login");
+            var principal = new ClaimsPrincipal(userIdentity);
+
+            Thread.CurrentPrincipal = principal;
+
+            await HttpContext.SignInAsync(principal);
+
+            return RedirectToAction("Index", "Home");
         }
 
 
@@ -125,12 +139,16 @@ namespace FIRSTShares.Controllers
 
         private bool ChecarSeEmailOuUsuarioEstaCadastrado(Usuario usuario)
         {
-            return BD.Usuarios.Any(u => (u.Email == usuario.Email || u.NomeUsuario == usuario.NomeUsuario) && u.Excluido == false) ? true : false;
+            return BD.Usuarios
+                .Any(u => (u.Email == usuario.Email || u.NomeUsuario == usuario.NomeUsuario) && u.Excluido == false) ? true : false;
         }
 
         private Usuario RetornarUsuarioPorEmailOuUsuario(string emailUsuario)
         {
-            return BD.Usuarios.SingleOrDefault(usuario => ((usuario.Email == emailUsuario) || (usuario.NomeUsuario == emailUsuario)) && usuario.Excluido == false);
+            return BD.Usuarios
+                .SingleOrDefault(usuario => 
+                ((usuario.Email == emailUsuario) || (usuario.NomeUsuario == emailUsuario)) && (usuario.Excluido == false)
+                );
         }
 
         private string SalvarUsuario(Usuario usuario)
@@ -148,10 +166,11 @@ namespace FIRSTShares.Controllers
             {
                 var time = new Time();
                 var retornarTime = time.RetornarTimePorNumero(numero, BD.Times.ToList());
+                var timeTheBlueAlliance = time.RetornarTimeTheBlueAlliance(numero);
+                var timeExiste = time.ChecarSeTimeExiste(timeTheBlueAlliance);
 
-                if (retornarTime == null)
+                if (retornarTime == null && timeExiste)
                 {
-                    var timeTheBlueAlliance = time.RetornarTimeTheBlueAlliance(numero);
 
                     time.Nome = timeTheBlueAlliance.Nome;
                     time.Numero = numero;
@@ -160,6 +179,8 @@ namespace FIRSTShares.Controllers
 
                     return time;
                 }
+                else if (!timeExiste)
+                    return null;
 
                 return retornarTime;
             }
@@ -190,7 +211,8 @@ namespace FIRSTShares.Controllers
             {
                 var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/usuarios", nomeUsuario + Path.GetExtension(foto.FileName));
 
-                if (foto.Length > 0) { 
+                if (foto.Length > 0)
+                {
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
                         foto.CopyTo(stream);

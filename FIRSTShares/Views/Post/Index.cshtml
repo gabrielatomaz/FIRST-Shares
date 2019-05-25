@@ -10,15 +10,78 @@
         <div class="col-10">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">
-                        <span class="badge badge-info mt-1 p-2">@Model.Categoria.Nome</span> @Model.Discussao.Assunto
-                        <img src="~/img/usuarios/@foto" align="left" class="img-fluid img-thumbnail mr-3 mb-1" width="120" />
-                    </h5>
-                    <p class="card-text">@Html.Raw(@Model.ConteudoHtml)</p>
+                    <h4 class="card-title mb-4">
+
+                        <div class="row">
+                            <div class="col-2">
+                                <span class="badge badge-info p-2">@Model.Categoria.Nome</span>
+                            </div>
+                            <div class="col-10">
+                                <span>@Model.Discussao.Assunto</span>
+                            </div>
+                        </div>
+                    </h4>
+                    <div class="row">
+                        <div class="col-2">
+
+                            <img src="~/img/usuarios/@foto" align="left" class="img-fluid img-thumbnail mr-3 mb-1" width="120" />
+                        </div>
+                        <div class="col-10">
+                            <h5 class="card-title">
+                                <span class="badge badge-secondary p-2 mt-2">
+                                    @Model.Usuario.Nome
+                                </span>
+
+                            </h5>
+                            <p class="card-text">
+                                @Html.Raw(@Model.ConteudoHtml)
+                            </p>
+                        </div>
+                    </div>
+                    @if (Model.Postagens.Count > 0)
+                    {
+                        <button data-toggle="collapse" class="btn float-right" data-target="#demo"><i class="far fa-comments mr-2 text-secondary"></i> Mostrar comentários</button>
+                    }
+
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <a href="#" class="float-right p-2 text-danger mr-3"><i class="fas fa-heart"></i></a>
+                        var user = (System.Security.Claims.ClaimsIdentity)User.Identity;
+                        var nomeUsuario = user.Claims.ToList().Find(t => t.Type == "NomeUsuario").Value;
+                        var temCurtida = Model.Curtidas.Any(c => c.Usuario.NomeUsuario == nomeUsuario && c.Excluido == false);
+
+                        if (Model.Usuario.NomeUsuario == nomeUsuario)
+                        {
+                            <a href="@Url.Action("Excluir", "Post", new { id = Model.ID } )"
+                               onclick="return confirm('Você tem certeza que deseja excluir essa postagem?')" class="float-right mt-2 mr-2">
+                                <i class="fas fa-trash-alt text-secondary"></i>
+                            </a>
+                            <a href="#" class="float-right mt-2 mr-3 ml-3"><i class="far fa-edit text-secondary"></i></a>
+                        }
+
+                        if (Model.Curtidas.Where(c => c.Excluido == false).Count() > 0)
+                        {
+                            <partial name="~/Views/Post/_PartialShowLikes.cshtml" model="@Model" />
+                        }
+                        <a href="@Url.Action("Curtir", "Post", new { postId = Model.ID, curtiu = !temCurtida })" class="float-right pt-2 pl-2">
+                            @{
+                                var text = temCurtida ? "text-danger" : "text-secondary";
+                            }
+                            <i class="fas fa-heart @text"></i>
+                        </a>
+
                         <partial name="~/Views/Post/_PartialAddComentario.cshtml" model="@Model" />
+
+
+                    }
+                    else
+                    {
+                        @if (Model.Curtidas.Where(c => c.Excluido == false).Count() > 0)
+                        {
+                            <partial name="~/Views/Post/_PartialShowLikes.cshtml" model="@Model" />
+                        }
+                        <a href="#" class="float-right pt-2 pl-2 text-dark">
+                            <i class="far fa-heart"></i>
+                        </a>
                     }
                 </div>
                 <div class="card-footer text-muted">
@@ -28,7 +91,10 @@
             </div>
         </div>
         <div class="col-1"></div>
-    </div>
-    <partial name="~/Views/Post/_PartialComentario.cshtml" model="@Model" />
-</div>
 
+
+    </div>
+    <div id="demo" class="collapse">
+        <partial name="~/Views/Post/_PartialComentario.cshtml" model="@Model" />
+    </div>
+</div>
