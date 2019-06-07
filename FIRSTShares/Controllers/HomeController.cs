@@ -16,7 +16,9 @@ namespace FIRSTShares.Controllers
     {
         private readonly LazyContext BD;
         private Usuario Usuario;
-        public Categoria Categoria { get; set; }
+        public Categoria Categoria;
+        public Postagem Postagem;
+        public Discussao Discussao;
 
         public HomeController(LazyContext bd)
         {
@@ -25,12 +27,29 @@ namespace FIRSTShares.Controllers
             Categoria = new Categoria(BD);
 
             Usuario = new Usuario(BD);
+
+            Postagem = new Postagem(BD);
+
+            Discussao = new Discussao(BD);
         }
 
         public async Task<IActionResult> Index(int page = 1)
         {
             var categorias = BD.Categorias.Where(c => c.Excluido == false).ToList();
-            var postagens = BD.Postagens.Where(p => p.Excluido == false && p.PostagemPai == null).OrderByDescending(p => p.DataCriacao);
+
+            var postagens = BD.Postagens
+                .Where(p => p.Excluido == false && p.PostagemPai == null)
+                .Select(p => new Postagem {
+                    Discussao = p.Discussao,
+                    Usuario = p.Usuario,
+                    Categoria = p.Categoria,
+                    DataCriacao = p.DataCriacao,
+                    Conteudo = p.Conteudo,
+                    Excluido = p.Excluido,
+                    ID = p.ID
+                })
+                .OrderByDescending(p => p.DataCriacao);
+
             var modelPostagens = await PagingList.CreateAsync(postagens, 5, page);
 
             var modelTupleCategoriasPostagens = new Tuple<List<Categoria>, PagingList<Postagem>>(categorias, modelPostagens);
@@ -55,38 +74,16 @@ namespace FIRSTShares.Controllers
 
             var postagem = new Postagem
             {
-                Discussao = AdicionarDiscussao(conteudo.Assunto, dataAtual),
+                Discussao = Discussao.Adicionar(conteudo.Assunto, dataAtual),
                 ConteudoHtml = conteudo.ConteudoHtml,
                 Conteudo = conteudo.Conteudo,
                 DataCriacao = dataAtual,
                 Usuario = usuario,
-                Categoria = categoria
+                Categoria = categoria,
+                PostagemOficial = conteudo.PostagemOficial
             };
 
-            SalvarPostagem(postagem);
-        }
-
-        private string SalvarPostagem(Postagem postagem)
-        {
-            BD.Postagens.Add(postagem);
-
-            return BD.SaveChanges() > 0 ?
-               "Sucesso ao adicionar post" : ViewBag.Mensagem = "Falha ao adicionar post";
-        }
-
-        private Discussao AdicionarDiscussao(string assunto, DateTime dataAtual)
-        {
-            var discussao = new Discussao
-            {
-                Assunto = assunto,
-                DataCriacao = dataAtual
-            };
-
-            BD.Discussoes.Add(discussao);
-
-            var salvar = BD.SaveChanges() > 0 ? true : false;
-
-            return salvar ? discussao : null;
+            Postagem.Salvar(postagem);
         }
     }
 }

@@ -15,18 +15,31 @@ namespace FIRSTShares.Controllers
     {
         public readonly LazyContext BD;
         public Usuario Usuario;
+        public Categoria Categoria;
+        public Discussao Discussao;
+        public Postagem Postagem;
+
         public PostController(LazyContext bd)
         {
             BD = bd;
 
+            Categoria = new Categoria(BD);
+
             Usuario = new Usuario(BD);
+
+            Discussao = new Discussao(BD);
+
+            Postagem = new Postagem(BD);
         }
 
         public IActionResult Index(int id)
         {
             var postagem = BD.Postagens.Single(p => p.ID == id);
+            var categorias = BD.Categorias.Where(c => c.Excluido == false).ToList();
 
-            return View(postagem);
+            var modelTupleCategoriasPostagem = new Tuple<List<Categoria>, Postagem>(categorias, postagem);
+
+            return View(modelTupleCategoriasPostagem);
         }
 
         [HttpPost]
@@ -47,24 +60,25 @@ namespace FIRSTShares.Controllers
             SalvarComentario(comentarioPostagem);
         }
 
-        public ActionResult Curtir(int postId, bool curtiu)
+        [HttpPost]
+        public void Curtir([FromBody] CurtirModel model)
         {
-            var postagem = BD.Postagens.FirstOrDefault(p => p.ID == postId);
+            var postagem = BD.Postagens.FirstOrDefault(p => p.ID == model.PostID);
             var usuario = RetornarUsuarioLogado();
-            var curtida = BD.Curtidas.FirstOrDefault(u => u.Usuario == usuario && u.Postagem.ID == postId);
+            var curtida = BD.Curtidas.FirstOrDefault(u => u.Usuario == usuario && u.Postagem.ID == model.PostID);
 
-            if (curtiu && curtida == null)
+            if (model.Curtiu && curtida == null)
             {
                 var novaCurtida = new Curtida
                 {
-                    Curtiu = curtiu,
-                    Postagem = BD.Postagens.FirstOrDefault(p => p.ID == postId),
+                    Curtiu = model.Curtiu,
+                    Postagem = BD.Postagens.FirstOrDefault(p => p.ID == model.PostID),
                     Usuario = usuario
                 };
 
                 SalvarCurtida(novaCurtida);
             }
-            else if (curtiu && curtida != null)
+            else if (model.Curtiu && curtida != null)
             {
                 curtida.Excluido = false;
 
@@ -77,9 +91,6 @@ namespace FIRSTShares.Controllers
                 SalvarCurtida(curtida, true);
             }
 
-            var postagemModel = postagem.PostagemPai != null ? postagem.PostagemPai : postagem;
-
-            return View("Index", postagemModel);
         }
 
         public ActionResult Excluir(int id)
@@ -92,6 +103,22 @@ namespace FIRSTShares.Controllers
             BD.SaveChanges();
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [HttpPost]
+        public void EditarPostagem([FromBody] PostagemModel conteudo)
+        {
+            var postagem = BD.Postagens.FirstOrDefault(post => post.ID == conteudo.ID);
+
+            var dataAtual = DateTime.Now;
+
+            postagem.Discussao = Discussao.Alterar(postagem.Discussao.ID, conteudo.Assunto, dataAtual);
+            postagem.Categoria = Categoria.RetornarCategoriaPorId(conteudo.Categoria);
+            postagem.ConteudoHtml = conteudo.ConteudoHtml;
+            postagem.Conteudo = conteudo.Conteudo;
+            postagem.DataCriacao = dataAtual;
+
+            Postagem.Alterar(postagem);
         }
 
         private Usuario RetornarUsuarioLogado()

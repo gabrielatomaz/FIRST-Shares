@@ -1,5 +1,6 @@
-﻿@model FIRSTShares.Entities.Postagem
-@foreach (var comentario in @Model.Postagens.OrderByDescending(c => c.DataCriacao))
+﻿@model Tuple<List<FIRSTShares.Entities.Categoria>, FIRSTShares.Entities.Postagem>
+
+@foreach (var comentario in @Model.Item2.Postagens.OrderByDescending(c => c.DataCriacao))
 {
     var foto = comentario.Usuario.Foto;
     <div class="row">

@@ -1,4 +1,4 @@
-﻿@model FIRSTShares.Entities.Postagem
+﻿@model Tuple<List<FIRSTShares.Entities.Categoria>, FIRSTShares.Entities.Postagem>
 
 @if (User.Identity.IsAuthenticated)
 {
@@ -41,7 +41,7 @@ $(function () {
         [{ 'direction': 'rtl' }],                         // text direction
 
         [{ 'size': ['small', false, 'large', 'huge'] }],
-
+        [ 'link', 'image', 'video', 'formula' ],
         [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
         [{ 'font': [] }],
         [{ 'align': [] }],
@@ -56,8 +56,14 @@ $(function () {
     });
     $("#publicar").on("click", function () {
         if (quill.getText().length > 10) {
+            $("#publicar").prop("disabled", true);
+            var element = $("img");
+            for (var i = 0; i < element.length; i++) {
+            if (element[i].src.includes("data:image"))
+                element[i].classList.add("img-fluid")
+            }
             var conteudoHtml = quill.root.innerHTML;
-            var post = { "conteudo": conteudoHtml, "idPostagemPai": "@Model.ID" };
+            var post = { "conteudo": conteudoHtml, "idPostagemPai": "@Model.Item2.ID" };
             console.log(post);
             $.ajax({
                 type: "POST",

@@ -58,3 +58,19 @@ body {
     line-height: 60px; /* Vertically center the text there */
 }
 
+#porquinho {
+    width: 130px;
+    border-radius: 65px;
+    box-shadow: 5px 10px grey;
+    transition: 1s;
+}
+
+    #porquinho:hover {
+        width: 120px;
+        border-radius: 60px;
+        box-shadow: none;
+    }
+    #porquinho:focus {
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem red;
+    }

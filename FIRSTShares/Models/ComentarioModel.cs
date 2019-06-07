@@ -11,4 +11,10 @@ namespace FIRSTShares.Models
         public string Conteudo { get; set; }
         public int IDPostagemPai { get; set; }
     }
+
+    public class CurtirModel
+    {
+        public int PostID { get; set; }
+        public bool Curtiu { get; set; }
+    }
 }

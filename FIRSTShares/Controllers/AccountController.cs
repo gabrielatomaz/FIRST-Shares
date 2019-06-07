@@ -85,7 +85,8 @@ namespace FIRSTShares.Controllers
                     new Claim(ClaimTypes.Name, usuario.Nome),
                     new Claim(ClaimTypes.Email, usuario.Email),
                     new Claim("NomeUsuario", nomeUsuario),
-                    new Claim("Foto", RetornarFoto(nomeUsuario))
+                    new Claim("Foto", RetornarFoto(nomeUsuario)),
+                    new Claim("CargoUsuario", usuario.Cargo.Tipo.ToString())
                 };
 
             var userIdentity = new ClaimsIdentity(claims, "login");
@@ -113,7 +114,8 @@ namespace FIRSTShares.Controllers
                     new Claim(ClaimTypes.Name, usuario.Nome),
                     new Claim(ClaimTypes.Email, usuario.Email),
                     new Claim("NomeUsuario", nomeUsuario),
-                    new Claim("Foto", RetornarFoto(nomeUsuario))
+                    new Claim("Foto", RetornarFoto(nomeUsuario)),
+                    new Claim("CargoUsuario", usuario.Cargo.Tipo.ToString())
                 };
 
                     var userIdentity = new ClaimsIdentity(claims, "login");

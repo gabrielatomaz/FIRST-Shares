@@ -2,10 +2,13 @@
     ViewData["Title"] = "Início";
 }
 @model Tuple<List<FIRSTShares.Entities.Categoria>, PagingList<FIRSTShares.Entities.Postagem>>
-@using ReflectionIT.Mvc.Paging  
-<partial name="~/Views/Home/_PartialAddPost.cshtml" />
+@using ReflectionIT.Mvc.Paging
 
-<div class="row">
+<partial name="~/Views/Home/_PartialAddPost.cshtml" />
+@{
+    var margin = User.Identity.IsAuthenticated ? "" : "mt-5";
+}
+<div class="row @margin">
     <div class="col-8">
         <partial name="~/Views/Home/_PartialPost.cshtml" />
     </div>
@@ -40,60 +43,36 @@
             </div>
         </div>
         <div id="accordion">
-            <div class="card">
+            <div class="card  text-center">
                 <div class="card-header" id="headingOne">
                     <h5 class="mb-0">
                         <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                            Collapsible Group Item #1
+                            Qual o intuito desta plataforma?
                         </button>
                     </h5>
                 </div>
 
                 <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
                     <div class="card-body">
-                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch.
+                        Compartilhar materias traduzidos sobre robótica educacional e trocar ideias entre times e pessoas interessadas na <b><a style="color:#2E698C" target="_blank" href="https://www.firstinspires.org/">FIRST</a></b>.
                     </div>
                 </div>
             </div>
-            <div class="card">
+            <div class="card text-center">
                 <div class="card-header" id="headingTwo">
                     <h5 class="mb-0">
                         <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                            Collapsible Group Item #2
+                            Vaquinha Online
                         </button>
                     </h5>
                 </div>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
                     <div class="card-body">
-                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch.
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-header" id="headingThree">
-                    <h5 class="mb-0">
-                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                            Collapsible Group Item #3
-                        </button>
-                    </h5>
-                </div>
-                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-                    <div class="card-body">
-                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch.
-                    </div>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-header" id="headingThree">
-                    <h5 class="mb-0">
-                        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                            Collapsible Group Item #4
-                        </button>
-                    </h5>
-                </div>
-                <div id="collapseFour" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-                    <div class="card-body">
-                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch.
+                        <span>Nos ajude a manter a plataforma no ar! :)</span>
+                        <br />
+                        <a href="#">
+                            <img src="~/img/porquinho.jpg" class="img-fluid" id="porquinho" />
+                        </a>
                     </div>
                 </div>
             </div>

@@ -1,8 +1,6 @@
-﻿@model FIRSTShares.Entities.Postagem
+﻿@model Tuple<List<FIRSTShares.Entities.Categoria>, FIRSTShares.Entities.Postagem>
 
-<button class="btn btn-link float-right p-2 text-dark">
-    <span data-toggle="modal" data-target="#modalLikes">@Model.Curtidas.Where(c => c.Excluido == false).Count()</span>
-</button>
+
 
 <!-- Modal -->
 <div class="modal fade" id="modalLikes" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -16,11 +14,11 @@
             </div>
             <div class="modal-body">
                 <ul class="list-group">
-                    @foreach (var curtida in Model.Curtidas.Where(c => c.Excluido == false).OrderByDescending(c => c.Postagem.DataCriacao))
+                    @foreach (var curtida in Model.Item2.Curtidas.Where(c => c.Excluido == false).OrderByDescending(c => c.Postagem.DataCriacao))
                     {
                         var foto = curtida.Usuario.Foto;
                         <li class="list-group-item d-flex align-items-center">
-                            <img src="~/img/usuarios/@foto" width="40" style="border-radius:20px;" class="img-fluid"/>
+                            <img src="~/img/usuarios/@foto" width="40" style="border-radius:20px;" class="img-fluid" />
                             <span class="ml-3">@curtida.Usuario.NomeUsuario</span>
                         </li>
                     }

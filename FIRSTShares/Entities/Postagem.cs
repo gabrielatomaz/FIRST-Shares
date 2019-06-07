@@ -1,10 +1,18 @@
-﻿using System;
+﻿using FIRSTShares.Data;
+using System;
 using System.Collections.Generic;
 
 namespace FIRSTShares.Entities
 {
     public class Postagem
     {
+        public LazyContext BD { get; set; }
+        public Postagem(LazyContext bd)
+        {
+            BD = bd;
+        }
+        public Postagem() { }
+
         public int ID { get; set; }
         public virtual Discussao Discussao { get; set; }
         public string ConteudoHtml { get; set; }
@@ -17,5 +25,20 @@ namespace FIRSTShares.Entities
         public virtual List<Curtida> Curtidas { get; set; }
         public virtual Categoria Categoria { get; set; }
         public bool Excluido { get; set; }
+
+
+        public bool Salvar(Postagem postagem)
+        {
+            BD.Postagens.Add(postagem);
+
+            return BD.SaveChanges() > 0;
+        }
+
+        public bool Alterar(Postagem postagem)
+        {
+            BD.Postagens.Update(postagem);
+
+            return BD.SaveChanges() > 0;
+        }
     }
 }

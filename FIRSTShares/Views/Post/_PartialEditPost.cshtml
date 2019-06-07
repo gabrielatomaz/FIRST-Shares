@@ -1,64 +1,48 @@
-﻿@model Tuple<List<FIRSTShares.Entities.Categoria>, PagingList<FIRSTShares.Entities.Postagem>>
-@using ReflectionIT.Mvc.Paging
+﻿@model Tuple<List<FIRSTShares.Entities.Categoria>, FIRSTShares.Entities.Postagem>
 
-@if (User.Identity.IsAuthenticated)
-{
+<button class="btn float-right" data-toggle="modal" data-tt="tooltip" title="Comentar" data-target="#modalEditPost">
+    <i class="far fa-edit text-secondary"></i>
+</button>
 
-    <div class="row">
-        <div class="col-8">
-            <button type="button" class="btn btn-secondary  mb-3 float-right mr-0" data-toggle="modal" data-target="#modalPost">
-                <i class="fas fa-plus mr-2"></i><strong>Novo tópico</strong>
-            </button>
-        </div>
-    </div>
-}
-<!-- Modal -->
-<div class="modal fade" id="modalPost" tabindex="-1" role="dialog" aria-labelledby="modalPostLabel" aria-hidden="true">
+<div class="modal fade" id="modalEditPost" tabindex="-1" role="dialog" aria-labelledby="modalPostLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form method="post" onsubmit="return false;">
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="row">
-
-                        <div class="col-6 mt-1">
-                            <input type="text" class="form-control" maxlength="200" id="assunto"
-                                   placeholder="Adicione um título" />
+                        <div class="col-6">
+                            <input type="text" class="form-control" maxlength="200" id="novoAssunto"
+                                   value="@Model.Item2.Discussao.Assunto" />
                         </div>
-                        <div class="col-6 mt-1">
-
-                            <select class="form-control" id="categoria">
+                        <div class="col-6">
+                            <select class="form-control" id="novaCategoria">
                                 @foreach (var categoria in Model.Item1.ToList())
                                 {
-                                    <option value="@categoria.ID">@categoria.Nome</option>
+                                    if (categoria == Model.Item2.Categoria)
+                                    {
+                                        <option value="@categoria.ID" selected>@categoria.Nome</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@categoria.ID">@categoria.Nome</option>
+                                    }
                                 }
 
                             </select>
                         </div>
                     </div>
-                    <div class="col-1">
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            var user = (System.Security.Claims.ClaimsIdentity)User.Identity;
-                            var cargoUsuario = user.Claims.ToList().Find(t => t.Type == "CargoUsuario").Value;
 
-                            if (cargoUsuario == "Administrador" || cargoUsuario == "Moderador")
-                            {
-                                <button class="btn" id="oficial" data-toggle="tooltip" data-placement="top" title="Post oficial"><i id="oficialIcon" class="far fa-check-circle text-danger fa-2x"></i></button>
-                            }
-                        }
-                    </div>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div id="editor" style="height:250px;">
-
+                    <div id="editorEdit" style="height:250px;">
+                        @Html.Raw(Model.Item2.ConteudoHtml)
                     </div>
                 </div>
                 <div class="modal-footer">
-
-                    <input type="submit" id="publicar" class="btn btn-primary" value="Publicar" />
+                    <input type="submit" id="editar" class="btn btn-primary" value="Publicar" />
                 </div>
             </div>
         </form>
@@ -85,32 +69,17 @@ $(function () {
         // remove formatting button
     ];
 
-    var quill = new Quill('#editor', {
+    var quill = new Quill('#editorEdit', {
         modules: {
             toolbar: toolbarOptions
         },
         theme: 'snow'
     });
-
-    var oficial = false;
-    $("#oficial").on("click", function () {
-        var icon = $("#oficialIcon");
-        if (icon.hasClass("text-danger")) {
-            icon.removeClass("text-danger");
-            icon.addClass("text-success");
-            oficial = true;
-        } else {
-            icon.addClass("text-danger");
-            icon.removeClass("text-success");
-            oficial = false;
-        }
-    });
-
-    $("#publicar").on("click", function () {
+   $("#editar").on("click", function () {
        if (quill.getText().length > 10) {
-            var assunto = $("#assunto");
+            var assunto = $("#novoAssunto");
             if (assunto.val() != "") {
-                $("#publicar").prop("disabled", true);
+                $("#editar").prop("disabled", true);
                  var element = $("img");
                  for (var i = 0; i < element.length; i++) {
                     if (element[i].src.includes("data:image"))
@@ -118,17 +87,17 @@ $(function () {
                 }
                 var conteudoHtml = quill.root.innerHTML;
                 var conteudo = quill.getText();
-                var categoria = $("#categoria").val();
-                var post = { "conteudoHtml": conteudoHtml, "categoria": categoria, "assunto": assunto.val(), "conteudo": conteudo, "postagemOficial": oficial };
+                var categoria = $("#novaCategoria").val();
+                var post = { "ID": @Model.Item2.ID,"conteudoHtml": conteudoHtml, "categoria": categoria, "assunto": assunto.val(), "conteudo": conteudo };
                 $.ajax({
                     type: "POST",
                     traditional: true,
-                    url: "@Url.Action("AdicionarPostagem", "Home")",
+                    url: "@Url.Action("EditarPostagem", "Post")",
                     data: JSON.stringify(post),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     complete: function (data) {
-                        $('#modalPost').modal('toggle');
+                        $('#modalEditPost').modal('toggle');
                         location.reload();
                     }
                 });
@@ -138,7 +107,7 @@ $(function () {
         } else {
             alert('Uma postagem deve conter no mínimo 10 caracteres.');
         }
-    });
+   });
 
 });
 
