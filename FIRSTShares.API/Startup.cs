@@ -31,7 +31,7 @@ namespace FIRSTShares.API
                 .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             //var connection = "Data Source=LAPTOP-65P53JE1\\SQLEXPRESS;Initial Catalog=Db_FirstShares;Integrated Security=True";
-            var connection = "Data Source=localhost,1433;Initial Catalog=Db_FirstShares;persist security info=True;user id=sa;password=!Alterar123@";
+            var connection = "Data Source=localhost:1433;Initial Catalog=Db_FirstShares;persist security info=True;user id=sa;password=!Alterar123@";
             services.AddDbContext<LazyContext>
                 (options => options.UseSqlServer(connection));
         }
