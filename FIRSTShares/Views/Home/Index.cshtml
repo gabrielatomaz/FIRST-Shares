@@ -9,7 +9,7 @@
     var margin = User.Identity.IsAuthenticated ? "" : "mt-5";
 }
 <div class="row @margin">
-    <div class="col-8">
+    <div class="col-sm-12 col-md-8">
         <partial name="~/Views/Home/_PartialPost.cshtml" />
     </div>
     <div class="col-4">
@@ -43,7 +43,7 @@
             </div>
         </div>
         <div id="accordion">
-            <div class="card  text-center">
+            <div class="card text-center  d-md-none d-lg-block d-none d-sm-block d-sm-none d-md-block">
                 <div class="card-header" id="headingOne">
                     <h5 class="mb-0">
                         <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
@@ -58,7 +58,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card text-center">
+            <div class="card text-center  d-md-none d-lg-block d-none d-sm-block d-sm-none d-md-block">
                 <div class="card-header" id="headingTwo">
                     <h5 class="mb-0">
                         <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
@@ -80,7 +80,7 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-8">
+    <div class="col-sm-12 col-md-8">
         <partial name="~/Views/Home/_PartialPagination.cshtml" />
     </div>
 </div>
