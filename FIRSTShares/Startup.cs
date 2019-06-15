@@ -47,7 +47,7 @@ namespace FIRSTShares
                 options.LoginPath = "/account/acessarconta";
                 options.LogoutPath = "/account/sair";
             });
-
+            //var connection = "Data Source=187.84.232.19,1433;Initial Catalog=Db_FirstShares;persist security info=True;user id=sa;password=!Alterar123@";
             var connection = "Data Source=sqlserver,1433;Initial Catalog=Db_FirstShares;persist security info=True;user id=sa;password=!Alterar123@";
             services.AddDbContext<LazyContext>
                 (options => options.UseSqlServer(connection));
