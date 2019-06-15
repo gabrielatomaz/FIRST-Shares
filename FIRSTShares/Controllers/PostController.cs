@@ -94,7 +94,7 @@ namespace FIRSTShares.Controllers
             var objecto = new
             {
                 model.Curtiu,
-                NumeroCurtidas = postagem.Curtidas.Count()
+                NumeroCurtidas = postagem.Curtidas.Where(c => !c.Excluido).Count()
             };
 
             return objecto;

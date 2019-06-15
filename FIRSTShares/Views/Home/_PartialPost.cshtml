@@ -13,7 +13,7 @@
                 <span class="badge badge-info p-2 mr-2">@postagem.Categoria.Nome</span> @postagem.Discussao.Assunto.Substring(0, Math.Min(postagem.Discussao.Assunto.Length, 45))@pontinhosTitulo
             </h5>
             <p class="card-text">@Html.Raw(postagem.Conteudo.Substring(0, Math.Min(postagem.Conteudo.Length, 200)) + pontinhosPost)</p>
-            <a href="@Url.Action("Index", "Post", new { id = postagem.ID } )" class="btn btn-info float-right" data-toggle="tooltip" data-placement="top" title="Ler mais"><i class="fas fa-angle-double-right"></i></a>
+            <a href="@Url.Action("Index", "Post", new { id = postagem.ID } )" class="btn btn-info float-right pt-0 pb-0" data-toggle="tooltip" data-placement="top" title="Ler mais"><i class="fas fa-angle-double-right"></i></a>
         </div>
         <div class="card-footer text-muted">
             <span class="float-left">@postagem.Usuario.NomeUsuario</span>

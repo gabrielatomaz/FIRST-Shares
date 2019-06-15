@@ -35,52 +35,54 @@
                             </p>
                         </div>
                     </div>
-                        <span class="badge badge-info float-right mt-2 p-2">@Model.Item2.Categoria.Nome</span>
+                    <span class="badge badge-info float-right mt-2 p-2">@Model.Item2.Categoria.Nome</span>
                     @if (Model.Item2.Postagens.Count > 0)
                     {
                         <button data-toggle="collapse" class="btn float-right" data-target="#demo"><i class="far fa-comments mr-2 text-secondary"></i> Mostrar comentários</button>
                     }
-
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        var user = (System.Security.Claims.ClaimsIdentity)User.Identity;
-                        var nomeUsuario = user.Claims.ToList().Find(t => t.Type == "NomeUsuario").Value;
-                        var temCurtida = Model.Item2.Curtidas.Any(c => c.Usuario.NomeUsuario == nomeUsuario && c.Excluido == false);
-
-                        if (Model.Item2.Usuario.NomeUsuario == nomeUsuario)
+                    @{
+                        var temCurtida = false;
+                        if (User.Identity.IsAuthenticated)
                         {
-                            <partial name="~/Views/Post/_PartialEditPost.cshtml" model="@Model" />
-                            <a href="@Url.Action("Excluir", "Post", new { id = Model.Item2.ID })"
-                               onclick="return confirm('Você tem certeza que deseja excluir essa postagem?')" class="float-right mt-2 mr-2 ml-2">
-                                <i class="fas fa-trash-alt text-secondary"></i>
+                            var user = (System.Security.Claims.ClaimsIdentity)User.Identity;
+                            var nomeUsuario = user.Claims.ToList().Find(t => t.Type == "NomeUsuario").Value;
+                            temCurtida = Model.Item2.Curtidas.Any(c => c.Usuario.NomeUsuario == nomeUsuario && c.Excluido == false);
+
+                            if (Model.Item2.Usuario.NomeUsuario == nomeUsuario)
+                            {
+                                <partial name="~/Views/Post/_PartialEditPost.cshtml" model="@Model" />
+                                <a href="@Url.Action("Excluir", "Post", new { id = Model.Item2.ID })"
+                                   onclick="return confirm('Você tem certeza que deseja excluir essa postagem?')" class="float-right mt-2 mr-2 ml-2">
+                                    <i class="fas fa-trash-alt text-secondary"></i>
+                                </a>
+                            }
+                            <div class="btn-group float-right">
+
+                                <button id="curtir" class="btn float-right pt-2 pr-0 pl-2">
+                                    @{
+                                        var margin = @Model.Item2.Curtidas.Where(c => c.Excluido == false).Count() > 0 ? "" : "mr-2";
+                                        var text = temCurtida ? "text-danger" : "text-secondary";
+                                    }
+                                    <i id="heart" class="fas fa-heart @text @margin"></i>
+                                </button>
+                                <button id="btnLikes" class="btn btn-link float-right p-2 text-dark">
+                                    <span id="numeroLikes" data-toggle="modal" data-target="#modalLikes"></span>
+                                </button>
+                                <partial name="~/Views/Post/_PartialShowLikes.cshtml" model="@Model" />
+                            </div>
+                            <partial name="~/Views/Post/_PartialAddComentario.cshtml" model="@Model" />
+
+                        }
+                        else
+                        {
+                            @if (Model.Item2.Curtidas.Where(c => c.Excluido == false).Count() > 0)
+                            {
+                                <partial name="~/Views/Post/_PartialShowLikes.cshtml" model="@Model" />
+                            }
+                            <a href="#" class="float-right pt-2 pl-2 text-dark mr-2">
+                                <i class="far fa-heart"></i>
                             </a>
                         }
-                        <div class="btn-group float-right">
-
-                            <button id="curtir" class="btn float-right pt-2 pr-0 pl-2">
-                                @{
-                                    var margin = @Model.Item2.Curtidas.Where(c => c.Excluido == false).Count() > 0 ? "" : "mr-2";
-                                    var text = temCurtida ? "text-danger" : "text-secondary";
-                                }
-                                <i id="heart" class="fas fa-heart @text @margin"></i>
-                            </button>
-                            <button id="btnLikes" class="btn btn-link float-right p-2 text-dark">
-                                <span id="numeroLikes" data-toggle="modal" data-target="#modalLikes"></span>
-                            </button>
-                            <partial name="~/Views/Post/_PartialShowLikes.cshtml" model="@Model" />
-                        </div>
-                        <partial name="~/Views/Post/_PartialAddComentario.cshtml" model="@Model" />
-
-                    }
-                    else
-                    {
-                        @if (Model.Item2.Curtidas.Where(c => c.Excluido == false).Count() > 0)
-                        {
-                            <partial name="~/Views/Post/_PartialShowLikes.cshtml" model="@Model" />
-                        }
-                        <a href="#" class="float-right pt-2 pl-2 text-dark">
-                            <i class="far fa-heart"></i>
-                        </a>
                     }
                 </div>
                 <div class="card-footer text-muted">
@@ -110,53 +112,50 @@
 
         if (@numeroLikes > 0) {
             $("#btnLikes").show();
-            $("#numeroLikes").show();
         } else {
             $("#btnLikes").hide();
-            $("#numeroLikes").hide();
         }
 
         $("#numeroLikes").text(@numeroLikes);
-        $("#curtir").on("click", function () {
-        @{
-            var temCurtidaJs = false;
-            if (User.Identity.IsAuthenticated)
-            {
-                var userJs = (System.Security.Claims.ClaimsIdentity)User.Identity;
-                var nomeUsuarioJs = userJs.Claims.ToList().Find(t => t.Type == "NomeUsuario").Value;
-                temCurtidaJs = Model.Item2.Curtidas.Any(c => c.Usuario.NomeUsuario == nomeUsuarioJs && c.Excluido == false);
-            }
-         }
-        var heart = $("#heart");
-        if (heart.hasClass("text-secondary")) {
-            heart.addClass("text-danger");
-            heart.removeClass("text-secondary");
-            $("#numeroLikes").text(parseInt($("#numeroLikes").text()) + 1);
-            $("#btnLikes").show();
-            $("#numeroLikes").show();
+        var firstTime = true;
+        var temCurtida =  @(temCurtida);
+        if (firstTime) {
+            firstTime = false;
         } else {
-            heart.addClass("text-secondary");
-            heart.removeClass("text-danger");
-            if (@numeroLikes > 1)
-                $("#numeroLikes").text(parseInt($("#numeroLikes").text()) - 1);
-            else {
-                $("#numeroLikes").hide();
-                $("#btnLikes").hide();
-                $("#heart").addClass("mr-2");
+            temCurtida = temCurtida;
             }
-        }
-
-        var data = { "postId": @Model.Item2.ID, "curtiu": @(!temCurtidaJs) };
+        $("#curtir").on("click", function () {
+            var data = { "postId": @Model.Item2.ID, "curtiu": !temCurtida };
         $.ajax({
-                type: "POST",
+            type: "POST",
             traditional: true,
             url: "@Url.Action("Curtir", "Post")",
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            complete: function (data) {
+            complete: function (dataAjax) {
+                var heart = $("#heart");
+                var response = dataAjax.responseJSON;
+                if (response.curtiu) {
+                    heart.addClass("text-danger");
+                    heart.removeClass("text-secondary");
+                    heart.removeClass("mr-2");
+                    temCurtida = true;
+                } else {
+                    heart.addClass("text-secondary");
+                    heart.removeClass("text-danger");
+                    heart.addClass("mr-2");
+                    temCurtida = false;
                 }
-            });
+
+                if (response.numeroCurtidas > 0) {
+                    $("#numeroLikes").text(response.numeroCurtidas);
+                    $("#btnLikes").show();
+                } else {
+                    $("#btnLikes").hide();
+                }
+            }
+        });
     });
 });
 </script>
