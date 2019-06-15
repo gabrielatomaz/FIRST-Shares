@@ -61,7 +61,7 @@ namespace FIRSTShares.Controllers
         }
 
         [HttpPost]
-        public void Curtir([FromBody] CurtirModel model)
+        public object Curtir([FromBody] CurtirModel model)
         {
             var postagem = BD.Postagens.FirstOrDefault(p => p.ID == model.PostID);
             var usuario = RetornarUsuarioLogado();
@@ -91,6 +91,13 @@ namespace FIRSTShares.Controllers
                 SalvarCurtida(curtida, true);
             }
 
+            var objecto = new
+            {
+                model.Curtiu,
+                NumeroCurtidas = postagem.Curtidas.Count()
+            };
+
+            return objecto;
         }
 
         public ActionResult Excluir(int id)

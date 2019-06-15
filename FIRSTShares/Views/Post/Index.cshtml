@@ -9,19 +9,17 @@
         <div class="col-1"></div>
         <div class="col-10">
             <div class="card">
+                <span class="container-fluid w-100 p-2" style="background-color:rgb(243, 243, 243);">
+                    <div class="container">
+                        <strong>
+                            @Model.Item2.Discussao.Assunto
+                        </strong>
+                    </div>
+
+                </span>
                 <div class="card-body">
-                    <h4 class="card-title mb-4">
-                        <div class="row">
-                            <div class="col-2">
-                                <span class="badge badge-info p-2">@Model.Item2.Categoria.Nome</span>
-                            </div>
-                            <div class="col-10">
-                                <span>@Model.Item2.Discussao.Assunto</span>
-                            </div>
-                        </div>
-                    </h4>
                     <div class="row">
-                        <div class="col-2">
+                        <div class="col-lg-2 col-sm-5">
 
                             <img src="~/img/usuarios/@foto" align="left" class="img-fluid img-thumbnail mr-3 mb-1" width="120" />
                         </div>
@@ -37,6 +35,7 @@
                             </p>
                         </div>
                     </div>
+                        <span class="badge badge-info float-right mt-2 p-2">@Model.Item2.Categoria.Nome</span>
                     @if (Model.Item2.Postagens.Count > 0)
                     {
                         <button data-toggle="collapse" class="btn float-right" data-target="#demo"><i class="far fa-comments mr-2 text-secondary"></i> Mostrar comentários</button>
@@ -65,16 +64,16 @@
                                 }
                                 <i id="heart" class="fas fa-heart @text @margin"></i>
                             </button>
-                                <button id="btnLikes" class="btn btn-link float-right p-2 text-dark">
-                                    <span id="numeroLikes" data-toggle="modal" data-target="#modalLikes"></span>
-                                </button>
-                                <partial name="~/Views/Post/_PartialShowLikes.cshtml" model="@Model" />
+                            <button id="btnLikes" class="btn btn-link float-right p-2 text-dark">
+                                <span id="numeroLikes" data-toggle="modal" data-target="#modalLikes"></span>
+                            </button>
+                            <partial name="~/Views/Post/_PartialShowLikes.cshtml" model="@Model" />
                         </div>
                         <partial name="~/Views/Post/_PartialAddComentario.cshtml" model="@Model" />
 
-                                    }
-                                    else
-                                    {
+                    }
+                    else
+                    {
                         @if (Model.Item2.Curtidas.Where(c => c.Excluido == false).Count() > 0)
                         {
                             <partial name="~/Views/Post/_PartialShowLikes.cshtml" model="@Model" />
@@ -82,7 +81,7 @@
                         <a href="#" class="float-right pt-2 pl-2 text-dark">
                             <i class="far fa-heart"></i>
                         </a>
-                                    }
+                    }
                 </div>
                 <div class="card-footer text-muted">
                     <span class="float-left">@Model.Item2.Usuario.NomeUsuario</span>
@@ -116,7 +115,7 @@
             $("#btnLikes").hide();
             $("#numeroLikes").hide();
         }
-        
+
         $("#numeroLikes").text(@numeroLikes);
         $("#curtir").on("click", function () {
         @{
