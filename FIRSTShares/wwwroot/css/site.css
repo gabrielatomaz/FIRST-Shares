@@ -70,7 +70,12 @@ body {
         border-radius: 60px;
         box-shadow: none;
     }
+
     #porquinho:focus {
         outline: 0;
         box-shadow: 0 0 0 0.2rem red;
     }
+
+.border-bottom {
+    border-bottom: 4px solid #568578 !important;
+}
