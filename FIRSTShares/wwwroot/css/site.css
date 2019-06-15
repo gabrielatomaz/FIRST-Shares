@@ -90,6 +90,8 @@ body {
     padding: 0.75rem 1.25rem !important;
     margin-bottom: -1px !important;
     background-color: #fff !important;
+    border-right: none !important;
+    border-left: none !important;
     border-top: 1px solid rgba(0, 0, 0, 0.125) !important;
     border-bottom: 1px solid rgba(0, 0, 0, 0.125) !important;
 }
@@ -236,3 +238,28 @@ body {
         .show > .btn-outline-primary.dropdown-toggle:focus {
             box-shadow: 0 0 0 0.2rem #316B5A !important;
         }
+
+
+#corpoUsuarios {
+    background-color: #fff;
+}
+.btn-link {
+    font-weight: 400;
+    color: #2E698C !important;
+    text-decoration: none;
+}
+
+    .btn-link:hover {
+        color: #2E698C !important;
+        text-decoration: underline;
+    }
+
+    .btn-link:focus, .btn-link.focus {
+        text-decoration: underline;
+        box-shadow: none;
+    }
+
+    .btn-link:disabled, .btn-link.disabled {
+        color: #2E698C !important;
+        pointer-events: none;
+    }
