@@ -35,21 +35,6 @@ namespace FIRSTShares.API.Controllers
                     ID = u.ID,
                     Nome = u.Nome,
                     NomeUsuario = u.NomeUsuario,
-                    CargoTime = u.CargoTime,
-                    DataCriacao = u.DataCriacao,
-                    Email = u.Email,
-                    Senha = u.Senha,
-                    Foto = u.Foto,
-                    Excluido = u.Excluido,
-                    Time = new TimeModel
-                    {
-                        ID = u.Time.ID,
-                        CodPais = u.Time.CodPais,
-                        Nome = u.Time.Nome,
-                        Numero = u.Time.Numero,
-                        Pais = u.Time.Pais,
-                        Excluido = u.Time.Excluido
-                    },
                     Cargo = new CargoModel
                     {
                         ID = u.Cargo.ID,
