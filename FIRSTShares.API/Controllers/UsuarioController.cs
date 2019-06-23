@@ -35,12 +35,7 @@ namespace FIRSTShares.API.Controllers
                     ID = u.ID,
                     Nome = u.Nome,
                     NomeUsuario = u.NomeUsuario,
-                    Cargo = new CargoModel
-                    {
-                        ID = u.Cargo.ID,
-                        Tipo = u.Cargo.Tipo,
-                        Excluido = u.Cargo.Excluido
-                    }
+                    CargoTipo = u.Cargo.Tipo
                 });
             });
 

@@ -12,6 +12,7 @@ namespace FIRSTShares.API.Models
         public string Nome { get; set; }
         public string NomeUsuario { get; set; }
         public string Email { get; set; }
-        public virtual CargoModel Cargo { get; set; }
+        public CargoTipo CargoTipo { get; set; }
+
     }
 }
