@@ -83,8 +83,8 @@ namespace FIRSTShares.API.Controllers
         }
 
 
-        [HttpGet("AlterarCargo/{id}")]
-        [HttpPut("{id}")]
+        [Route("AlterarCargo/{id}")]
+        [HttpGet]
         public ActionResult AlterarCargo(string cargo)
         {
             //var usuarioAlterado = Usuario.AlterarCargoUsuario(id, idCargo);
