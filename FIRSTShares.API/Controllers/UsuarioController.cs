@@ -85,14 +85,14 @@ namespace FIRSTShares.API.Controllers
 
         [Route("AlterarCargo/{id}")]
         [HttpPut("{id}")]
-        public ActionResult AlterarCargo(int id, [FromBody] int idCargo)
+        public ActionResult AlterarCargo(string cargo)
         {
-            var usuarioAlterado = Usuario.AlterarCargoUsuario(id, idCargo);
+            //var usuarioAlterado = Usuario.AlterarCargoUsuario(id, idCargo);
 
-            if (usuarioAlterado)
-                return Ok("Alterado com sucesso!");
+            //if (usuarioAlterado)
+                return Ok(string.Format("Alterado com sucesso! {0}", cargo));
 
-            return NotFound();
+            //return NotFound();
         }
 
         [Route("Excluir/{id}")]
