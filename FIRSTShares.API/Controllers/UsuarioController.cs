@@ -3,6 +3,7 @@ using FIRSTShares.Data;
 using FIRSTShares.Entities;
 using FIRSTShares.Util;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -87,12 +88,14 @@ namespace FIRSTShares.API.Controllers
         [HttpGet]
         public ActionResult AlterarCargo(string cargo)
         {
-            //var usuarioAlterado = Usuario.AlterarCargoUsuario(id, idCargo);
+            var cargoNovo = cargo.Split(",");
+            var enumCargo = (CargoTipo)Enum.Parse(typeof(CargoTipo), cargoNovo[3], true);
+            var usuarioAlterado = Usuario.AlterarCargoUsuario(Int32.Parse(cargoNovo[0]), (int)enumCargo);
 
-            //if (usuarioAlterado)
+            if (usuarioAlterado)
                 return Ok(string.Format("Alterado com sucesso! {0}", cargo));
 
-            //return NotFound();
+            return NotFound();
         }
 
         [Route("Excluir/{id}")]
