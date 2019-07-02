@@ -41,7 +41,7 @@ namespace FIRSTShares.Entities
         public bool AlterarCargoUsuario(int idUsuario, int cargoId)
         {
             var usuario = BD.Usuarios.SingleOrDefault(u => u.ID == idUsuario);
-            var cargo = BD.Cargos.SingleOrDefault(c => c.ID == cargoId);
+            var cargo = BD.Cargos.SingleOrDefault(c => (int)c.Tipo == cargoId);
 
             if (usuario != null && cargo != null)
             {
