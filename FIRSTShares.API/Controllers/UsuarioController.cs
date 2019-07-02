@@ -35,7 +35,7 @@ namespace FIRSTShares.API.Controllers
                     ID = u.ID,
                     Nome = u.Nome,
                     NomeUsuario = u.NomeUsuario,
-                    CargoTipo = u.Cargo.Tipo
+                    CargoTipo = u.Cargo.Tipo.ToString()
                 });
             });
 
