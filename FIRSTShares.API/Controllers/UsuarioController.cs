@@ -83,7 +83,7 @@ namespace FIRSTShares.API.Controllers
         }
 
 
-        [Route("AlterarCargo/{id}")]
+        [Route("AlterarCargo/{cargo}")]
         [HttpGet]
         public ActionResult AlterarCargo(string cargo)
         {
