@@ -15,12 +15,14 @@ namespace FIRSTShares.API.Controllers
     {
         private readonly LazyContext BD;
         public Denuncia Denuncia { get; set; }
+        public Denuncia Usuario { get; set; }
 
         public DenunciaController(LazyContext bd)
         {
             BD = bd;
 
             Denuncia = new Denuncia(BD);
+            Usuario = new Usuario(BD);
         }
 
         [HttpGet]
@@ -41,6 +43,16 @@ namespace FIRSTShares.API.Controllers
             });
 
             return Ok(denunciaModel);
+        }
+
+        [Route("/Banir/{idUsuario}/{idDenuncia}")]
+        [HttpGet]
+        public IActionResult BanirUsuario(int idUsuario, int idDenuncia)
+        {
+            if(Usuario.Excluir(idUsuario))
+                return Ok(Denuncia.Excluir(idDenuncia));
+
+            return NotFound();
         }
     }
 }

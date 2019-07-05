@@ -24,5 +24,29 @@ namespace FIRSTShares.Entities
         {
             return BD.Denuncias.Where(d => d.Excluido == false).ToList();
         }
+
+        public Denuncia RetornarDenunciaPorId(int idDenuncia)
+        {
+            return BD.Denuncias.SingleOrDefault(d => d.ID == idDenuncia);
+        }
+
+        public bool Excluir(int idDenuncia)
+        {
+            var denuncia = RetornarDenunciaPorId(idDenuncia);
+
+            if (denuncia != null)
+            {
+                denuncia.Excluido = true;
+
+                BD.Denuncias.Update(denuncia);
+                BD.SaveChanges();
+
+                return true;
+            }
+
+            return false;
+        }
+
     }
+}
 }
