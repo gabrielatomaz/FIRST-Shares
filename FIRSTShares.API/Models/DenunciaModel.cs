@@ -9,7 +9,7 @@ namespace FIRSTShares.API.Models
     {
         public int IDDenuncia { get; set; }
         public string Motivo { get; set; }
-        public string NomeUsuario { get; set; }
         public int IDUsuario { get; set; }
+        public string NomeUsuario { get; set; }
     }
 }
