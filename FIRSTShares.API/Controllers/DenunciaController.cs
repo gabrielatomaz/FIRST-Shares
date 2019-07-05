@@ -50,7 +50,7 @@ namespace FIRSTShares.API.Controllers
         public IActionResult BanirUsuario(int idUsuario, int idDenuncia)
         {
             if(Usuario.Excluir(idUsuario))
-                return Ok(Denuncia.Excluir(idDenuncia));
+                return Ok();
 
             return NotFound();
         }

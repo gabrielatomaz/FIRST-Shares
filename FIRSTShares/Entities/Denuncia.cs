@@ -22,7 +22,7 @@ namespace FIRSTShares.Entities
 
         public List<Denuncia> RetornarTodasDenuncias()
         {
-            return BD.Denuncias.Where(d => d.Excluido == false).ToList();
+            return BD.Denuncias.Where(d => d.Excluido == false && d.UsuarioDenunciado.Excluido == false).ToList();
         }
 
         public Denuncia RetornarDenunciaPorId(int idDenuncia)
