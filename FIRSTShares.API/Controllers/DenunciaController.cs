@@ -15,7 +15,7 @@ namespace FIRSTShares.API.Controllers
     {
         private readonly LazyContext BD;
         public Denuncia Denuncia { get; set; }
-        public Denuncia Usuario { get; set; }
+        public Usuario Usuario { get; set; }
 
         public DenunciaController(LazyContext bd)
         {
