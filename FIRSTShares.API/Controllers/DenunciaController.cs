@@ -54,5 +54,15 @@ namespace FIRSTShares.API.Controllers
 
             return NotFound();
         }
+
+        [Route("CancelarDenuncia/{idDenuncia}")]
+        [HttpGet]
+        public IActionResult CancelarDenuncia(int idDenuncia)
+        {
+            if (Denuncia.Excluir(idDenuncia))
+                return Ok();
+
+            return NotFound();
+        }
     }
 }
