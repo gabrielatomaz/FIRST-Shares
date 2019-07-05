@@ -15,6 +15,7 @@ namespace FIRSTShares.Data
         public DbSet<Discussao> Discussoes { get; set; }
         public DbSet<Curtida> Curtidas { get; set; }
         public DbSet<Postagem> Postagens { get; set; }
+        public DbSet<Denuncia> Denuncias { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -60,6 +61,10 @@ namespace FIRSTShares.Data
             modelBuilder.Entity<Postagem>()
                 .HasOne(d => d.Discussao)
                 .WithMany(p => p.Postagens);
+
+            modelBuilder.Entity<Denuncia>()
+               .HasOne(d => d.UsuarioDenunciado)
+               .WithMany(u => u.Denuncias);
 
         }
     }

@@ -27,6 +27,7 @@ namespace FIRSTShares.Entities
         public virtual Cargo Cargo { get; set; }
         public virtual List<Curtida> Curtidas { get; set; }
         public virtual List<Postagem> Postagens { get; set; }
+        public virtual List<Denuncia> Denuncias { get; set; }
 
         public Usuario RetonarUsuarioPorNomeUsuario(string nomeUsuario)
         {
