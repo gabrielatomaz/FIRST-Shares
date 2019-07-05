@@ -45,7 +45,7 @@ namespace FIRSTShares.API.Controllers
             return Ok(denunciaModel);
         }
 
-        [Route("/Banir/{idUsuario}/{idDenuncia}")]
+        [Route("Banir/{idUsuario}/{idDenuncia}")]
         [HttpGet]
         public IActionResult BanirUsuario(int idUsuario, int idDenuncia)
         {
