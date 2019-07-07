@@ -45,11 +45,13 @@ namespace FIRSTShares.API.Controllers
             return Ok(denunciaModel);
         }
 
-        [Route("Banir/{idUsuario}/{idDenuncia}")]
+        [Route("Banir/{denuncia}")]
         [HttpGet]
-        public IActionResult BanirUsuario(int idUsuario, int idDenuncia)
+        public IActionResult BanirUsuario(string denuncia)
         {
-            if(Usuario.Excluir(idUsuario))
+            var denunciaMotivoUsuario = denuncia.Split(",");
+
+            if (Usuario.Excluir(Int32.Parse(denunciaMotivoUsuario[0])))
                 return Ok();
 
             return NotFound();
