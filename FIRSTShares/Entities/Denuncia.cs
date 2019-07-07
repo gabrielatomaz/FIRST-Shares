@@ -25,14 +25,14 @@ namespace FIRSTShares.Entities
             return BD.Denuncias.Where(d => d.Excluido == false && d.UsuarioDenunciado.Excluido == false).ToList();
         }
 
-        public Denuncia RetornarDenunciaPorId(int idDenuncia)
+        public Denuncia RetornarDenunciaPorUsuarioId(int idUsuario)
         {
-            return BD.Denuncias.SingleOrDefault(d => d.ID == idDenuncia);
+            return BD.Denuncias.SingleOrDefault(d => d.UsuarioDenunciado.ID == idUsuario);
         }
 
         public bool Excluir(int idDenuncia)
         {
-            var denuncia = RetornarDenunciaPorId(idDenuncia);
+            var denuncia = RetornarDenunciaPorUsuarioId(idDenuncia);
 
             if (denuncia != null)
             {
