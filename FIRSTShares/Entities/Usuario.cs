@@ -29,7 +29,7 @@ namespace FIRSTShares.Entities
         public virtual List<Postagem> Postagens { get; set; }
         public virtual List<Denuncia> Denuncias { get; set; }
 
-        public Usuario RetonarUsuarioPorNomeUsuario(string nomeUsuario)
+        public Usuario RetornarUsuarioPorNomeUsuario(string nomeUsuario)
         {
             return BD.Usuarios.Single(u => u.NomeUsuario == nomeUsuario);
         }
@@ -74,6 +74,40 @@ namespace FIRSTShares.Entities
             return false;
         }
 
+        public bool ChecarSeEmailOuUsuarioEstaCadastrado(Usuario usuario)
+        {
+            return BD.Usuarios
+                .Any(u => (u.Email == usuario.Email || u.NomeUsuario == usuario.NomeUsuario) && u.Excluido == false);
+        }
+
+        public bool ChecarSeEmailOuUsuarioEstaCadastrado(string usuario, string email)
+        {
+            return BD.Usuarios
+                .Any(u => (u.Email == email || u.NomeUsuario == usuario) && u.Excluido == false);
+        }
+
+        public bool ChecarSeEmailEstaCadastrado(string email)
+        {
+            return BD.Usuarios
+                .Any(u => (u.Email == email) && u.Excluido == false);
+        }
+
+        public bool ChecarSeUsuarioEstaCadastrado(string usuario)
+        {
+            return BD.Usuarios
+                .Any(u => (u.NomeUsuario == usuario) && u.Excluido == false);
+        }
+
+        public bool AlterarUsuario(Usuario usuario)
+        {
+            BD.Usuarios.Update(usuario);
+            return BD.SaveChanges() > 0;
+        }
+
+        public Usuario RetornarUsuario(int id)
+        {
+            return BD.Usuarios.Single(u => u.ID == id);
+        }
     }
 
     public enum CargoTime

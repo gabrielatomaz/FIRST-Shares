@@ -1,0 +1,32 @@
+﻿@model FIRSTShares.Entities.Usuario
+<table class="table table-striped mt-3">
+    <thead>
+        <tr>
+            <th scope="col">Número</th>
+            <th scope="col">Nome</th>
+            <th scope="col">País</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Model.Time.Numero</td>
+            <td>@Model.Time.Nome</td>
+            <td>@Model.Time.Pais</td>
+        </tr>
+    </tbody>
+</table>
+<table class="table table-striped mt-3">
+    <thead>
+        <tr>
+            <th scope="col" colspan="3">Membros</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var membro in Model.Time.Usuarios)
+        {
+            <tr>
+                <td>@membro.NomeUsuario</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -118,5 +118,10 @@
     <script src="~/lib/jvectormap/jquery-jvectormap-south_america-mill.js"></script>
     <script defer src="~/lib/fontawesome/js/all.js"></script>
     @RenderSection("Scripts", required: false)
+    <script>
+    $(document).ready(function () {
+        $('.dropdown-toggle').dropdown();
+    });
+</script>
 </body>
 </html>

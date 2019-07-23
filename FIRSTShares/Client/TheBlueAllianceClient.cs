@@ -18,7 +18,7 @@ namespace FIRSTShares.Client
             HttpClient = new RestClient("https://www.thebluealliance.com/api/v3");
         }
 
-        public TimeTheBlueAlliance RetonarTimeTheBlueAllianceAsync(string numero)
+        public TimeTheBlueAlliance RetoenarTimeTheBlueAllianceAsync(string numero)
         {
             var request = new RestRequest(string.Format("team/frc{0}", numero));
             request.AddHeader("X-TBA-Auth-Key", "xbOx30uWwOP5b2Pc0YfVoujuxHt9llWMAgAulPS4VPMOV2hhT8DLZSWLzCgMuA3G");

@@ -132,7 +132,7 @@ namespace FIRSTShares.Controllers
         {
             var claims = (ClaimsIdentity)User.Identity;
 
-            return Usuario.RetonarUsuarioPorNomeUsuario(claims.Claims.Single(u => u.Type == "NomeUsuario").Value);
+            return Usuario.RetornarUsuarioPorNomeUsuario(claims.Claims.Single(u => u.Type == "NomeUsuario").Value);
         }
 
         private string SalvarComentario(Postagem postagem)

@@ -19,7 +19,7 @@ namespace FIRSTShares.Entities
         {
             var theBlueAlliance = new TheBlueAllianceClient();
 
-            return theBlueAlliance.RetonarTimeTheBlueAllianceAsync(numero);
+            return theBlueAlliance.RetoenarTimeTheBlueAllianceAsync(numero);
         }
 
         public bool ChecarSeTimeExiste(TimeTheBlueAlliance timeTheBlueAlliance)

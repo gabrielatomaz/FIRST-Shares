@@ -1,0 +1,122 @@
+﻿@model FIRSTShares.Entities.Usuario
+<div class="form-row mt-4" id="form">
+    <div class="form-group col-md-12">
+        <div class="input-group mb-2">
+            <input type="text" name="nome" id="nome" class="form-control" oninvalid="this.setCustomValidity('Por favor, preencha esse campo.')" value="@Model.Nome" disabled />
+            <div class="input-group-prepend">
+                <button class="input-group-text"><i class="far fa-edit"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="form-group col-md-6">
+        <div class="input-group mb-2">
+            <input type="text" name="nomeusuario" id="usuario" pattern="[a-zA-Z0-9]+" class="form-control" oninvalid="this.setCustomValidity('Usuário inválido.')" min="5" max="40" value="@Model.NomeUsuario" disabled />
+            <div class="input-group-prepend">
+                <button class="input-group-text"><i class="far fa-edit"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="form-group col-md-6">
+        <div class="input-group mb-2">
+            <input type="email" name="email" id="email" class="form-control" oninvalid="this.setCustomValidity('E-mail inválido.')" value="@Model.Email" disabled />
+            <div class="input-group-prepend">
+                <button class="input-group-text"><i class="far fa-edit"></i></button>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <input type="submit" value="Alterar informações" id="alterar_config" class="btn btn-block btn-primary" />
+    </div>
+    <div class="col-md-4">
+        <input type="submit" value="Alterar senha" class="btn btn-block btn-secondary" id="alt_senha" data-toggle="collapse" href="#collapseNewPassword" role="button" aria-expanded="false" aria-controls="collapseNewPassword" />
+    </div>
+    <div class="col-md-4">
+        <input type="submit" value="Alterar foto" class="btn btn-block btn-secondary" id="alt_foto" data-toggle="collapse" href="#collapseNewPhoto" role="button" aria-expanded="false" aria-controls="collapseNewPhoto" />
+    </div>
+</div>
+<div class="collapse" id="collapseNewPhoto">
+    <form action="/Profile/AlterarFoto" enctype="multipart/form-data" class="form-row mt-3 text-center" method="POST">
+        <input type="hidden" name="id" value="@Model.ID" />
+        <div class="custom-file form-group col-12 ml-1">
+            <input type="file" name="foto" class="custom-file-input">
+            <label class="custom-file-label" for="customFileLangHTML" data-browse="Buscar arquivo">Nova foto</label>
+        </div>
+        <input type="submit" class="btn btn-primary mt-3 form-group col-12" value="Alterar foto" />
+    </form>
+</div>
+<div class="collapse" id="collapseNewPassword">
+    <div class="form-row mt-3">
+        <div class="form-group col-md-12">
+            <label>Senha atual</label>
+            <input type="password" id="senhaAtual" class="form-control" min="5" max="50" oninvalid="this.setCustomValidity('Senha inválida! É necessário pelo menos 5 caracteres.')" placeholder="*******" required />
+        </div>
+        <div class="form-group col-md-6">
+            <label>Nova senha</label>
+            <input type="password" id="senha" class="form-control" min="5" max="50" oninvalid="this.setCustomValidity('Senha inválida! É necessário pelo menos 5 caracteres.')" placeholder="*******" required />
+        </div>
+        <div class="form-group col-md-6">
+            <label>Confirmar</label>
+            <input type="password" id="confirmaSenha" class="form-control" min="5" max="50" oninvalid="this.setCustomValidity('Senha inválida! É necessário pelo menos 5 caracteres.')" placeholder="*******" required />
+        </div>
+        <div class="col-md-12">
+            <input type="submit" value="Confirmar alteração" id="alterar_senha" class="btn btn-block btn-primary" />
+        </div>
+    </div>
+</div>
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+<script>
+    $(".input-group-text").on("click", function () {
+        $("#nome").prop("disabled", false);
+        $("#usuario").prop("disabled", false);
+        $("#email").prop("disabled", false);
+    });
+
+    $("#alterar_config").on("click", function () {
+        var nome = $("#nome").val();
+        var usuario = $("#usuario").val();
+        var email = $("#email").val();
+        var post = { "id": @Model.ID, "nome": nome, "usuario": usuario, "email": email };
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            url: "@Url.Action("AlterarPerfilAsync", "Profile")",
+            data: JSON.stringify(post),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            complete: function (data) {
+                if (data.responseText.includes("Erro") || data.responseText.includes("uso")) {
+                    alert(data.responseText);
+                    if (data.responseText.includes("Email"))
+                        $("#email").val("@Model.Email");
+                    else if (data.responseText.includes("Usuário"))
+                        $("#usuario").val("@Model.NomeUsuario");
+                }
+            }
+        });
+    });
+
+    $("#alterar_senha").on("click", function () {
+        var senhaAtual = $("#senhaAtual").val();
+        var senha = $("#senha").val();
+        var confirmaSenha = $("#confirmaSenha").val();
+        var post = { "IDUsuario": @Model.ID, "senhaAtual": senhaAtual, "senha": senha, "confirmaSenha": confirmaSenha };
+        $.ajax({
+            type: "POST",
+            traditional: true,
+            url: "@Url.Action("AlterarSenha", "Profile")",
+            data: JSON.stringify(post),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            complete: function (data) {
+                alert(data.responseText);
+            }
+        });
+    });
+    $("#alt_senha").on('click',function(){
+$('.collapse').collapse('hide');
+    })
+    $("#alt_foto").on('click',function(){
+$('.collapse').collapse('hide');
+})
+</script>

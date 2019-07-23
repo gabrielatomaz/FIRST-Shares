@@ -65,7 +65,7 @@ namespace FIRSTShares.Controllers
 
 
 
-        public string RetonarTimesJson()
+        public string RetornarTimesJson()
         {
             var times = RetornarTimes();
             var jsonPaisTimes = new { countries = RetornarPaisTimes(times) };

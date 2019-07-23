@@ -70,7 +70,7 @@ namespace FIRSTShares.Controllers
             var claims = (ClaimsIdentity)User.Identity;
 
             var categoria = Categoria.RetornarCategoriaPorId(conteudo.Categoria);
-            var usuario = Usuario.RetonarUsuarioPorNomeUsuario(claims.Claims.Single(u => u.Type == "NomeUsuario").Value);
+            var usuario = Usuario.RetornarUsuarioPorNomeUsuario(claims.Claims.Single(u => u.Type == "NomeUsuario").Value);
 
             var postagem = new Postagem
             {

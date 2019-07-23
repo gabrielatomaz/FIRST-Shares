@@ -12,8 +12,6 @@ using FIRSTShares.Util;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 
 namespace FIRSTShares.Controllers
 {
@@ -21,10 +19,12 @@ namespace FIRSTShares.Controllers
     {
 
         private readonly LazyContext BD;
+        private Usuario Usuario;
 
         public AccountController(LazyContext bd)
         {
             BD = bd;
+            Usuario = new Usuario(BD);
         }
 
         public IActionResult Register()
@@ -57,7 +57,7 @@ namespace FIRSTShares.Controllers
                 return View("Register");
             }
 
-            if (ChecarSeEmailOuUsuarioEstaCadastrado(usuario))
+            if (Usuario.ChecarSeEmailOuUsuarioEstaCadastrado(usuario))
             {
                 ViewBag.Mensagem = "Este e-mail ou usuário já está cadastrado.";
 
@@ -137,12 +137,6 @@ namespace FIRSTShares.Controllers
         public bool LoginUsuario(Usuario usuario, string senha)
         {
             return ((usuario == null) || (!Criptografia.Compara(usuario.Senha, senha))) ? false : true;
-        }
-
-        private bool ChecarSeEmailOuUsuarioEstaCadastrado(Usuario usuario)
-        {
-            return BD.Usuarios
-                .Any(u => (u.Email == usuario.Email || u.NomeUsuario == usuario.NomeUsuario) && u.Excluido == false) ? true : false;
         }
 
         private Usuario RetornarUsuarioPorEmailOuUsuario(string emailUsuario)
