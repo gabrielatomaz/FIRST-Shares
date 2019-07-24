@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FIRSTShares.Controllers
 {
-    
+
     public class ProfileController : Controller
     {
         public readonly LazyContext BD;
@@ -41,11 +41,13 @@ namespace FIRSTShares.Controllers
             var usuario = Usuario.RetornarUsuario(idUsuario);
 
             var claims = (ClaimsIdentity)User.Identity;
-            var usuarioLogado = Usuario.RetornarUsuarioPorNomeUsuario(claims.Claims.Single(u => u.Type == "NomeUsuario").Value);
+            if (claims.Claims.Count() > 0)
+            {
+                var usuarioLogado = Usuario.RetornarUsuarioPorNomeUsuario(claims.Claims.Single(u => u.Type == "NomeUsuario").Value);
 
-            if(usuarioLogado != null)
                 if (usuarioLogado.NomeUsuario == usuario.NomeUsuario)
-                return View("Index", usuario);
+                    return View("Index", usuario);
+            }
 
             return View("UserProfile", usuario);
         }
@@ -110,7 +112,8 @@ namespace FIRSTShares.Controllers
         {
             var usuario = Usuario.RetornarUsuario(model.UsuarioDenunciadoID);
 
-            var denuncia = new Denuncia {
+            var denuncia = new Denuncia
+            {
                 Motivo = model.Motivo,
                 UsuarioDenunciado = usuario
             };

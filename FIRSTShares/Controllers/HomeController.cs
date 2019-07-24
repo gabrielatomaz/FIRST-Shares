@@ -74,7 +74,9 @@ namespace FIRSTShares.Controllers
 
             var modelPostagens = await PagingList.CreateAsync(postagens, 5, page);
 
-            var modelTupleCategoriasPostagens = new Tuple<List<Categoria>, PagingList<Postagem>>(categorias, modelPostagens);
+            var usuarios = Usuario.RetornarUsuarios().OrderByDescending(u => u.Postagens.Where(p => !p.Excluido).Count()).Take(5).ToList();
+
+            var modelTupleCategoriasPostagens = new Tuple<List<Categoria>, PagingList<Postagem>, List<Usuario>>(categorias, modelPostagens, usuarios);
 
             return View(modelTupleCategoriasPostagens);
         }

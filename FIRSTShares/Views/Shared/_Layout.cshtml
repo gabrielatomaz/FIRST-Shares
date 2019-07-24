@@ -43,15 +43,15 @@
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item text-dark" asp-area="" asp-controller="Map" asp-action="Index">Manuais de jogos</a>
-                                <a class="dropdown-item text-dark" asp-area="" asp-controller="Map" asp-action="Index">Tutorias</a>
+                                <a class="dropdown-item text-dark" asp-area="" asp-controller="Resources" asp-action="Tutorials">Tutorias</a>
                             </div>
                         </li>
                     </ul>
                     <form asp-controller="Home" asp-action="Index" method="post" class="form row">
                         <div class="input-group mb-3 col-10 mt-3 ml-5">
-                            <input type="text" class="form-control border-secondary" name="search" placeholder="Pesquisar...">
+                            <input type="text" class="form-control border-secondary d-md-none d-lg-block d-none d-sm-block d-sm-none d-md-block" name="search" placeholder="Pesquisar...">
                             <div class="input-group-append">
-                                <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search"></i></button>
+                                <button class="btn btn-outline-primary d-md-none d-lg-block d-none d-sm-block d-sm-none d-md-block" type="submit"><i class="fas fa-search"></i></button>
                             </div>
                         </div>
                     </form>
@@ -74,7 +74,7 @@
 
                             <div class="dropdown">
                                 <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <img width="35" style="        border-radius: 5px;" src="~/img/usuarios/@photo.Value" />
+                                    <img width="35" style=" border-radius: 5px;" src="~/img/usuarios/@photo.Value" />
                                 </button>
                                 <div class="dropdown-menu" style="min-width:50px;" aria-labelledby="dropdownMenuButton">
                                     <a asp-area="" asp-controller="Profile" asp-action="Index" class="dropdown-item"><i class="fas fa-user mr-2"></i> Perfil</a>
