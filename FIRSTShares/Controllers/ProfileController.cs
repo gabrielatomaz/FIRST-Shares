@@ -40,6 +40,13 @@ namespace FIRSTShares.Controllers
         {
             var usuario = Usuario.RetornarUsuario(idUsuario);
 
+            var claims = (ClaimsIdentity)User.Identity;
+            var usuarioLogado = Usuario.RetornarUsuarioPorNomeUsuario(claims.Claims.Single(u => u.Type == "NomeUsuario").Value);
+
+            if(usuarioLogado != null)
+                if (usuarioLogado.NomeUsuario == usuario.NomeUsuario)
+                return View("Index", usuario);
+
             return View("UserProfile", usuario);
         }
 
