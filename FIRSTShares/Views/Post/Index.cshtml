@@ -51,7 +51,8 @@
                             {
                                 <partial name="~/Views/Post/_PartialEditPost.cshtml" model="@Model" />
                                 <a href="@Url.Action("Excluir", "Post", new { id = Model.Item2.ID })"
-                                   onclick="return confirm('Você tem certeza que deseja excluir essa postagem?')" class="float-right mt-2 mr-2 ml-2">
+                                   onclick="return confirm('Você tem certeza que deseja excluir essa postagem?')"
+                                   class="float-right mt-2 mr-2 ml-2">
                                     <i class="fas fa-trash-alt text-secondary"></i>
                                 </a>
                             }
@@ -76,11 +77,15 @@
                         {
                             @if (Model.Item2.Curtidas.Where(c => c.Excluido == false).Count() > 0)
                             {
+                                var margin = @Model.Item2.Curtidas.Where(c => c.Excluido == false).Count() > 0 ? "" : "mr-2";
+                                <button id="btnLikes" class="btn float-right p-2 text-dark">
+                                    <span id="numeroLikes" data-toggle="modal" data-target="#modalLikes"></span>
+                                </button>
                                 <partial name="~/Views/Post/_PartialShowLikes.cshtml" model="@Model" />
+                                <a href="#" class="float-right pt-2 pl-2 text-dark @margin">
+                                    <i class="far fa-heart"></i>
+                                </a>
                             }
-                            <a href="#" class="float-right pt-2 pl-2 text-dark mr-2">
-                                <i class="far fa-heart"></i>
-                            </a>
                         }
                     }
                 </div>
@@ -111,8 +116,10 @@
 
         if (@numeroLikes > 0) {
             $("#btnLikes").show();
+            $("#heart").removeClass("mr-2");
         } else {
             $("#btnLikes").hide();
+            $("#heart").addClass("mr-2");
         }
 
         $("#numeroLikes").text(@numeroLikes);
@@ -143,8 +150,9 @@
                 } else {
                     heart.addClass("text-secondary");
                     heart.removeClass("text-danger");
-                    heart.addClass("mr-2");
                     temCurtida = false;
+                    if (response.numeroCurtidas == 0)
+                        heart.addClass("mr-2");
                 }
 
                 if (response.numeroCurtidas > 0) {
