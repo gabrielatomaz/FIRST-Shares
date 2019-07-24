@@ -19,7 +19,6 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <div class="row">
-
                         <div class="col-6 mt-1">
                             <input type="text" class="form-control" maxlength="200" id="assunto"
                                    placeholder="Adicione um título" />
@@ -31,21 +30,11 @@
                                 {
                                     <option value="@categoria.ID">@categoria.Nome</option>
                                 }
-
                             </select>
                         </div>
                     </div>
                     <div class="col-1">
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            var user = (System.Security.Claims.ClaimsIdentity)User.Identity;
-                            var cargoUsuario = user.Claims.ToList().Find(t => t.Type == "CargoUsuario").Value;
-
-                            if (cargoUsuario == "Administrador" || cargoUsuario == "Moderador")
-                            {
-                                <button class="btn" id="oficial" data-toggle="tooltip" data-placement="top" title="Post oficial"><i id="oficialIcon" class="far fa-check-circle text-danger fa-2x"></i></button>
-                            }
-                        }
+                       
                     </div>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -57,7 +46,16 @@
                     </div>
                 </div>
                 <div class="modal-footer">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        var user = (System.Security.Claims.ClaimsIdentity)User.Identity;
+                        var cargoUsuario = user.Claims.ToList().Find(t => t.Type == "CargoUsuario").Value;
 
+                        if (cargoUsuario == "Administrador" || cargoUsuario == "Moderador")
+                        {
+                            <button class="btn" id="oficial" data-toggle="tooltip" data-placement="top" title="Post oficial"><i id="oficialIcon" class="far fa-check-circle text-danger fa-2x"></i></button>
+                        }
+                    }
                     <input type="submit" id="publicar" class="btn btn-primary" value="Publicar" />
                 </div>
             </div>

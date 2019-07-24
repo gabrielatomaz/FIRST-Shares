@@ -16,7 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FIRSTShares.Controllers
 {
-    [Authorize]
+    
     public class ProfileController : Controller
     {
         public readonly LazyContext BD;
@@ -28,6 +28,7 @@ namespace FIRSTShares.Controllers
             Usuario = new Usuario(BD);
         }
 
+        [Authorize]
         public IActionResult Index()
         {
             var claims = (ClaimsIdentity)User.Identity;
@@ -35,7 +36,15 @@ namespace FIRSTShares.Controllers
             return View(usuario);
         }
 
-        public IActionResult AlterarFoto(IFormFile foto, int id) {
+        public IActionResult UserProfile(int idUsuario)
+        {
+            var usuario = Usuario.RetornarUsuario(idUsuario);
+
+            return View("UserProfile", usuario);
+        }
+
+        public IActionResult AlterarFoto(IFormFile foto, int id)
+        {
             var usuario = Usuario.RetornarUsuario(id);
             SalvarFoto(foto, usuario.NomeUsuario);
 
@@ -88,6 +97,20 @@ namespace FIRSTShares.Controllers
             usuario.Senha = Criptografia.Codifica(model.Senha);
 
             return Usuario.AlterarUsuario(usuario) ? Json("Usuário alterado com sucesso") : Json("Erro ao alterar usuário");
+        }
+
+        public IActionResult Denunciar([FromBody] DenunciaModel model)
+        {
+            var usuario = Usuario.RetornarUsuario(model.UsuarioDenunciadoID);
+
+            var denuncia = new Denuncia {
+                Motivo = model.Motivo,
+                UsuarioDenunciado = usuario
+            };
+
+            BD.Add(denuncia);
+
+            return BD.SaveChanges() > 0 ? Json("Obrigado! Nossos moderadores vão analisar seu pedido.") : Json("Falha ao denunciar usuário, tente mais tarde novamente.");
         }
 
         public async Task<IActionResult> ExcluirPerfilAsync(int id)

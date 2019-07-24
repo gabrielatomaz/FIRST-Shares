@@ -219,7 +219,7 @@ body {
     }
 
     .btn-outline-primary:focus, .btn-outline-primary.focus {
-        box-shadow: 0 0 0 0.2rem #316B5A !important;
+        box-shadow: 0 0 0 0.2rem #68A593 !important;
     }
 
     .btn-outline-primary.disabled, .btn-outline-primary:disabled {
@@ -298,3 +298,11 @@ body {
         .show > .btn-primary.dropdown-toggle:focus {
             box-shadow: 0 0 0 0.2rem #2E698C !important;
         }
+
+.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #316B5A !important;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(130, 138, 145, 0.5);
+}

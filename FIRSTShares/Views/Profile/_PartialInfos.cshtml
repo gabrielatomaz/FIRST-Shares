@@ -1,0 +1,18 @@
+﻿@model FIRSTShares.Entities.Usuario
+<div class="form-row mt-4" id="form">
+    <div class="form-group col-md-12">
+        <div class="input-group mb-2">
+            <input type="text" name="nome" id="nome" class="form-control" value="@Model.Nome" disabled />
+        </div>
+    </div>
+    <div class="form-group col-md-6">
+        <div class="input-group mb-2">
+            <input type="text" name="nomeusuario" id="usuario" class="form-control"  value="@Model.NomeUsuario" disabled />
+        </div>
+    </div>
+    <div class="form-group col-md-6">
+        <div class="input-group mb-2">
+            <input type="email" name="email" id="email" class="form-control" value="@Model.Email" disabled />
+        </div>
+    </div>
+</div>

@@ -47,7 +47,14 @@
                             </div>
                         </li>
                     </ul>
-
+                    <form asp-controller="Home" asp-action="Index" method="post" class="form row">
+                        <div class="input-group mb-3 col-10 mt-3 ml-5">
+                            <input type="text" class="form-control border-secondary" name="search" placeholder="Pesquisar...">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-primary" type="submit"><i class="fas fa-search"></i></button>
+                            </div>
+                        </div>
+                    </form>
                     @if (!User.Identity.IsAuthenticated)
                     {
                         <ul class="navbar-nav ml-0">
@@ -119,9 +126,9 @@
     <script defer src="~/lib/fontawesome/js/all.js"></script>
     @RenderSection("Scripts", required: false)
     <script>
-    $(document).ready(function () {
-        $('.dropdown-toggle').dropdown();
-    });
-</script>
+        $(document).ready(function () {
+            $('.dropdown-toggle').dropdown();
+        });
+    </script>
 </body>
 </html>

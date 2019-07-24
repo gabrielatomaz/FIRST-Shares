@@ -86,7 +86,7 @@
             dataType: "json",
             complete: function (data) {
                 if (data.responseText.includes("Erro") || data.responseText.includes("uso")) {
-                    alert(data.responseText);
+                    alert(data.responseJSON);
                     if (data.responseText.includes("Email"))
                         $("#email").val("@Model.Email");
                     else if (data.responseText.includes("Usuário"))
@@ -109,7 +109,7 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             complete: function (data) {
-                alert(data.responseText);
+                alert(data.responseJSON);
             }
         });
     });

@@ -33,13 +33,18 @@ namespace FIRSTShares.Controllers
             Discussao = new Discussao(BD);
         }
 
-        public async Task<IActionResult> Index(int page = 1)
+        public async Task<IActionResult> Index(string search, int page = 1)
         {
             var categorias = BD.Categorias.Where(c => c.Excluido == false).ToList();
 
-            var postagens = BD.Postagens
-                .Where(p => p.Excluido == false && p.PostagemPai == null)
-                .Select(p => new Postagem {
+            IOrderedQueryable<Postagem> postagens;
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                postagens = BD.Postagens
+                .Where(p => p.Excluido == false && p.PostagemPai == null && (p.Discussao.Assunto.Contains(search) || p.Categoria.Nome.Contains(search)))
+                .Select(p => new Postagem
+                {
                     Discussao = p.Discussao,
                     Usuario = p.Usuario,
                     Categoria = p.Categoria,
@@ -49,6 +54,23 @@ namespace FIRSTShares.Controllers
                     ID = p.ID
                 })
                 .OrderByDescending(p => p.DataCriacao);
+            }
+            else
+            {
+                postagens = BD.Postagens
+                    .Where(p => p.Excluido == false && p.PostagemPai == null)
+                    .Select(p => new Postagem
+                    {
+                        Discussao = p.Discussao,
+                        Usuario = p.Usuario,
+                        Categoria = p.Categoria,
+                        DataCriacao = p.DataCriacao,
+                        Conteudo = p.Conteudo,
+                        Excluido = p.Excluido,
+                        ID = p.ID
+                    })
+                    .OrderByDescending(p => p.DataCriacao);
+            }
 
             var modelPostagens = await PagingList.CreateAsync(postagens, 5, page);
 
