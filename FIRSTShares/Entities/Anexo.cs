@@ -19,5 +19,6 @@ public enum TipoAnexo
 {
     Video,
     PDF,
-    NULL
+    NULL, 
+    Manual
 }

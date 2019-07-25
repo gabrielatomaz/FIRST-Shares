@@ -42,7 +42,7 @@ namespace FIRSTShares.Controllers
             if (!string.IsNullOrEmpty(search))
             {
                 postagens = BD.Postagens
-                .Where(p => p.Excluido == false && p.PostagemPai == null && (p.Discussao.Assunto.Contains(search) || p.Categoria.Nome.Contains(search)))
+                .Where(p => p.Excluido == false && p.PostagemPai == null && !p.PostagemOficial && (p.Discussao.Assunto.Contains(search) || p.Categoria.Nome.Contains(search)))
                 .Select(p => new Postagem
                 {
                     Discussao = p.Discussao,
@@ -58,7 +58,7 @@ namespace FIRSTShares.Controllers
             else
             {
                 postagens = BD.Postagens
-                    .Where(p => p.Excluido == false && p.PostagemPai == null)
+                    .Where(p => p.Excluido == false && p.PostagemPai == null && !p.PostagemOficial)
                     .Select(p => new Postagem
                     {
                         Discussao = p.Discussao,

@@ -1,0 +1,33 @@
+﻿@model PagingList<FIRSTShares.Entities.Anexo>
+@using ReflectionIT.Mvc.Paging
+<div class="row">
+    <div class="col-md-8 col-sm-10">
+        <partial name="~/Views/Manual/_PartialAddManual.cshtml" />
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8 col-sm-12">
+        <div class="accordion" id="accordionExample">
+            <partial name="~/Views/Manual/_PartialManual.cshtml" />
+        </div>
+    </div>
+    <div class="col-4 d-none d-sm-block d-sm-none d-md-block">
+        <div class="card" style="width: 18rem;">
+            <img src="~/img/teamwork.png" class="card-img-top" style="-webkit-filter: grayscale(100%);filter: grayscale(100%);" />
+            <div class="card-body">
+                <h5 class="card-title">Um resumo do que você irá encontrar aqui!</h5>
+                <p class="card-text">
+                    blá blá blá manuais traduzidos blá blá blá
+                    blá blá blá manuais traduzidos blá blá blá
+                    blá blá blá manuais traduzidos blá blá blá
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-12 col-md-8">
+        <partial name="~/Views/Manual/_PartialPagination.cshtml" />
+    </div>
+</div>
+

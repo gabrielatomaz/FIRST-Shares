@@ -21,8 +21,8 @@ namespace FIRSTShares.Controllers
             BD = bd;
 
             Usuario = new Usuario(BD);
-
         }
+
         public async Task<IActionResult> Index(int page = 1)
         {
             var postagens = BD.Postagens
@@ -90,7 +90,8 @@ namespace FIRSTShares.Controllers
                 SRC = model.SRC,
                 TipoAnexo = model.Tipo,
                 Titulo = model.Titulo,
-                Usuario = usuario
+                Usuario = usuario,
+                DataCriacao = DateTime.Now
             };
 
             BD.Add(anexo);
