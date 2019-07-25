@@ -39,7 +39,7 @@ namespace FIRSTShares.Controllers
                 })
                 .OrderByDescending(p => p.DataCriacao);
 
-            var modelPostagens = await PagingList.CreateAsync(postagens, 5, page);
+            var modelPostagens = await PagingList.CreateAsync(postagens, 3, page);
 
             return View(modelPostagens);
         }
