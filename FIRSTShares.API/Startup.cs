@@ -30,8 +30,8 @@ namespace FIRSTShares.API
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddJsonOptions(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
-            //var connection = "Data Source=187.84.232.19,1433;Initial Catalog=Db_FirstShares;persist security info=True;user id=sa;password=!Alterar123@";
-            var connection = "Data Source=sqlserver,1433;Initial Catalog=Db_FirstShares;persist security info=True;user id=sa;password=!Alterar123@";
+            var connection = "Data Source=187.84.232.19,1433;Initial Catalog=Db_FirstShares;persist security info=True;user id=sa;password=!Alterar123@";
+            //var connection = "Data Source=sqlserver,1433;Initial Catalog=Db_FirstShares;persist security info=True;user id=sa;password=!Alterar123@";
             services.AddDbContext<LazyContext>
                 (options => options.UseSqlServer(connection));
         }
