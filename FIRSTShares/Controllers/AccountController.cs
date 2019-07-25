@@ -85,7 +85,7 @@ namespace FIRSTShares.Controllers
                     new Claim(ClaimTypes.Name, usuario.Nome),
                     new Claim(ClaimTypes.Email, usuario.Email),
                     new Claim("NomeUsuario", nomeUsuario),
-                    new Claim("Foto", RetornarFoto(nomeUsuario)),
+                    new Claim("Foto", usuarioDb.Foto),
                     new Claim("CargoUsuario", usuario.Cargo.Tipo.ToString())
                 };
 
@@ -114,7 +114,7 @@ namespace FIRSTShares.Controllers
                     new Claim(ClaimTypes.Name, usuario.Nome),
                     new Claim(ClaimTypes.Email, usuario.Email),
                     new Claim("NomeUsuario", nomeUsuario),
-                    new Claim("Foto", RetornarFoto(nomeUsuario)),
+                    new Claim("Foto", usuario.Foto),
                     new Claim("CargoUsuario", usuario.Cargo.Tipo.ToString())
                 };
 
