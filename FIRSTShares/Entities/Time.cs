@@ -48,12 +48,34 @@ namespace FIRSTShares.Entities
 
         public string RetornarCodPais(string nomePais)
         {
-            if (nomePais.Count() > 3)
+            switch (nomePais)
             {
-                var regions = CultureInfo.GetCultures(CultureTypes.SpecificCultures).Select(x => new RegionInfo(x.LCID));
-                var englishRegion = regions.FirstOrDefault(region => region.EnglishName.Contains(nomePais));
-
-                return englishRegion.TwoLetterISORegionName;
+                case "Paraguay":
+                    return "PY";
+                case "Colombia":
+                    return "CO";
+                case "Venezuela":
+                    return "VE";
+                case "Chile":
+                    return "CL";
+                case "Suriname":
+                    return "SR";
+                case "Bolivia":
+                    return "BO";
+                case "Ecuador":
+                    return "EC";
+                case "Argentina":
+                    return "AR";
+                case "Guyana":
+                    return "GY";
+                case "Brazil":
+                    return "BR";
+                case "Peru":
+                    return "PE";
+                case "Uruguay":
+                    return "UY";
+                case "Falkland Is.":
+                    return "FK";
             }
 
             return nomePais;
