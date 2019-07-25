@@ -4,14 +4,16 @@ using FIRSTShares.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FIRSTShares.Migrations
 {
     [DbContext(typeof(LazyContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20190724215239_AddAnexoTipo")]
+    partial class AddAnexoTipo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,10 +26,6 @@ namespace FIRSTShares.Migrations
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("DataCriacao");
-
-                    b.Property<bool>("Excluido");
 
                     b.Property<string>("Resumo");
 

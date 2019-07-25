@@ -128,7 +128,7 @@ namespace FIRSTShares.Controllers
             Postagem.Alterar(postagem);
         }
 
-        private Usuario RetornarUsuarioLogado()
+        public Usuario RetornarUsuarioLogado()
         {
             var claims = (ClaimsIdentity)User.Identity;
 

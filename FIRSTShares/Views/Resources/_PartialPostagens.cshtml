@@ -1,0 +1,26 @@
+﻿@model PagingList<FIRSTShares.Entities.Postagem>
+@using ReflectionIT.Mvc.Paging
+    <div class="alert alert-secondary text-center" role="alert">
+        <i class="far fa-check-square fa-2x" style="color:#568578"></i><h5>Postagens oficias</h5>
+    </div>
+@foreach (var postagem in Model.ToList())
+{
+    <div class="card">
+        <div class="card-body">
+            @{
+                var pontinhosPost = (postagem.Conteudo.Length < 200) ? "" : " [...]";
+                var pontinhosTitulo = (postagem.Discussao.Assunto.Length < 45) ? "" : "...";
+            }
+            <h5 class="card-title">
+                <span class="badge badge-info p-2 mr-2">@postagem.Categoria.Nome</span> @postagem.Discussao.Assunto.Substring(0, Math.Min(postagem.Discussao.Assunto.Length, 45))@pontinhosTitulo
+            </h5>
+            <p class="card-text">@Html.Raw(postagem.Conteudo.Substring(0, Math.Min(postagem.Conteudo.Length, 200)) + pontinhosPost)</p>
+            <a href="@Url.Action("Index", "Post", new { id = postagem.ID } )" class="btn btn-info float-right pt-0 pb-0" data-toggle="tooltip" data-placement="top" title="Ler mais"><i class="fas fa-angle-double-right"></i></a>
+        </div>
+        <div class="card-footer text-muted">
+            <span class="float-left"><a asp-area="" asp-controller="Profile" asp-action="UserProfile" asp-route-idUsuario="@postagem.Usuario.ID" style="color: dimgrey;">@postagem.Usuario.NomeUsuario</a></span>
+            <span class="float-right">@postagem.DataCriacao</span>
+        </div>
+    </div>
+}
+
