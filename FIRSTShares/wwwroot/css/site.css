@@ -304,5 +304,11 @@ body {
     background-color: #fff;
     border-color: #316B5A !important;
     outline: 0;
-    box-shadow: 0 0 0 0.2rem rgba(130, 138, 145, 0.5);
+    box-shadow: 0 0 0 0.2rem rgba(130, 138, 145, 0.5) !important;
+}
+
+.dropdown-item.active, .dropdown-item:active {
+    color: #fff;
+    text-decoration: none;
+    background-color: rgba(130, 138, 145, 0.5) !important;
 }
