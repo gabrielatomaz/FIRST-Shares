@@ -79,14 +79,13 @@ namespace FIRSTShares.Controllers
 
             SalvarUsuario(usuarioDb);
 
-            var nomeUsuario = usuario.NomeUsuario;
             var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, usuario.Nome),
                     new Claim(ClaimTypes.Email, usuario.Email),
-                    new Claim("NomeUsuario", nomeUsuario),
+                    new Claim("NomeUsuario", usuario.NomeUsuario),
                     new Claim("Foto", usuarioDb.Foto),
-                    new Claim("CargoUsuario", usuario.Cargo.Tipo.ToString())
+                    new Claim("CargoUsuario", CargoTipo.Usuario.ToString())
                 };
 
             var userIdentity = new ClaimsIdentity(claims, "login");
@@ -110,13 +109,13 @@ namespace FIRSTShares.Controllers
                 {
                     var nomeUsuario = usuario.NomeUsuario;
                     var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, usuario.Nome),
-                    new Claim(ClaimTypes.Email, usuario.Email),
-                    new Claim("NomeUsuario", nomeUsuario),
-                    new Claim("Foto", usuario.Foto),
-                    new Claim("CargoUsuario", usuario.Cargo.Tipo.ToString())
-                };
+                    {
+                        new Claim(ClaimTypes.Name, usuario.Nome),
+                        new Claim(ClaimTypes.Email, usuario.Email),
+                        new Claim("NomeUsuario", nomeUsuario),
+                        new Claim("Foto", usuario.Foto),
+                        new Claim("CargoUsuario", usuario.Cargo.Tipo.ToString())
+                    };
 
                     var userIdentity = new ClaimsIdentity(claims, "login");
                     var principal = new ClaimsPrincipal(userIdentity);
@@ -142,7 +141,7 @@ namespace FIRSTShares.Controllers
         private Usuario RetornarUsuarioPorEmailOuUsuario(string emailUsuario)
         {
             return BD.Usuarios
-                .SingleOrDefault(usuario => 
+                .SingleOrDefault(usuario =>
                 ((usuario.Email == emailUsuario) || (usuario.NomeUsuario == emailUsuario)) && (usuario.Excluido == false)
                 );
         }
