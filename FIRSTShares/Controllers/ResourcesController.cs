@@ -66,7 +66,7 @@ namespace FIRSTShares.Controllers
             return Json(anexos);
         }
 
-        public IActionResult Excluir(int id)
+        public async Task<IActionResult> Excluir(int id)
         {
             var anexo = BD.Anexos.SingleOrDefault(a => a.ID == id);
             anexo.Excluido = true;
@@ -74,9 +74,23 @@ namespace FIRSTShares.Controllers
             BD.Update(anexo);
             BD.SaveChanges();
 
-            var anexos = BD.Anexos.Where(a => !a.Excluido).OrderByDescending(a => a.DataCriacao).ToList();
+            var postagens = BD.Postagens
+               .Where(p => !p.Excluido && p.PostagemPai == null && p.PostagemOficial)
+               .Select(p => new Postagem
+               {
+                   Discussao = p.Discussao,
+                   Usuario = p.Usuario,
+                   Categoria = p.Categoria,
+                   DataCriacao = p.DataCriacao,
+                   Conteudo = p.Conteudo,
+                   Excluido = p.Excluido,
+                   ID = p.ID
+               })
+               .OrderByDescending(p => p.DataCriacao);
 
-            return View("Index", anexos);
+            var modelPostagens = await PagingList.CreateAsync(postagens, 3, 1);
+
+            return View("Index", modelPostagens);
         }
 
         public IActionResult AdicionarAnexo([FromBody] AnexoModel model)

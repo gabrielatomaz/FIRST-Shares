@@ -53,5 +53,22 @@ namespace FIRSTShares.Controllers
 
             return BD.SaveChanges() > 0 ? Json("Manual adicionado com sucesso!") : Json("Falha ao adicionar manual, tente novamente mais tarde.");
         }
+
+        public async Task<IActionResult> Excluir(int id)
+        {
+            var anexo = BD.Anexos.SingleOrDefault(a => a.ID == id);
+            anexo.Excluido = true;
+
+            BD.Update(anexo);
+            BD.SaveChanges();
+            
+            var anexos = BD.Anexos
+                .Where(a => !a.Excluido && a.TipoAnexo == TipoAnexo.Manual)
+                .OrderByDescending(a => a.Titulo);
+
+            var modelAnexos = await PagingList.CreateAsync(anexos, 6, 1);
+
+            return View("Index", modelAnexos);
+        }
     }
 }
