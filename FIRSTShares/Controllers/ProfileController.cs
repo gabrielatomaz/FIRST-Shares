@@ -34,6 +34,8 @@ namespace FIRSTShares.Controllers
             var claims = (ClaimsIdentity)User.Identity;
             var usuario = Usuario.RetornarUsuarioPorNomeUsuario(claims.Claims.Single(u => u.Type == "NomeUsuario").Value);
 
+            MostrarFotoPerfil();
+
             var errorViewModel = new ErrorViewModel { };
 
             var model = new Tuple<Usuario, ErrorViewModel>(usuario, errorViewModel);
@@ -45,6 +47,8 @@ namespace FIRSTShares.Controllers
         {
             var usuario = Usuario.RetornarUsuario(idUsuario);
             var error = new ErrorViewModel { };
+
+            MostrarFotoPerfil();
 
             var claims = (ClaimsIdentity)User.Identity;
             if (claims.Claims.Count() > 0)
@@ -202,6 +206,18 @@ namespace FIRSTShares.Controllers
             }
 
             return "user.png";
+        }
+
+        private void MostrarFotoPerfil()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var claims = (ClaimsIdentity)User.Identity;
+                var usuario = Usuario.RetornarUsuarioPorNomeUsuario(claims.Claims.Single(u => u.Type == "NomeUsuario").Value);
+
+                var foto = Convert.ToBase64String(usuario.Foto.FotoBase64);
+                ViewData["foto"] = foto;
+            }
         }
     }
 }

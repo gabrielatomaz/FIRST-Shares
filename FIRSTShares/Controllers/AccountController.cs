@@ -85,7 +85,6 @@ namespace FIRSTShares.Controllers
                     new Claim(ClaimTypes.Name, usuario.Nome),
                     new Claim(ClaimTypes.Email, usuario.Email),
                     new Claim("NomeUsuario", usuario.NomeUsuario),
-                    new Claim("Foto", System.Text.Encoding.UTF8.GetString(usuario.Foto.FotoBase64, 0, usuario.Foto.FotoBase64.Length)),
                     new Claim("CargoUsuario", CargoTipo.Usuario.ToString())
                 };
 
@@ -116,16 +115,15 @@ namespace FIRSTShares.Controllers
             {
                 if (LoginUsuario(usuario, usuarioModel.Senha))
                 {
-                    var foto = Convert.ToBase64String(usuario.Foto.FotoBase64);
                     var nomeUsuario = usuario.NomeUsuario;
                     var claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.Name, usuario.Nome),
                         new Claim(ClaimTypes.Email, usuario.Email),
                         new Claim("NomeUsuario", nomeUsuario),
-                        new Claim("Foto", foto),
                         new Claim("CargoUsuario", usuario.Cargo.Tipo.ToString())
                     };
+
 
                     var userIdentity = new ClaimsIdentity(claims, "login");
                     var principal = new ClaimsPrincipal(userIdentity);

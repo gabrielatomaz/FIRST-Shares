@@ -8,15 +8,20 @@ using Newtonsoft.Json;
 using System.Globalization;
 using FIRSTShares.Entities;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using System;
 
 namespace FIRSTShares.Controllers
 {
     public class MapController : Controller
     {
         private readonly LazyContext BD;
+        private readonly Usuario Usuario;
 
         public IActionResult Index()
         {
+            MostrarFotoPerfil();
+
             return View();
         }
 
@@ -24,6 +29,8 @@ namespace FIRSTShares.Controllers
         public MapController(LazyContext context)
         {
             BD = context;
+
+            Usuario = new Usuario(BD);
         }
 
         [HttpPost]
@@ -62,8 +69,6 @@ namespace FIRSTShares.Controllers
 
             return ViewBag.Mensagem = "Falha ao cadastrar time.";
         }
-
-
 
         public string RetornarTimesJson()
         {
@@ -106,5 +111,16 @@ namespace FIRSTShares.Controllers
             return dictionaryPais;
         }
 
+        private void MostrarFotoPerfil()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var claims = (ClaimsIdentity)User.Identity;
+                var usuario = Usuario.RetornarUsuarioPorNomeUsuario(claims.Claims.Single(u => u.Type == "NomeUsuario").Value);
+
+                var foto = Convert.ToBase64String(usuario.Foto.FotoBase64);
+                ViewData["foto"] = foto;
+            }
+        }
     }
 }

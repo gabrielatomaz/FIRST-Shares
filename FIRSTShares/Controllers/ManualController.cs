@@ -32,6 +32,8 @@ namespace FIRSTShares.Controllers
 
             var modelAnexos = await PagingList.CreateAsync(anexos, 6, page);
 
+            MostrarFotoPerfil();
+
             return View(modelAnexos);
         }
 
@@ -69,6 +71,18 @@ namespace FIRSTShares.Controllers
             var modelAnexos = await PagingList.CreateAsync(anexos, 6, 1);
 
             return View("Index", modelAnexos);
+        }
+
+        private void MostrarFotoPerfil()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var claims = (ClaimsIdentity)User.Identity;
+                var usuario = Usuario.RetornarUsuarioPorNomeUsuario(claims.Claims.Single(u => u.Type == "NomeUsuario").Value);
+
+                var foto = Convert.ToBase64String(usuario.Foto.FotoBase64);
+                ViewData["foto"] = foto;
+            }
         }
     }
 }

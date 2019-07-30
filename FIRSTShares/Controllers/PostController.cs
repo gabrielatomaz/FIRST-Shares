@@ -34,6 +34,8 @@ namespace FIRSTShares.Controllers
 
         public IActionResult Index(int id)
         {
+            MostrarFotoPerfil();
+
             var postagem = BD.Postagens.Single(p => p.ID == id);
             var categorias = BD.Categorias.Where(c => c.Excluido == false).ToList();
 
@@ -151,6 +153,18 @@ namespace FIRSTShares.Controllers
                 BD.Curtidas.Add(curtida);
 
             return BD.SaveChanges() > 0 ? true : false;
+        }
+
+        private void MostrarFotoPerfil()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var claims = (ClaimsIdentity)User.Identity;
+                var usuario = Usuario.RetornarUsuarioPorNomeUsuario(claims.Claims.Single(u => u.Type == "NomeUsuario").Value);
+
+                var foto = Convert.ToBase64String(usuario.Foto.FotoBase64);
+                ViewData["foto"] = foto;
+            }
         }
     }
 }

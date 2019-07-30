@@ -39,6 +39,8 @@ namespace FIRSTShares.Controllers
                 })
                 .OrderByDescending(p => p.DataCriacao);
 
+            MostrarFotoPerfil();
+
             var modelPostagens = await PagingList.CreateAsync(postagens, 3, page);
 
             return View(modelPostagens);
@@ -111,6 +113,18 @@ namespace FIRSTShares.Controllers
             BD.Add(anexo);
 
             return BD.SaveChanges() > 0 ? Json("Anexo adicionado com sucesso!") : Json("Falha ao adicionar anexo, tente novamente mais tarde.");
+        }
+
+        private void MostrarFotoPerfil()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var claims = (ClaimsIdentity)User.Identity;
+                var usuario = Usuario.RetornarUsuarioPorNomeUsuario(claims.Claims.Single(u => u.Type == "NomeUsuario").Value);
+
+                var foto = Convert.ToBase64String(usuario.Foto.FotoBase64);
+                ViewData["foto"] = foto;
+            }
         }
     }
 }
