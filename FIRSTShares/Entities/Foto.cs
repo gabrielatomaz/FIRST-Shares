@@ -7,6 +7,7 @@ namespace FIRSTShares.Entities
 {
     public class Foto
     {
+        public Foto() { }
         public int ID { get; set; }
         public byte[] FotoBase64 { get; set; }
     }

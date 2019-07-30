@@ -80,8 +80,6 @@ namespace FIRSTShares.Controllers
             if (!AlterarUsuarioFoto(foto, usuario))
                 error.NotFound = true;
 
-            SalvarFoto(foto, usuario.NomeUsuario);
-
             var model = new Tuple<Usuario, ErrorViewModel>(usuario, error);
 
             return View("Index", model);
@@ -185,27 +183,6 @@ namespace FIRSTShares.Controllers
             Thread.CurrentPrincipal = principal;
 
             await HttpContext.SignInAsync(principal);
-        }
-
-        private string SalvarFoto(IFormFile foto, string nomeUsuario)
-        {
-            if (foto != null)
-            {
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/usuarios", nomeUsuario + Path.GetExtension(foto.FileName));
-
-                if (foto.Length > 0)
-                {
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        foto.CopyTo(stream);
-                        stream.Flush();
-                    }
-                }
-
-                return nomeUsuario + Path.GetExtension(foto.FileName);
-            }
-
-            return "user.png";
         }
 
         private void MostrarFotoPerfil()
