@@ -7,5 +7,6 @@ namespace FIRSTShares.Models
         public string RequestId { get; set; }
 
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+        public bool NotFound { get; set; }
     }
 }

@@ -16,9 +16,9 @@
                 <ul class="list-group">
                     @foreach (var curtida in Model.Item2.Curtidas.Where(c => c.Excluido == false).OrderByDescending(c => c.Postagem.DataCriacao))
                     {
-                        var foto = curtida.Usuario.Foto;
+                        var foto = curtida.Usuario.Foto.FotoBase64;
                         <li class="list-group-item d-flex align-items-center">
-                            <img src="~/img/usuarios/@foto" width="40" style="border-radius:20px;" class="img-fluid" />
+                            <img src="data:image;base64,@Convert.ToBase64String(@foto)" width="40" style="border-radius:20px;" class="img-fluid" />
                             <span class="ml-3">@curtida.Usuario.NomeUsuario</span>
                         </li>
                     }

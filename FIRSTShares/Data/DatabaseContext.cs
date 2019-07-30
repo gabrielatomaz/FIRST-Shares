@@ -17,6 +17,7 @@ namespace FIRSTShares.Data
         public DbSet<Postagem> Postagens { get; set; }
         public DbSet<Denuncia> Denuncias { get; set; }
         public DbSet<Anexo> Anexos { get; set; }
+        public DbSet<Foto> Fotos { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -71,6 +72,8 @@ namespace FIRSTShares.Data
                 .HasOne(u => u.Usuario)
                 .WithMany(a => a.Anexos);
 
+            modelBuilder.Entity<Usuario>()
+                .HasOne(u => u.Foto);
         }
     }
 }

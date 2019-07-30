@@ -1,4 +1,4 @@
-﻿@model FIRSTShares.Entities.Usuario
+﻿@model Tuple<FIRSTShares.Entities.Usuario, ErrorViewModel>
 
 <button type="button" class="btn btn-danger mt-3" data-toggle="modal" data-target="#modalBan">
     <i class="fas fa-user-slash"></i> Denunciar
@@ -30,7 +30,7 @@
 $(function () {
     $("#denunciar").on("click", function () {
         if ($("#motivo").val().length > 5) {
-            var denuncia = { "motivo": $("#motivo").val(), "usuarioDenunciadoID": @Model.ID};
+            var denuncia = { "motivo": $("#motivo").val(), "usuarioDenunciadoID": @Model.Item1.ID};
             $.ajax({
                 type: "POST",
                 traditional: true,

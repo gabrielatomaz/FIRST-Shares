@@ -1,8 +1,9 @@
-﻿@model FIRSTShares.Entities.Usuario
+﻿@model Tuple<FIRSTShares.Entities.Usuario, ErrorViewModel>
+
 <div class="form-row mt-4" id="form">
     <div class="form-group col-md-12">
         <div class="input-group mb-2">
-            <input type="text" name="nome" id="nome" class="form-control" oninvalid="this.setCustomValidity('Por favor, preencha esse campo.')" value="@Model.Nome" disabled />
+            <input type="text" name="nome" id="nome" class="form-control" oninvalid="this.setCustomValidity('Por favor, preencha esse campo.')" value="@Model.Item1.Nome" disabled />
             <div class="input-group-prepend">
                 <button class="input-group-text"><i class="far fa-edit"></i></button>
             </div>
@@ -10,7 +11,7 @@
     </div>
     <div class="form-group col-md-6">
         <div class="input-group mb-2">
-            <input type="text" name="nomeusuario" id="usuario" pattern="[a-zA-Z0-9]+" class="form-control" oninvalid="this.setCustomValidity('Usuário inválido.')" min="5" max="40" value="@Model.NomeUsuario" disabled />
+            <input type="text" name="nomeusuario" id="usuario" pattern="[a-zA-Z0-9]+" class="form-control" oninvalid="this.setCustomValidity('Usuário inválido.')" min="5" max="40" value="@Model.Item1.NomeUsuario" disabled />
             <div class="input-group-prepend">
                 <button class="input-group-text"><i class="far fa-edit"></i></button>
             </div>
@@ -18,7 +19,7 @@
     </div>
     <div class="form-group col-md-6">
         <div class="input-group mb-2">
-            <input type="email" name="email" id="email" class="form-control" oninvalid="this.setCustomValidity('E-mail inválido.')" value="@Model.Email" disabled />
+            <input type="email" name="email" id="email" class="form-control" oninvalid="this.setCustomValidity('E-mail inválido.')" value="@Model.Item1.Email" disabled />
             <div class="input-group-prepend">
                 <button class="input-group-text"><i class="far fa-edit"></i></button>
             </div>
@@ -34,9 +35,19 @@
         <input type="submit" value="Alterar foto" class="btn btn-block btn-secondary" id="alt_foto" data-toggle="collapse" href="#collapseNewPhoto" role="button" aria-expanded="false" aria-controls="collapseNewPhoto" />
     </div>
 </div>
+@if (Model.Item2.NotFound)
+{
+    <div class="alert alert-danger mt-2" role="alert">
+        A foto deve ter no máximo 1Mb!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
 <div class="collapse" id="collapseNewPhoto">
+
     <form action="/Profile/AlterarFoto" enctype="multipart/form-data" class="form-row mt-3 text-center" method="POST">
-        <input type="hidden" name="id" value="@Model.ID" />
+        <input type="hidden" name="id" value="@Model.Item1.ID" />
         <div class="custom-file form-group col-12 ml-1">
             <input type="file" name="foto" class="custom-file-input">
             <label class="custom-file-label" for="customFileLangHTML" data-browse="Buscar arquivo">Nova foto</label>
@@ -76,7 +87,7 @@
         var nome = $("#nome").val();
         var usuario = $("#usuario").val();
         var email = $("#email").val();
-        var post = { "id": @Model.ID, "nome": nome, "usuario": usuario, "email": email };
+        var post = { "id": @Model.Item1.ID, "nome": nome, "usuario": usuario, "email": email };
         $.ajax({
             type: "POST",
             traditional: true,
@@ -88,9 +99,9 @@
                 if (data.responseText.includes("Erro") || data.responseText.includes("uso")) {
                     alert(data.responseJSON);
                     if (data.responseText.includes("Email"))
-                        $("#email").val("@Model.Email");
+                        $("#email").val("@Model.Item1.Email");
                     else if (data.responseText.includes("Usuário"))
-                        $("#usuario").val("@Model.NomeUsuario");
+                        $("#usuario").val("@Model.Item1.NomeUsuario");
                 }
             }
         });
@@ -100,7 +111,7 @@
         var senhaAtual = $("#senhaAtual").val();
         var senha = $("#senha").val();
         var confirmaSenha = $("#confirmaSenha").val();
-        var post = { "IDUsuario": @Model.ID, "senhaAtual": senhaAtual, "senha": senha, "confirmaSenha": confirmaSenha };
+        var post = { "IDUsuario": @Model.Item1.ID, "senhaAtual": senhaAtual, "senha": senha, "confirmaSenha": confirmaSenha };
         $.ajax({
             type: "POST",
             traditional: true,
@@ -114,9 +125,9 @@
         });
     });
     $("#alt_senha").on('click',function(){
-$('.collapse').collapse('hide');
+        $('.collapse').collapse('hide');
     })
     $("#alt_foto").on('click',function(){
-$('.collapse').collapse('hide');
+        $('.collapse').collapse('hide');
 })
 </script>

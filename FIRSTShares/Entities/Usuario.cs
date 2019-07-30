@@ -21,7 +21,6 @@ namespace FIRSTShares.Entities
         public string Senha { get; set; }
         public CargoTime CargoTime { get; set; }
         public DateTime DataCriacao { get; set; }
-        public string Foto { get; set; }
         public bool Excluido { get; set; } = false;
         public virtual Time Time { get; set; }
         public virtual Cargo Cargo { get; set; }
@@ -29,6 +28,7 @@ namespace FIRSTShares.Entities
         public virtual List<Postagem> Postagens { get; set; }
         public virtual List<Denuncia> Denuncias { get; set; }
         public virtual List<Anexo> Anexos { get; set; }
+        public virtual Foto Foto { get; set; }
 
         public Usuario RetornarUsuarioPorNomeUsuario(string nomeUsuario)
         {

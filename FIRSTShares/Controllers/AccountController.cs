@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using FIRSTShares.Data;
@@ -74,7 +75,7 @@ namespace FIRSTShares.Controllers
                 DataCriacao = DateTime.Now,
                 Cargo = BD.Cargos.ToList().Find(cargo => cargo.Tipo == CargoTipo.Usuario),
                 NomeUsuario = usuario.NomeUsuario,
-                Foto = SalvarFoto(foto, usuario.NomeUsuario)
+                Foto = new Foto { FotoBase64 = AdicionarUsuarioFoto(foto) }
             };
 
             SalvarUsuario(usuarioDb);
@@ -84,7 +85,7 @@ namespace FIRSTShares.Controllers
                     new Claim(ClaimTypes.Name, usuario.Nome),
                     new Claim(ClaimTypes.Email, usuario.Email),
                     new Claim("NomeUsuario", usuario.NomeUsuario),
-                    new Claim("Foto", usuarioDb.Foto),
+                    new Claim("Foto", System.Text.Encoding.UTF8.GetString(usuario.Foto.FotoBase64, 0, usuario.Foto.FotoBase64.Length)),
                     new Claim("CargoUsuario", CargoTipo.Usuario.ToString())
                 };
 
@@ -98,6 +99,14 @@ namespace FIRSTShares.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        public byte[] AdicionarUsuarioFoto(IFormFile foto)
+        {
+            using (var ms = new MemoryStream())
+            {
+                foto.CopyTo(ms);
+                return ms.ToArray();
+            }
+        }
 
         [HttpPost]
         public async Task<IActionResult> AcessarConta(UsuarioViewModel usuarioModel)
@@ -107,13 +116,14 @@ namespace FIRSTShares.Controllers
             {
                 if (LoginUsuario(usuario, usuarioModel.Senha))
                 {
+                    var foto = Convert.ToBase64String(usuario.Foto.FotoBase64);
                     var nomeUsuario = usuario.NomeUsuario;
                     var claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.Name, usuario.Nome),
                         new Claim(ClaimTypes.Email, usuario.Email),
                         new Claim("NomeUsuario", nomeUsuario),
-                        new Claim("Foto", usuario.Foto),
+                        new Claim("Foto", foto),
                         new Claim("CargoUsuario", usuario.Cargo.Tipo.ToString())
                     };
 

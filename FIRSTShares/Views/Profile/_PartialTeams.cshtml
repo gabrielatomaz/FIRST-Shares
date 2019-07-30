@@ -1,4 +1,5 @@
-﻿@model FIRSTShares.Entities.Usuario
+﻿@model Tuple<FIRSTShares.Entities.Usuario, ErrorViewModel>
+
 <table class="table table-striped mt-3">
     <thead>
         <tr>
@@ -9,9 +10,9 @@
     </thead>
     <tbody>
         <tr>
-            <td>@Model.Time.Numero</td>
-            <td>@Model.Time.Nome</td>
-            <td>@Model.Time.Pais</td>
+            <td>@Model.Item1.Time.Numero</td>
+            <td>@Model.Item1.Time.Nome</td>
+            <td>@Model.Item1.Time.Pais</td>
         </tr>
     </tbody>
 </table>
@@ -22,7 +23,7 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var membro in Model.Time.Usuarios)
+        @foreach (var membro in Model.Item1.Time.Usuarios)
         {
             <tr>
                 <td>@membro.NomeUsuario</td>

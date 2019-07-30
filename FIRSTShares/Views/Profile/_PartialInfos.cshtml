@@ -1,18 +1,19 @@
-﻿@model FIRSTShares.Entities.Usuario
+﻿@model Tuple<FIRSTShares.Entities.Usuario, ErrorViewModel>
+
 <div class="form-row mt-4" id="form">
     <div class="form-group col-md-12">
         <div class="input-group mb-2">
-            <input type="text" name="nome" id="nome" class="form-control" value="@Model.Nome" disabled />
+            <input type="text" name="nome" id="nome" class="form-control" value="@Model.Item1.Nome" disabled />
         </div>
     </div>
     <div class="form-group col-md-6">
         <div class="input-group mb-2">
-            <input type="text" name="nomeusuario" id="usuario" class="form-control"  value="@Model.NomeUsuario" disabled />
+            <input type="text" name="nomeusuario" id="usuario" class="form-control" value="@Model.Item1.NomeUsuario" disabled />
         </div>
     </div>
     <div class="form-group col-md-6">
         <div class="input-group mb-2">
-            <input type="email" name="email" id="email" class="form-control" value="@Model.Email" disabled />
+            <input type="email" name="email" id="email" class="form-control" value="@Model.Item1.Email" disabled />
         </div>
     </div>
 </div>

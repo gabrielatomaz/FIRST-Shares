@@ -33,32 +33,68 @@ namespace FIRSTShares.Controllers
         {
             var claims = (ClaimsIdentity)User.Identity;
             var usuario = Usuario.RetornarUsuarioPorNomeUsuario(claims.Claims.Single(u => u.Type == "NomeUsuario").Value);
-            return View(usuario);
+
+            var errorViewModel = new ErrorViewModel { };
+
+            var model = new Tuple<Usuario, ErrorViewModel>(usuario, errorViewModel);
+
+            return View(model);
         }
 
         public IActionResult UserProfile(int idUsuario)
         {
             var usuario = Usuario.RetornarUsuario(idUsuario);
+            var error = new ErrorViewModel { };
 
             var claims = (ClaimsIdentity)User.Identity;
             if (claims.Claims.Count() > 0)
             {
                 var usuarioLogado = Usuario.RetornarUsuarioPorNomeUsuario(claims.Claims.Single(u => u.Type == "NomeUsuario").Value);
 
+
+                var model = new Tuple<Usuario, ErrorViewModel>(usuarioLogado, error);
+
                 if (usuarioLogado.NomeUsuario == usuario.NomeUsuario)
-                    return View("Index", usuario);
+                    return View("Index", model);
             }
 
-            return View("UserProfile", usuario);
+            var modelProfile = new Tuple<Usuario, ErrorViewModel>(usuario, error);
+
+            return View("UserProfile", modelProfile);
         }
 
         public IActionResult AlterarFoto(IFormFile foto, int id)
         {
+            var oneMb = 1024 * 1024;
             var usuario = Usuario.RetornarUsuario(id);
+
+            var error = new ErrorViewModel
+            {
+                NotFound = foto.Length > oneMb
+            };
+
+            if (!AlterarUsuarioFoto(foto, usuario))
+                error.NotFound = true;
+
             SalvarFoto(foto, usuario.NomeUsuario);
 
-            return View("Index", usuario);
+            var model = new Tuple<Usuario, ErrorViewModel>(usuario, error);
+
+            return View("Index", model);
         }
+
+        public bool AlterarUsuarioFoto(IFormFile foto, Usuario usaurio) {
+            using (var ms = new MemoryStream())
+            {
+                foto.CopyTo(ms);
+                usaurio.Foto.FotoBase64 = ms.ToArray();
+            }
+
+            BD.Update(usaurio);
+
+            return BD.SaveChanges() > 0;
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> AlterarPerfilAsync([FromBody] ProfileModel profile)
