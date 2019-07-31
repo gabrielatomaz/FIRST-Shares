@@ -50,7 +50,7 @@
                         </div>
                     </div>
                     <span class="badge badge-info float-right mt-2 p-2">@Model.Item2.Categoria.Nome</span>
-                    @if (Model.Item2.Postagens.Count > 0)
+                    @if (Model.Item2.Postagens.Where(p => !p.Excluido).Count() > 0)
                     {
                         <button data-toggle="collapse" class="btn float-right" data-target="#demo"><i class="far fa-comments mr-2 text-secondary"></i> Mostrar comentários</button>
                     }
@@ -93,8 +93,8 @@
                             @if (Model.Item2.Curtidas.Where(c => c.Excluido == false).Count() > 0)
                             {
                                 var margin = @Model.Item2.Curtidas.Where(c => c.Excluido == false).Count() > 0 ? "" : "mr-2";
-                                <button id="btnLikes" class="btn float-right p-2 text-dark">
-                                    <span id="numeroLikes" data-toggle="modal" data-target="#modalLikes"></span>
+                                <button id="btnLikes" class="btn float-right p-2  text-dark">
+                                    <span id="numeroLikes" data-toggle="modal" class="text-dark" data-target="#modalLikes"></span>
                                 </button>
                                 <partial name="~/Views/Post/_PartialShowLikes.cshtml" model="@Model" />
                                 <a href="#" class="float-right pt-2 pl-2 text-dark @margin">

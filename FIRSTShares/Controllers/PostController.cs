@@ -37,7 +37,7 @@ namespace FIRSTShares.Controllers
         {
             MostrarFotoPerfil();
 
-            var postagem = BD.Postagens.Single(p => p.ID == id);
+            var postagem = BD.Postagens.Single(p => p.ID == id && !p.Excluido);
             var categorias = BD.Categorias.Where(c => c.Excluido == false).ToList();
 
             if (!string.IsNullOrEmpty(idioma))
@@ -70,6 +70,11 @@ namespace FIRSTShares.Controllers
 
             var resultPost = await translator.TranslateLiteAsync(postagem.ConteudoHtml, from, to);
             var resultThread = await translator.TranslateLiteAsync(postagem.Discussao.Assunto, from, to);
+
+            foreach (var comentario in postagem.Postagens) {
+                var resultComent = (await translator.TranslateLiteAsync(comentario.ConteudoHtml, from, to)).MergedTranslation;
+                comentario.ConteudoHtml = resultComent;
+            }
 
             postagem.ConteudoHtml = resultPost.MergedTranslation;
             postagem.Discussao.Assunto = resultThread.MergedTranslation;
@@ -135,6 +140,12 @@ namespace FIRSTShares.Controllers
             return objecto;
         }
 
+        public IActionResult CurtirComentario(CurtirModel model)
+        {
+            
+            return View(model);
+        }
+
         public ActionResult Excluir(int id)
         {
             var postagem = BD.Postagens.FirstOrDefault(p => p.ID == id);
@@ -143,6 +154,16 @@ namespace FIRSTShares.Controllers
             BD.Postagens.Update(postagem);
 
             BD.SaveChanges();
+
+            if (postagem.PostagemPai != null)
+            {
+                MostrarFotoPerfil();
+
+                var categorias = BD.Categorias.Where(c => c.Excluido == false).ToList();
+                var modelTupleCategoriasPostagem = new Tuple<List<Categoria>, Postagem>(categorias, postagem);
+
+                return View("Index", modelTupleCategoriasPostagem);
+            }
 
             return RedirectToAction("Index", "Home");
         }

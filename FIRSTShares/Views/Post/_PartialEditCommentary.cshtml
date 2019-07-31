@@ -1,48 +1,25 @@
-﻿@model Tuple<List<FIRSTShares.Entities.Categoria>, FIRSTShares.Entities.Postagem>
+﻿@model FIRSTShares.Entities.Postagem
 
-<button class="btn float-right" data-toggle="modal" data-tt="tooltip" title="Comentar" data-target="#modalEditPost">
+<button class="btn float-right" data-toggle="modal" data-tt="tooltip" title="Comentar" data-target="#modalEditCommentary">
     <i class="far fa-edit text-secondary"></i>
 </button>
 
-<div class="modal fade" id="modalEditPost" tabindex="-1" role="dialog" aria-labelledby="modalPostLabel" aria-hidden="true">
+<div class="modal fade" id="modalEditCommentary" tabindex="-1" role="dialog" aria-labelledby="modalPostLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <form method="post" onsubmit="return false;">
             <div class="modal-content">
                 <div class="modal-header">
-                    <div class="row">
-                        <div class="col-6">
-                            <input type="text" class="form-control" maxlength="200" id="novoAssunto"
-                                   value="@Model.Item2.Discussao.Assunto" />
-                        </div>
-                        <div class="col-6">
-                            <select class="form-control" id="novaCategoria">
-                                @foreach (var categoria in Model.Item1.ToList())
-                                {
-                                    if (categoria == Model.Item2.Categoria)
-                                    {
-                                        <option value="@categoria.ID" selected>@categoria.Nome</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="@categoria.ID">@categoria.Nome</option>
-                                    }
-                                }
-
-                            </select>
-                        </div>
-                    </div>
-
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div id="editorEdit" style="height:250px;">
-                        @Html.Raw(Model.Item2.ConteudoHtml)
+                    <div id="editorCommentary" style="height:250px;">
+                        @Html.Raw(Model.ConteudoHtml)
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <input type="submit" id="editar" class="btn btn-primary" value="Editar" />
+                    <input type="submit" id="editarComentario" class="btn btn-primary" value="Editar" />
                 </div>
             </div>
         </form>
@@ -69,15 +46,15 @@ $(function () {
         // remove formatting button
     ];
 
-    var quill = new Quill('#editorEdit', {
+    var quill = new Quill('#editorCommentary', {
         modules: {
             toolbar: toolbarOptions
         },
         theme: 'snow'
     });
-   $("#editar").on("click", function () {
+   $("#editarComentario").on("click", function () {
        if (quill.getText().length > 10) {
-           $("#editar").prop("disabled", true);
+           $("#editarComentario").prop("disabled", true);
             var assunto = $("#novoAssunto");
             if (assunto.val() != "") {
                 $("#editar").prop("disabled", true);
@@ -89,7 +66,7 @@ $(function () {
                 var conteudoHtml = quill.root.innerHTML;
                 var conteudo = quill.getText();
                 var categoria = $("#novaCategoria").val();
-                var post = { "ID": @Model.Item2.ID,"conteudoHtml": conteudoHtml, "categoria": categoria, "assunto": assunto.val(), "conteudo": conteudo };
+                var post = { "ID": @Model.ID,"conteudoHtml": conteudoHtml, "categoria": categoria, "assunto": assunto.val(), "conteudo": conteudo };
                 $.ajax({
                     type: "POST",
                     traditional: true,

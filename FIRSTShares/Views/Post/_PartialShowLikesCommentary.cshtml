@@ -1,0 +1,26 @@
+﻿@model FIRSTShares.Entities.Postagem
+<!-- Modal -->
+<div class="modal fade" id="modalLikesComentario" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title ml-2">Lista de curtidas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group">
+                    @foreach (var curtida in Model.Curtidas.Where(c => c.Excluido == false).OrderByDescending(c => c.Postagem.DataCriacao))
+                    {
+                        var foto = curtida.Usuario.Foto.FotoBase64;
+                        <li class="list-group-item d-flex align-items-center">
+                            <img src="data:image;base64,@Convert.ToBase64String(@foto)" width="40" style="border-radius:20px;" class="img-fluid" />
+                            <span class="ml-3">@curtida.Usuario.NomeUsuario</span>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
