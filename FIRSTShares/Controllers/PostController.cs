@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using FIRSTShares.Data;
 using FIRSTShares.Entities;
 using FIRSTShares.Models;
+using GoogleTranslateFreeApi;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,16 +33,48 @@ namespace FIRSTShares.Controllers
             Postagem = new Postagem(BD);
         }
 
-        public IActionResult Index(int id)
+        public IActionResult Index(int id, string idioma)
         {
             MostrarFotoPerfil();
 
             var postagem = BD.Postagens.Single(p => p.ID == id);
             var categorias = BD.Categorias.Where(c => c.Excluido == false).ToList();
 
+            if (!string.IsNullOrEmpty(idioma))
+            {
+                var traducao = TraduzirPostAsync(postagem, idioma);
+
+                var modelTupleCategoriasPostagemTraucao = 
+                    new Tuple<List<Categoria>, Postagem>(categorias, traducao.Result);
+
+                return View(modelTupleCategoriasPostagemTraucao);
+            }
+
             var modelTupleCategoriasPostagem = new Tuple<List<Categoria>, Postagem>(categorias, postagem);
 
             return View(modelTupleCategoriasPostagem);
+        }
+
+        public async Task<Postagem> TraduzirPostAsync(Postagem postagem, string idioma)
+        {
+            var translator = new GoogleTranslator();
+
+            var from = GoogleTranslator.GetLanguageByName("Portuguese");
+            var to = GoogleTranslator.GetLanguageByName("Spanish");
+
+            if (idioma == Idioma.PT.ToString())
+            {
+                from = GoogleTranslator.GetLanguageByName("Spanish");
+                to = GoogleTranslator.GetLanguageByName("Portuguese");
+            }
+
+            var resultPost = await translator.TranslateLiteAsync(postagem.ConteudoHtml, from, to);
+            var resultThread = await translator.TranslateLiteAsync(postagem.Discussao.Assunto, from, to);
+
+            postagem.ConteudoHtml = resultPost.MergedTranslation;
+            postagem.Discussao.Assunto = resultThread.MergedTranslation;
+
+            return postagem;
         }
 
         [HttpPost]
@@ -166,5 +199,11 @@ namespace FIRSTShares.Controllers
                 ViewData["foto"] = foto;
             }
         }
+    }
+
+    public enum Idioma
+    {
+        ES,
+        PT
     }
 }

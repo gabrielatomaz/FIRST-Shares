@@ -11,6 +11,19 @@
             }
             <h5 class="card-title">
                 <span class="badge badge-info p-2 mr-2">@postagem.Categoria.Nome</span> @postagem.Discussao.Assunto.Substring(0, Math.Min(postagem.Discussao.Assunto.Length, 45))@pontinhosTitulo
+                <span class="float-right" style="position: relative; margin-top:-3.1%; margin-right: -1%;">
+                    <ul class="navbar-nav" style="font-size: 15px">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Traduzir
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item text-dark" href="@Url.Action("Index", "Post", new { id = postagem.ID, idioma = "ES" } )">Español</a>
+                                <a class="dropdown-item text-dark" href="@Url.Action("Index", "Post", new { id = postagem.ID, idioma = "PT" } )">Português</a>
+                            </div>
+                        </li>
+                    </ul>
+                </span>
             </h5>
             <p class="card-text">@Html.Raw(postagem.Conteudo.Substring(0, Math.Min(postagem.Conteudo.Length, 200)) + pontinhosPost)</p>
             <a href="@Url.Action("Index", "Post", new { id = postagem.ID } )" class="btn btn-info float-right pt-0 pb-0" data-toggle="tooltip" data-placement="top" title="Ler mais"><i class="fas fa-angle-double-right"></i></a>

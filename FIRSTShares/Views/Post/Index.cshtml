@@ -9,10 +9,17 @@
         <div class="col-sm-0 col-md-1 col-lg-1"></div>
         <div class="col-sm-12 col-md-10 col-lg-10">
             <div class="card">
-                <span class="container-fluid w-100 p-2" style="background-color:rgb(243, 243, 243);">
+                <span class="container-fluid w-100 p-2" style="        background-color: rgb(243, 243, 243);">
                     <div class="container">
                         <strong>
-                            @Model.Item2.Discussao.Assunto
+                            @if (Model.Item2 != null)
+                            {
+                                @Model.Item2.Discussao.Assunto
+                            }
+                            else
+                            {
+                                @Model.Item2.Discussao.Assunto
+                            }
                         </strong>
                     </div>
 
@@ -26,11 +33,19 @@
                         <div class="col-10">
                             <h5 class="card-title">
                                 <span class="badge badge-secondary p-2 mt-2">
-                                    <a asp-area="" asp-controller="Profile" asp-action="UserProfile" asp-route-idUsuario="@Model.Item2.Usuario.ID" style="color:white;">@Model.Item2.Usuario.Nome</a>
+                                    <a asp-area="" asp-controller="Profile" asp-action="UserProfile" asp-route-idUsuario="@Model.Item2.Usuario.ID" style="        color: white;">@Model.Item2.Usuario.Nome</a>
                                 </span>
                             </h5>
                             <p class="card-text">
-                                @Html.Raw(@Model.Item2.ConteudoHtml)
+
+                                @if (Model.Item2 != null)
+                                {
+                                    @Html.Raw(@Model.Item2.ConteudoHtml)
+                                }
+                                else
+                                {
+                                    @Html.Raw(@Model.Item2.ConteudoHtml)
+                                }
                             </p>
                         </div>
                     </div>
@@ -90,7 +105,7 @@
                     }
                 </div>
                 <div class="card-footer text-muted">
-                    <span class="float-left"><a asp-area="" asp-controller="Profile" asp-action="UserProfile" asp-route-idUsuario="@Model.Item2.Usuario.ID" style="color:dimgrey;">@Model.Item2.Usuario.NomeUsuario</a></span>
+                    <span class="float-left"><a asp-area="" asp-controller="Profile" asp-action="UserProfile" asp-route-idUsuario="@Model.Item2.Usuario.ID" style="        color: dimgrey;">@Model.Item2.Usuario.NomeUsuario</a></span>
                     <span class="float-right">@Model.Item2.DataCriacao</span>
                 </div>
             </div>
