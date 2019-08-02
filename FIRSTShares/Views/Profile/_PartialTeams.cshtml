@@ -26,7 +26,7 @@
         @foreach (var membro in Model.Item1.Time.Usuarios)
         {
             <tr>
-                <td>@membro.NomeUsuario</td>
+                <td><a asp-area="" asp-controller="Profile" asp-action="UserProfile" asp-route-idUsuario="@membro.ID" style="color: black;">@membro.NomeUsuario</a></td>
             </tr>
         }
     </tbody>

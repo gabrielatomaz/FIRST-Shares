@@ -47,7 +47,7 @@
                             <button id="btnLikesComentario" class="btn btn-link float-right p-2 text-dark">
                                 <span id="numeroLikesComentario" data-toggle="modal" data-target="#modalLikesComentario"></span>
                             </button>
-                            <span>
+                            <span id="showLikes">
                                 <partial name="~/Views/Post/_PartialShowLikesCommentary.cshtml" model="@comentario" />
                             </span>
                         </div>
@@ -91,6 +91,7 @@
             $("#heartComentario").removeClass("mr-2");
         } else {
             $("#btnLikesComentario").hide();
+            $("#showLikes").hide();
             $("#heartComentario").addClass("mr-2");
         }
 
