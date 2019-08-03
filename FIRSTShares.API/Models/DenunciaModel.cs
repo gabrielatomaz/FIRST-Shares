@@ -11,5 +11,6 @@ namespace FIRSTShares.API.Models
         public string Motivo { get; set; }
         public int IDUsuario { get; set; }
         public string NomeUsuario { get; set; }
+        public string Foto { get; set; }
     }
 }

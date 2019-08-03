@@ -38,7 +38,8 @@ namespace FIRSTShares.API.Controllers
                     IDDenuncia = d.ID,
                     IDUsuario = d.UsuarioDenunciado.ID,
                     NomeUsuario = d.UsuarioDenunciado.NomeUsuario,
-                    Motivo = d.Motivo
+                    Motivo = d.Motivo,
+                    Foto = Convert.ToBase64String(d.UsuarioDenunciado.Foto.FotoBase64)
                 });
             });
 
