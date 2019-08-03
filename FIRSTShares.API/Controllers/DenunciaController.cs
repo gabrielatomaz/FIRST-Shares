@@ -53,7 +53,8 @@ namespace FIRSTShares.API.Controllers
             if (banir)
                 if (Usuario.Excluir(idUsuario))
                     return Ok();
-            else if(Denuncia.Excluir(idDenuncia))
+
+            if (Denuncia.Excluir(idDenuncia))
                     return Ok();
 
             return NotFound();
