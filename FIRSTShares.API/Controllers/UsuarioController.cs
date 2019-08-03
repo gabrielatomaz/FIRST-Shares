@@ -36,7 +36,8 @@ namespace FIRSTShares.API.Controllers
                     ID = u.ID,
                     Nome = u.Nome,
                     NomeUsuario = u.NomeUsuario,
-                    CargoTipo = u.Cargo.Tipo.ToString()
+                    CargoTipo = u.Cargo.Tipo.ToString(),
+                    Foto = Convert.ToBase64String(u.Foto.FotoBase64)
                 });
             });
 
@@ -77,7 +78,8 @@ namespace FIRSTShares.API.Controllers
                 ID = usuario.ID,
                 Nome = usuario.Nome,
                 NomeUsuario = usuario.NomeUsuario,
-                Email = usuario.Email
+                Email = usuario.Email,
+                Foto = Convert.ToBase64String(usuario.Foto.FotoBase64)
             };
 
             return Ok(usuarioModel);

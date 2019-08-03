@@ -13,6 +13,7 @@ namespace FIRSTShares.API.Models
         public string NomeUsuario { get; set; }
         public string Email { get; set; }
         public string CargoTipo { get; set; }
+        public string Foto { get; set; }
 
     }
 }
