@@ -59,7 +59,7 @@ namespace FIRSTShares.API.Controllers
 
             return NotFound();
         }
-
+            
         [Route("CancelarDenuncia/{denuncia}")]
         [HttpGet]
         public IActionResult CancelarDenuncia(string denuncia)

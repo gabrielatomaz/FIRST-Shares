@@ -30,9 +30,14 @@ namespace FIRSTShares.Entities
             return BD.Denuncias.SingleOrDefault(d => d.UsuarioDenunciado.ID == idUsuario);
         }
 
+        public Denuncia RetornarDenuncia(int idDenuncia)
+        {
+            return BD.Denuncias.SingleOrDefault(d => d.ID == idDenuncia);
+        }
+
         public bool Excluir(int idDenuncia)
         {
-            var denuncia = RetornarDenunciaPorUsuarioId(idDenuncia);
+            var denuncia = RetornarDenuncia(idDenuncia);
 
             if (denuncia != null)
             {
