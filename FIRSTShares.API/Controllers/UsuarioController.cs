@@ -86,23 +86,22 @@ namespace FIRSTShares.API.Controllers
         }
 
 
-        [Route("AlterarCargo/{cargo}")]
+        [Route("AlterarCargo/{idUsuario}/{novoCargo}")]
         [HttpGet]
-        public ActionResult AlterarCargo(string cargo)
+        public ActionResult AlterarCargo(int idUsuario, string novoCargo)
         {
-            var cargoNovo = cargo.Split(",");
-            var enumCargo = (CargoTipo)Enum.Parse(typeof(CargoTipo), cargoNovo[3], true);
-            var usuarioAlterado = Usuario.AlterarCargoUsuario(Int32.Parse(cargoNovo[0]), (int)enumCargo);
+            var enumCargo = (CargoTipo)Enum.Parse(typeof(CargoTipo), novoCargo, true);
+            var usuarioAlterado = Usuario.AlterarCargoUsuario(idUsuario, (int)enumCargo);
 
             if (usuarioAlterado)
-                return Ok(string.Format("Alterado com sucesso! {0}", cargo));
+                return Ok("Cargo alterado com sucesso!");
 
             return NotFound();
         }
 
-        [Route("Excluir/{id}")]
-        [HttpPut("{id}")]
-        public ActionResult Excluir(int id)
+        // DELETE api/values/5
+        [HttpDelete("{id}")]
+        public ActionResult Delete(int id)
         {
             var usuarioAlterado = Usuario.Excluir(id);
 
@@ -110,12 +109,6 @@ namespace FIRSTShares.API.Controllers
                 return Ok("Excluido com sucesso!");
 
             return NotFound();
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }
