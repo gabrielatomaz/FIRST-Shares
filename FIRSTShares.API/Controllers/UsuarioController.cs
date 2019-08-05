@@ -79,7 +79,8 @@ namespace FIRSTShares.API.Controllers
                 Nome = usuario.Nome,
                 NomeUsuario = usuario.NomeUsuario,
                 Email = usuario.Email,
-                Foto = Convert.ToBase64String(usuario.Foto.FotoBase64)
+                Foto = Convert.ToBase64String(usuario.Foto.FotoBase64),
+                CargoTipo = usuario.Cargo.Tipo.ToString()
             };
 
             return Ok(usuarioModel);
