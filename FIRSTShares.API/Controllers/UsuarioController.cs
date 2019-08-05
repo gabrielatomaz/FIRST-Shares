@@ -63,7 +63,7 @@ namespace FIRSTShares.API.Controllers
         {
             var usuario = Usuario.RetornarUsuarios().Find(u =>
                     (u.NomeUsuario == nomeUsuario || u.Email == nomeUsuario) 
-                    && u.Cargo.Tipo == CargoTipo.Administrador
+                    && (u.Cargo.Tipo == CargoTipo.Administrador || u.Cargo.Tipo == CargoTipo.Moderador)
                     && u.Excluido == false
                 );
 
