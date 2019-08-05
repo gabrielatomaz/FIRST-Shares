@@ -32,12 +32,13 @@ namespace FIRSTShares.Entities
 
         public Usuario RetornarUsuarioPorNomeUsuario(string nomeUsuario)
         {
-            return BD.Usuarios.Single(u => u.NomeUsuario == nomeUsuario);
+            return BD.Usuarios.Single(u => u.NomeUsuario == nomeUsuario && !u.Excluido);
         }
 
         public List<Usuario> RetornarUsuarios()
         {
-            return BD.Set<Usuario>().ToList();
+            return BD.Set<Usuario>().Where(u => !u.Excluido)
+                .ToList();
         }
 
         public bool AlterarCargoUsuario(int idUsuario, int cargoId)
@@ -107,7 +108,7 @@ namespace FIRSTShares.Entities
 
         public Usuario RetornarUsuario(int id)
         {
-            return BD.Usuarios.Single(u => u.ID == id);
+            return BD.Usuarios.Single(u => u.ID == id && !u.Excluido);
         }
     }
 
