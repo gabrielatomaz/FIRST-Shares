@@ -65,6 +65,8 @@ namespace FIRSTShares.Controllers
                 return View("Register");
             }
 
+            var fotoBytes = AdicionarUsuarioFoto(foto);
+
             var usuarioDb = new Usuario
             {
                 Nome = string.Format("{0} {1}", usuario.Nome, sobrenome),
@@ -75,7 +77,7 @@ namespace FIRSTShares.Controllers
                 DataCriacao = DateTime.Now,
                 Cargo = BD.Cargos.ToList().Find(cargo => cargo.Tipo == CargoTipo.Usuario),
                 NomeUsuario = usuario.NomeUsuario,
-                Foto = new Foto { FotoBase64 = AdicionarUsuarioFoto(foto) }
+                Foto = new Foto { FotoBase64 = (fotoBytes == null) ? (BD.Fotos.SingleOrDefault(ft => ft.ID == 4)).FotoBase64 : fotoBytes }
             };
 
             SalvarUsuario(usuarioDb);
@@ -100,6 +102,9 @@ namespace FIRSTShares.Controllers
 
         public byte[] AdicionarUsuarioFoto(IFormFile foto)
         {
+            if(foto == null)
+                return null;
+
             using (var ms = new MemoryStream())
             {
                 foto.CopyTo(ms);
