@@ -46,15 +46,15 @@ $(function () {
         // remove formatting button
     ];
 
-    var quill = new Quill('#editorCommentary', {
+    var quill = new Quill('#editorCommentary-@Model.ID', {
         modules: {
             toolbar: toolbarOptions
         },
         theme: 'snow'
     });
-   $("#editarComentario-@Model.ID").on("click", function () {
+   $("#editarComentario").on("click", function () {
        if (quill.getText().length > 10) {
-           $("#editarComentario-@Model.ID").prop("disabled", true);
+           $("#editarComentario").prop("disabled", true);
             var assunto = $("#novoAssunto");
             if (assunto.val() != "") {
                 $("#editar").prop("disabled", true);
