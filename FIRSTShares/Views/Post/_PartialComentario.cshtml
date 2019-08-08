@@ -81,7 +81,7 @@
     <script>
     $(function () {
     @{
-        var numeroLikes = @Model.Item2.Curtidas.Where(c => c.Excluido == false).Count();
+        var numeroLikes = @comentario.Curtidas.Where(c => c.Excluido == false).Count();
 
     }
 
