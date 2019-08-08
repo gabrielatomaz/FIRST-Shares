@@ -37,18 +37,18 @@
 
                         <div class="btn-group float-right">
 
-                            <button id="curtirComentario" class="btn float-right pt-2 pr-0 pl-2">
+                            <button id="curtirComentario-@comentario.ID" class="btn float-right pt-2 pr-0 pl-2">
                                 @{
                                     temCurtida = comentario.Curtidas.Any(c => c.Usuario.NomeUsuario == nomeUsuario && c.Excluido == false);
                                     var margin = comentario.Curtidas.Where(c => c.Excluido == false).Count() > 0 ? "" : "mr-2";
                                     var text = temCurtida ? "text-danger" : "text-secondary";
                                 }
-                                <i id="heartComentario" class="fas fa-heart @text @margin"></i>
+                                <i id="heartComentario-@comentario.ID" class="fas fa-heart @text @margin"></i>
                             </button>
-                            <button id="btnLikesComentario" class="btn btn-link float-right p-2 text-dark">
-                                <span id="numeroLikesComentario" data-toggle="modal" data-target="#modalLikesComentario"></span>
+                            <button id="btnLikesComentario-@comentario.ID" class="btn btn-link float-right p-2 text-dark">
+                                <span id="numeroLikesComentario-@comentario.ID" data-toggle="modal" data-target="#modalLikesComentario"></span>
                             </button>
-                            <span id="showLikes">
+                            <span id="showLikes-@comentario.ID">
                                 <partial name="~/Views/Post/_PartialShowLikesCommentary.cshtml" model="@comentario" />
                             </span>
                         </div>
@@ -88,15 +88,15 @@
         var True = true, False = false;
 
         if (@numeroLikes > 0) {
-            $("#btnLikesComentario").show();
-            $("#heartComentario").removeClass("mr-2");
+            $("#btnLikesComentario-@comentario.ID").show();
+            $("#heartComentario-@comentario.ID").removeClass("mr-2");
         } else {
-            $("#btnLikesComentario").hide();
-            $("#showLikes").hide();
-            $("#heartComentario").addClass("mr-2");
+            $("#btnLikesComentario-@comentario.ID").hide();
+            $("#showLikes-@comentario.ID").hide();
+            $("#heartComentario-@comentario.ID").addClass("mr-2");
         }
 
-        $("#numeroLikesComentario").text(@numeroLikes);
+        $("#numeroLikesComentario-@comentario.ID").text(@numeroLikes);
         var firstTime = true;
         var temCurtida =  @(temCurtida);
         if (firstTime) {
@@ -104,7 +104,7 @@
         } else {
             temCurtida = temCurtida;
             }
-        $("#curtirComentario").on("click", function () {
+        $("#curtirComentario-@comentario.ID").on("click", function () {
             var data = { "postId": @comentario.ID, "curtiu": !temCurtida };
         $.ajax({
             type: "POST",
@@ -114,7 +114,7 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             complete: function (dataAjax) {
-                var heart = $("#heartComentario");
+                var heart = $("#heartComentario-@comentario.ID");
                 var response = dataAjax.responseJSON;
                 if (response.curtiu) {
                     heart.addClass("text-danger");
@@ -130,10 +130,10 @@
                 }
 
                 if (response.numeroCurtidas > 0) {
-                    $("#numeroLikesComentario").text(response.numeroCurtidas);
-                    $("#btnLikesComentario").show();
+                    $("#numeroLikesComentario-@comentario.ID").text(response.numeroCurtidas);
+                    $("#btnLikesComentario-@comentario.ID").show();
                 } else {
-                    $("#btnLikesComentario").hide();
+                    $("#btnLikesComentario-@comentario.ID").hide();
                 }
             }
         });
