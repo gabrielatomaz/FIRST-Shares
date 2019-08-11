@@ -82,6 +82,7 @@ namespace FIRSTShares.Controllers
 
                 var foto = Convert.ToBase64String(usuario.Foto.FotoBase64);
                 ViewData["foto"] = foto;
+                ViewData["temNotificacao"] = usuario.NotificacoesRecebidas.Where(n => !n.Excluido).ToList().Count > 0;
             }
         }
     }

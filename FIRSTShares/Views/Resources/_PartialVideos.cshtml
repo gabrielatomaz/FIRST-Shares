@@ -68,8 +68,8 @@
                             + '<span>' + data[i].resumo + '</span><br />' +
                         '<div class="embed-responsive embed-responsive-16by9 mt-2">' +
                         '<iframe class="embed-responsive-item" src="' + data[i].src + '" allowfullscreen></iframe>' +
-                        '</div><i><span>Publicado por: <a asp-area="" style="color: #212529;" asp-controller="Profile" asp-action="UserProfile" asp-route-idUsuario="' +
-                            data[i].idUsuario + '">' + data[i].nomeUsuario + '</a></span></i>'+ deletevar + '<hr/>');
+                        '</div><i><span>Publicado por: <a href="/Profile/UserProfile?idUsuario=' +
+                            data[i].idUsuario + '"style="color: #212529;">' + data[i].nomeUsuario + '</a></span></i>'+ deletevar + '<hr/>');
                     }
                     pageIndex++;
                 }

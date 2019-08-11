@@ -44,7 +44,7 @@ namespace FIRSTShares.Controllers
             {
                 var traducao = TraduzirPostAsync(postagem, idioma);
 
-                var modelTupleCategoriasPostagemTraucao = 
+                var modelTupleCategoriasPostagemTraucao =
                     new Tuple<List<Categoria>, Postagem>(categorias, traducao.Result);
 
                 return View(modelTupleCategoriasPostagemTraucao);
@@ -71,7 +71,8 @@ namespace FIRSTShares.Controllers
             var resultPost = await translator.TranslateLiteAsync(postagem.ConteudoHtml, from, to);
             var resultThread = await translator.TranslateLiteAsync(postagem.Discussao.Assunto, from, to);
 
-            foreach (var comentario in postagem.Postagens) {
+            foreach (var comentario in postagem.Postagens)
+            {
                 var resultComent = (await translator.TranslateLiteAsync(comentario.ConteudoHtml, from, to)).MergedTranslation;
                 comentario.ConteudoHtml = resultComent;
             }
@@ -86,7 +87,7 @@ namespace FIRSTShares.Controllers
         public void AdicionarComentario([FromBody] ComentarioModel comentario)
         {
             var postagemPai = BD.Postagens.Single(p => p.ID == comentario.IDPostagemPai);
-
+            var usuarioLogado = RetornarUsuarioLogado();
             var comentarioPostagem = new Postagem
             {
                 Categoria = postagemPai.Categoria,
@@ -94,8 +95,22 @@ namespace FIRSTShares.Controllers
                 DataCriacao = DateTime.Now,
                 Discussao = postagemPai.Discussao,
                 PostagemPai = postagemPai,
-                Usuario = RetornarUsuarioLogado()
+                Usuario = usuarioLogado
             };
+
+            if (usuarioLogado.ID != postagemPai.Usuario.ID)
+            {
+                var notificacao = new Notificacao
+                {
+                    Acao = TipoAcao.Comentou,
+                    UsuarioAcao = RetornarUsuarioLogado(),
+                    UsuarioNotificado = postagemPai.Usuario,
+                    Data = DateTime.Now
+                };
+
+                BD.Add(notificacao);
+                BD.SaveChanges();
+            }
 
             SalvarComentario(comentarioPostagem);
         }
@@ -115,6 +130,20 @@ namespace FIRSTShares.Controllers
                     Postagem = BD.Postagens.FirstOrDefault(p => p.ID == model.PostID),
                     Usuario = usuario
                 };
+
+                if (usuario.ID != postagem.Usuario.ID)
+                {
+                    var notificacao = new Notificacao
+                    {
+                        Acao = TipoAcao.Curtiu,
+                        UsuarioAcao = usuario,
+                        UsuarioNotificado = postagem.Usuario,
+                        Data = DateTime.Now
+                    };
+
+                    BD.Add(notificacao);
+                    BD.SaveChanges();
+                }
 
                 SalvarCurtida(novaCurtida);
             }
@@ -142,7 +171,7 @@ namespace FIRSTShares.Controllers
 
         public IActionResult CurtirComentario(CurtirModel model)
         {
-            
+
             return View(model);
         }
 
@@ -218,6 +247,7 @@ namespace FIRSTShares.Controllers
 
                 var foto = Convert.ToBase64String(usuario.Foto.FotoBase64);
                 ViewData["foto"] = foto;
+                ViewData["temNotificacao"] = usuario.NotificacoesRecebidas.Where(n => !n.Excluido).ToList().Count > 0;
             }
         }
     }

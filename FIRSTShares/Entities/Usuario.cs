@@ -28,6 +28,8 @@ namespace FIRSTShares.Entities
         public virtual List<Postagem> Postagens { get; set; }
         public virtual List<Denuncia> Denuncias { get; set; }
         public virtual List<Anexo> Anexos { get; set; }
+        public virtual List<Notificacao> NotificacoesRecebidas { get; set; }
+        public virtual List<Notificacao> NotificacoesFeitas { get; set; }
         public virtual Foto Foto { get; set; }
 
         public Usuario RetornarUsuarioPorNomeUsuario(string nomeUsuario)

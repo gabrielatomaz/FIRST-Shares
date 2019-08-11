@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FIRSTShares.Migrations
 {
     [DbContext(typeof(LazyContext))]
-    [Migration("20190729230254_mudancaFoto")]
-    partial class mudancaFoto
+    [Migration("20190810203906_AddNotification")]
+    partial class AddNotification
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -148,6 +148,29 @@ namespace FIRSTShares.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Fotos");
+                });
+
+            modelBuilder.Entity("FIRSTShares.Entities.Notificacao", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Acao");
+
+                    b.Property<bool>("Excluido");
+
+                    b.Property<int?>("UsuarioAcaoID");
+
+                    b.Property<int?>("UsuarioNotificadoID");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("UsuarioAcaoID");
+
+                    b.HasIndex("UsuarioNotificadoID");
+
+                    b.ToTable("Notificacoes");
                 });
 
             modelBuilder.Entity("FIRSTShares.Entities.Permissao", b =>
@@ -287,6 +310,17 @@ namespace FIRSTShares.Migrations
                     b.HasOne("FIRSTShares.Entities.Usuario", "UsuarioDenunciado")
                         .WithMany("Denuncias")
                         .HasForeignKey("UsuarioDenunciadoID");
+                });
+
+            modelBuilder.Entity("FIRSTShares.Entities.Notificacao", b =>
+                {
+                    b.HasOne("FIRSTShares.Entities.Usuario", "UsuarioAcao")
+                        .WithMany()
+                        .HasForeignKey("UsuarioAcaoID");
+
+                    b.HasOne("FIRSTShares.Entities.Usuario", "UsuarioNotificado")
+                        .WithMany("Notificacoes")
+                        .HasForeignKey("UsuarioNotificadoID");
                 });
 
             modelBuilder.Entity("FIRSTShares.Entities.Permissao", b =>

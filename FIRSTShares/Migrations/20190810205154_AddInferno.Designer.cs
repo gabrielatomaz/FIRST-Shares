@@ -4,14 +4,16 @@ using FIRSTShares.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FIRSTShares.Migrations
 {
     [DbContext(typeof(LazyContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20190810205154_AddInferno")]
+    partial class AddInferno
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,8 +157,6 @@ namespace FIRSTShares.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("Acao");
-
-                    b.Property<DateTime>("Data");
 
                     b.Property<bool>("Excluido");
 

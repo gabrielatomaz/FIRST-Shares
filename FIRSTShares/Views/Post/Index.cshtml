@@ -63,7 +63,9 @@
                             var cargoUsuario = user.Claims.ToList().Find(t => t.Type == "CargoUsuario").Value;
                             temCurtida = Model.Item2.Curtidas.Any(c => c.Usuario.NomeUsuario == nomeUsuario && c.Excluido == false);
 
-                            if (Model.Item2.Usuario.NomeUsuario == nomeUsuario || (cargoUsuario == FIRSTShares.Entities.CargoTipo.Moderador.ToString() || cargoUsuario == FIRSTShares.Entities.CargoTipo.Administrador.ToString()))
+                            if (Model.Item2.Usuario.NomeUsuario == nomeUsuario ||
+                                (cargoUsuario == FIRSTShares.Entities.CargoTipo.Moderador.ToString() ||
+                                cargoUsuario == FIRSTShares.Entities.CargoTipo.Administrador.ToString()))
                             {
                                 <partial name="~/Views/Post/_PartialEditPost.cshtml" model="@Model" />
                                 <a href="@Url.Action("Excluir", "Post", new { id = Model.Item2.ID })"

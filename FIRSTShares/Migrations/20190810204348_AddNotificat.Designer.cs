@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FIRSTShares.Migrations
 {
     [DbContext(typeof(LazyContext))]
-    [Migration("20190730020434_fotos")]
-    partial class fotos
+    [Migration("20190810204348_AddNotificat")]
+    partial class AddNotificat
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -150,6 +150,29 @@ namespace FIRSTShares.Migrations
                     b.ToTable("Fotos");
                 });
 
+            modelBuilder.Entity("FIRSTShares.Entities.Notificacao", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("Acao");
+
+                    b.Property<bool>("Excluido");
+
+                    b.Property<int?>("UsuarioAcaoID");
+
+                    b.Property<int?>("UsuarioNotificadoID");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("UsuarioAcaoID");
+
+                    b.HasIndex("UsuarioNotificadoID");
+
+                    b.ToTable("Notificacoes");
+                });
+
             modelBuilder.Entity("FIRSTShares.Entities.Permissao", b =>
                 {
                     b.Property<int>("ID")
@@ -243,7 +266,7 @@ namespace FIRSTShares.Migrations
 
                     b.Property<bool>("Excluido");
 
-                    b.Property<int>("FotoID");
+                    b.Property<int?>("FotoID");
 
                     b.Property<string>("Nome");
 
@@ -257,8 +280,7 @@ namespace FIRSTShares.Migrations
 
                     b.HasIndex("CargoID");
 
-                    b.HasIndex("FotoID")
-                        .IsUnique();
+                    b.HasIndex("FotoID");
 
                     b.HasIndex("TimeID");
 
@@ -288,6 +310,17 @@ namespace FIRSTShares.Migrations
                     b.HasOne("FIRSTShares.Entities.Usuario", "UsuarioDenunciado")
                         .WithMany("Denuncias")
                         .HasForeignKey("UsuarioDenunciadoID");
+                });
+
+            modelBuilder.Entity("FIRSTShares.Entities.Notificacao", b =>
+                {
+                    b.HasOne("FIRSTShares.Entities.Usuario", "UsuarioAcao")
+                        .WithMany()
+                        .HasForeignKey("UsuarioAcaoID");
+
+                    b.HasOne("FIRSTShares.Entities.Usuario", "UsuarioNotificado")
+                        .WithMany("Notificacoes")
+                        .HasForeignKey("UsuarioNotificadoID");
                 });
 
             modelBuilder.Entity("FIRSTShares.Entities.Permissao", b =>
@@ -323,9 +356,8 @@ namespace FIRSTShares.Migrations
                         .HasForeignKey("CargoID");
 
                     b.HasOne("FIRSTShares.Entities.Foto", "Foto")
-                        .WithOne("Usuario")
-                        .HasForeignKey("FIRSTShares.Entities.Usuario", "FotoID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .WithMany()
+                        .HasForeignKey("FotoID");
 
                     b.HasOne("FIRSTShares.Entities.Time", "Time")
                         .WithMany("Usuarios")

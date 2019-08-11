@@ -54,9 +54,21 @@ namespace FIRSTShares.Controllers
             if (claims.Claims.Count() > 0)
             {
                 var usuarioLogado = Usuario.RetornarUsuarioPorNomeUsuario(claims.Claims.Single(u => u.Type == "NomeUsuario").Value);
-
-
                 var model = new Tuple<Usuario, ErrorViewModel>(usuarioLogado, error);
+
+                if (usuarioLogado.ID != usuario.ID)
+                {
+                    var notificacao = new Notificacao
+                    {
+                        Acao = TipoAcao.VisualizouPerfil,
+                        UsuarioAcao = usuarioLogado,
+                        UsuarioNotificado = usuario,
+                        Data = DateTime.Now
+                    };
+
+                    BD.Add(notificacao);
+                    BD.SaveChanges();
+                }
 
                 if (usuarioLogado.NomeUsuario == usuario.NomeUsuario)
                     return View("Index", model);
@@ -85,7 +97,8 @@ namespace FIRSTShares.Controllers
             return View("Index", model);
         }
 
-        public bool AlterarUsuarioFoto(IFormFile foto, Usuario usaurio) {
+        public bool AlterarUsuarioFoto(IFormFile foto, Usuario usaurio)
+        {
             using (var ms = new MemoryStream())
             {
                 foto.CopyTo(ms);
@@ -194,6 +207,7 @@ namespace FIRSTShares.Controllers
 
                 var foto = Convert.ToBase64String(usuario.Foto.FotoBase64);
                 ViewData["foto"] = foto;
+                ViewData["temNotificacao"] = usuario.NotificacoesRecebidas.Where(n => !n.Excluido).ToList().Count > 0;
             }
         }
     }

@@ -57,31 +57,39 @@
                     </form>
                     @if (!User.Identity.IsAuthenticated)
                     {
-                        <ul class="navbar-nav ml-0">
-                            <li class="nav-item mb-2 mb-sm-2 mb-md-0 mb-lg-0">
-                                <a asp-area="" asp-controller="Account" asp-action="Login" class="btn btn-outline-primary mr-1">Entrar</a>
-                            </li>
-                            <li class="nav-item">
-                                <a asp-area="" asp-controller="Account" asp-action="Register" class="btn btn-outline-primary">Cadastre-se</a>
-                            </li>
-                        </ul>
+                    <ul class="navbar-nav ml-0">
+                        <li class="nav-item mb-2 mb-sm-2 mb-md-0 mb-lg-0">
+                            <a asp-area="" asp-controller="Account" asp-action="Login" class="btn btn-outline-primary mr-1">Entrar</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-area="" asp-controller="Account" asp-action="Register" class="btn btn-outline-primary">Cadastre-se</a>
+                        </li>
+                    </ul>
                     }
                     else
                     {
                         {
                             var user = (System.Security.Claims.ClaimsIdentity)User.Identity;
-                            var photo = user.Claims.ToList().Find(t => t.Type == "Foto");
+                            var temNotificacao = (bool)ViewData["temNotificacao"];
+                            var color = temNotificacao ? "#568578" : "black";
 
-                            <div class="dropdown">
-                                <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <img width="35" style=" border-radius: 5px;" src="data:image;base64,@ViewData["foto"]" />
-                                </button>
-                                <div class="dropdown-menu" style="min-width:50px;" aria-labelledby="dropdownMenuButton">
-                                    <a asp-area="" asp-controller="Profile" asp-action="Index" class="dropdown-item"><i class="fas fa-user mr-2"></i> Perfil</a>
-                                    <a asp-area="" asp-controller="Account" asp-action="Logout" class="dropdown-item"><i class="fas fa-sign-out-alt mr-2"></i> Sair</a>
-                                </div>
-                            </div>
-                        }
+                    <div class="dropdown">
+                        <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            @if (temNotificacao)
+                            {
+                            <i class="fas fa-circle" style="position: absolute; z-index: 3;top: 29px; color: #568578; left: 10px;"></i>
+                            }
+                            <img width="35" style=" border-radius: 5px;" src="data:image;base64,@ViewData["foto"]" />
+                        </button>
+                        <div class="dropdown-menu" style="min-width:50px;" aria-labelledby="dropdownMenuButton">
+                            <a asp-area="" asp-controller="Profile" asp-action="Index" class="dropdown-item"><i class="fas fa-user mr-2"></i> Perfil</a>
+                            <a asp-area="" asp-controller="Notification" asp-action="Index" class="dropdown-item">
+                                <i class="fas fa-bell" style="color:@color"></i> Notificações
+                            </a>
+                            <a asp-area="" asp-controller="Account" asp-action="Logout" class="dropdown-item"><i class="fas fa-sign-out-alt mr-2"></i> Sair</a>
+                        </div>
+                    </div>
+                    }
                     }
                 </div>
             </div>

@@ -18,6 +18,7 @@ namespace FIRSTShares.Data
         public DbSet<Denuncia> Denuncias { get; set; }
         public DbSet<Anexo> Anexos { get; set; }
         public DbSet<Foto> Fotos { get; set; }
+        public DbSet<Notificacao> Notificacoes { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -31,7 +32,7 @@ namespace FIRSTShares.Data
                 .WithMany(p => p.Permissoes);
 
             modelBuilder.Entity<Usuario>()
-                .HasOne( t => t.Time)
+                .HasOne(t => t.Time)
                 .WithMany(u => u.Usuarios);
 
             modelBuilder.Entity<Usuario>()
@@ -74,6 +75,14 @@ namespace FIRSTShares.Data
 
             modelBuilder.Entity<Usuario>()
                 .HasOne(u => u.Foto);
+
+            modelBuilder.Entity<Notificacao>()
+                .HasOne(n => n.UsuarioNotificado)
+                .WithMany(u => u.NotificacoesRecebidas);
+
+            modelBuilder.Entity<Notificacao>()
+               .HasOne(n => n.UsuarioAcao)
+               .WithMany(u => u.NotificacoesFeitas);
         }
     }
 }

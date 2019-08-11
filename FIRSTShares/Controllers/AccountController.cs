@@ -120,13 +120,16 @@ namespace FIRSTShares.Controllers
             {
                 if (LoginUsuario(usuario, usuarioModel.Senha))
                 {
+                    var notificacao = usuario.NotificacoesRecebidas.Where(n => !n.Excluido).Count() > 0 ? "Tem" : "NaoTem";
+
                     var nomeUsuario = usuario.NomeUsuario;
                     var claims = new List<Claim>
                     {
                         new Claim(ClaimTypes.Name, usuario.Nome),
                         new Claim(ClaimTypes.Email, usuario.Email),
                         new Claim("NomeUsuario", nomeUsuario),
-                        new Claim("CargoUsuario", usuario.Cargo.Tipo.ToString())
+                        new Claim("CargoUsuario", usuario.Cargo.Tipo.ToString()),
+                        new Claim("TemNotificacao", notificacao)
                     };
 
 
