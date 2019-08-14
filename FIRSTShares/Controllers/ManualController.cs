@@ -69,6 +69,7 @@ namespace FIRSTShares.Controllers
                 .OrderByDescending(a => a.Titulo);
 
             var modelAnexos = await PagingList.CreateAsync(anexos, 6, 1);
+            MostrarFotoPerfil();
 
             return View("Index", modelAnexos);
         }

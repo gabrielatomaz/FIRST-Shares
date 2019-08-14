@@ -91,6 +91,7 @@ namespace FIRSTShares.Controllers
                .OrderByDescending(p => p.DataCriacao);
 
             var modelPostagens = await PagingList.CreateAsync(postagens, 3, 1);
+            MostrarFotoPerfil();
 
             return View("Index", modelPostagens);
         }

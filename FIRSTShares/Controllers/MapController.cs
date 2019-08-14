@@ -54,7 +54,7 @@ namespace FIRSTShares.Controllers
 
                 return View("Index");
             }
-
+            MostrarFotoPerfil();
             ViewBag.Mensagem = timeExiste ?
                  "Este time já está cadastrado!" : "Não há nenhum time com esse número de registro!";
 

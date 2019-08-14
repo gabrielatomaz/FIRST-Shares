@@ -93,6 +93,7 @@ namespace FIRSTShares.Controllers
                 error.NotFound = true;
 
             var model = new Tuple<Usuario, ErrorViewModel>(usuario, error);
+            MostrarFotoPerfil();
 
             return View("Index", model);
         }
@@ -181,6 +182,7 @@ namespace FIRSTShares.Controllers
             usuario.Excluido = true;
 
             Usuario.AlterarUsuario(usuario);
+            MostrarFotoPerfil();
 
             await HttpContext.SignOutAsync();
 
