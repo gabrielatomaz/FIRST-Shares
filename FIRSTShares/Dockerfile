@@ -1,7 +1,5 @@
-﻿FROM microsoft/dotnet:2.2-aspnetcore-runtime AS base
+FROM mcr.microsoft.com/dotnet/core/runtime:2.2
 
-WORKDIR /app
-
-COPY publish .
+COPY app/bin/Release/netcoreapp2.2/publish/ app/
 
 ENTRYPOINT ["dotnet", "FIRSTShares.dll"]
