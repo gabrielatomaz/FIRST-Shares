@@ -39,6 +39,13 @@
 
 
   <ItemGroup>
+    <Folder Include="Resources\Controllers\" />
+    <Folder Include="Resources\Views\FIRSTCategories\" />
+    <Folder Include="Resources\Views\Manual\" />
+    <Folder Include="Resources\Views\Profile\" />
+    <Folder Include="Resources\Views\Notification\" />
+    <Folder Include="Resources\Views\Post\" />
+    <Folder Include="Resources\Views\Resources\" />
     <Folder Include="wwwroot\img\usuarios\" />
   </ItemGroup>
 

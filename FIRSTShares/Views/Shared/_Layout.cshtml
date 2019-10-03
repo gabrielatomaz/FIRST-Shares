@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer _localizer
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -31,7 +34,7 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="FIRSTCategories" asp-action="Index">Categorias FIRST</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="FIRSTCategories" asp-action="Index">@_localizer["Categorias"] FIRST</a>
                         </li>
 
                         <li class="nav-item d-none d-sm-block d-sm-none d-md-block">
@@ -42,14 +45,14 @@
                                 Recursos
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item text-dark" asp-area="" asp-controller="Resources" asp-action="Index">Oficiais</a>
-                                <a class="dropdown-item text-dark" asp-area="" asp-controller="Manual" asp-action="Index">Manuais</a>
+                                <a class="dropdown-item text-dark" asp-area="" asp-controller="Resources" asp-action="Index">@_localizer["Oficiais"]</a>
+                                <a class="dropdown-item text-dark" asp-area="" asp-controller="Manual" asp-action="Index">@_localizer["Manuais"]</a>
                             </div>
                         </li>
                     </ul>
                     <form asp-controller="Home" asp-action="Index" method="post" class="form row">
                         <div class="input-group mb-3 col-10 mt-3 ml-5">
-                            <input type="text" class="form-control border-secondary d-md-none d-lg-block d-none d-sm-block d-sm-none d-md-block" name="search" placeholder="Pesquisar...">
+                            <input type="text" class="form-control border-secondary d-md-none d-lg-block d-none d-sm-block d-sm-none d-md-block" name="search" placeholder="@_localizer["Pesquisar..."]">
                             <div class="input-group-append">
                                 <button class="btn btn-outline-primary d-md-none d-lg-block d-none d-sm-block d-sm-none d-md-block" type="submit"><i class="fas fa-search"></i></button>
                             </div>
@@ -59,10 +62,10 @@
                     {
                     <ul class="navbar-nav ml-0">
                         <li class="nav-item mb-2 mb-sm-2 mb-md-0 mb-lg-0">
-                            <a asp-area="" asp-controller="Account" asp-action="Login" class="btn btn-outline-primary mr-1">Entrar</a>
+                            <a asp-area="" asp-controller="Account" asp-action="Login" class="btn btn-outline-primary mr-1">@_localizer["Entrar"]</a>
                         </li>
                         <li class="nav-item">
-                            <a asp-area="" asp-controller="Account" asp-action="Register" class="btn btn-outline-primary">Cadastre-se</a>
+                            <a asp-area="" asp-controller="Account" asp-action="Register" class="btn btn-outline-primary">@_localizer["Cadastre-se"]</a>
                         </li>
                     </ul>
                     }
@@ -84,9 +87,9 @@
                         <div class="dropdown-menu" style="min-width:50px;" aria-labelledby="dropdownMenuButton">
                             <a asp-area="" asp-controller="Profile" asp-action="Index" class="dropdown-item"><i class="fas fa-user mr-2"></i> Perfil</a>
                             <a asp-area="" asp-controller="Notification" asp-action="Index" class="dropdown-item">
-                                <i class="fas fa-bell" style="color:@color"></i> Notificações
+                                <i class="fas fa-bell" style="color:@color"></i> @_localizer["Notificações"]
                             </a>
-                            <a asp-area="" asp-controller="Account" asp-action="Logout" class="dropdown-item"><i class="fas fa-sign-out-alt mr-2"></i> Sair</a>
+                            <a asp-area="" asp-controller="Account" asp-action="Logout" class="dropdown-item"><i class="fas fa-sign-out-alt mr-2"></i> @_localizer["Sair"]</a>
                         </div>
                     </div>
                     }

@@ -1,13 +1,18 @@
 ﻿@model Tuple<List<FIRSTShares.Entities.Categoria>, PagingList<FIRSTShares.Entities.Postagem>, List<FIRSTShares.Entities.Usuario>>
 @using ReflectionIT.Mvc.Paging
 
+
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer _localizer
+
+
 @if (User.Identity.IsAuthenticated)
 {
 
     <div class="row">
         <div class="col-12 col-md-8">
             <button type="button" class="btn btn-secondary  mb-3 float-right mr-0" data-toggle="modal" data-target="#modalPost">
-                <i class="fas fa-plus mr-2"></i><strong>Novo tópico</strong>
+                <i class="fas fa-plus mr-2"></i><strong>@_localizer["Novo tópico"]</strong>
             </button>
         </div>
     </div>
@@ -21,19 +26,19 @@
                     <div class="row">
                         <div class="col-6 mt-1">
                             <input type="text" class="form-control" maxlength="200" id="assunto"
-                                   placeholder="Adicione um título" />
+                                   placeholder="@_localizer["Adicione um título"]" />
                         </div>
                         <div class="col-6 mt-1">
                             <select class="form-control" id="categoria">
                                 @foreach (var categoria in Model.Item1.ToList())
                                 {
-                                    <option value="@categoria.ID">@categoria.Nome</option>
+                                <option value="@categoria.ID">@_localizer[categoria.Nome]</option>
                                 }
                             </select>
                         </div>
                     </div>
                     <div class="col-1">
-                       
+
                     </div>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>

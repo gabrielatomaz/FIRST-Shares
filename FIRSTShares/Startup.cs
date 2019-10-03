@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using ReflectionIT.Mvc.Paging;
+using System.Globalization;
+using System.Collections.Generic;
+using Microsoft.Extensions.Options;
 
 namespace FIRSTShares
 {
@@ -32,9 +35,32 @@ namespace FIRSTShares
 
             services.AddPaging();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddSessionStateTempDataProvider();
+            services.AddMvc()
+                .AddViewLocalization(option => { option.ResourcesPath = "Resources"; })
+                .AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix)
+                .AddDataAnnotationsLocalization()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2).AddSessionStateTempDataProvider();
 
             services.AddSession();
+
+            services.Configure<RequestLocalizationOptions>(options => 
+            {
+                var supportedCultures = new List<CultureInfo>
+                {
+                    new CultureInfo("pt-BR"),
+                    new CultureInfo("es")
+
+                };
+
+                options.DefaultRequestCulture = new Microsoft.AspNetCore.Localization.RequestCulture("pt-BR");
+
+                options.SupportedCultures = supportedCultures;
+
+                options.SupportedUICultures = supportedCultures;
+            });
+
+            services.AddLocalization(option => { option.ResourcesPath = "Resources"; });
+
 
             services.AddAuthentication(options =>
             {
@@ -48,8 +74,8 @@ namespace FIRSTShares
                 options.LogoutPath = "/account/sair";
             });
             //var connection = "Data Source=187.84.232.19,1433;Initial Catalog=Db_FirstShares;persist security info=True;user id=sa;password=!Alterar123@";
-            var connection = "Data Source=sqlserver,1433;Initial Catalog=Db_FirstShares;persist security info=True;user id=sa;password=!Alterar123@";
-            //var connection = "Server=localhost\\sqlexpress;Database=Db_FirstShares;Integrated Security=True;";
+            //var connection = "Data Source=sqlserver,1433;Initial Catalog=Db_FirstShares;persist security info=True;user id=sa;password=!Alterar123@";
+            var connection = "Server=localhost\\sqlexpress;Database=Db_FirstShares;Integrated Security=True;";
             services.AddDbContext<LazyContext>
                 (options => options.UseSqlServer(connection));
         }
@@ -72,6 +98,9 @@ namespace FIRSTShares
             {
                 MinimumSameSitePolicy = SameSiteMode.Strict,
             };
+
+            var options = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
+            app.UseRequestLocalization(options.Value);
 
             app.UseCookiePolicy(cookiePolicyOptions);
             app.UseHttpsRedirection();
