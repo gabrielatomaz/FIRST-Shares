@@ -74,7 +74,7 @@ namespace FIRSTShares
                 options.LogoutPath = "/account/sair";
             });
             //var connection = "Data Source=187.84.232.19,1433;Initial Catalog=Db_FirstShares;persist security info=True;user id=sa;password=!Alterar123@";
-            var connection = "Data Source=firstshares.ceovzqggb3yp.us-east-2.rds.amazonaws.com,1433;Initial Catalog=Db_FirstShares;Integrated Security=False;user id=admin;password=senha123;MultipleActiveResultSets=True";
+            var connection = "Data Source=firstshares.ceovzqggb3yp.us-east-2.rds.amazonaws.com;Initial Catalog=Db_FirstShares;Integrated Security=False;user id=admin;password=senha123;MultipleActiveResultSets=True";
             //var connection = "Server=localhost\\sqlexpress;Database=Db_FirstShares;Integrated Security=True;";
             services.AddDbContext<LazyContext>
                 (options => options.UseSqlServer(connection));
