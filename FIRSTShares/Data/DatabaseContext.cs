@@ -74,7 +74,8 @@ namespace FIRSTShares.Data
                 .WithMany(a => a.Anexos);
 
             modelBuilder.Entity<Usuario>()
-                .HasOne(u => u.Foto);
+                .HasOne(u => u.Foto)
+                .WithMany(f => f.Usuarios);
 
             modelBuilder.Entity<Notificacao>()
                 .HasOne(n => n.UsuarioNotificado)

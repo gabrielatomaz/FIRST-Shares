@@ -4,14 +4,16 @@ using FIRSTShares.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FIRSTShares.Migrations
 {
     [DbContext(typeof(LazyContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20191010230610_migracao")]
+    partial class migracao
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -356,7 +358,7 @@ namespace FIRSTShares.Migrations
                         .HasForeignKey("CargoID");
 
                     b.HasOne("FIRSTShares.Entities.Foto", "Foto")
-                        .WithMany("Usuarios")
+                        .WithMany()
                         .HasForeignKey("FotoID");
 
                     b.HasOne("FIRSTShares.Entities.Time", "Time")

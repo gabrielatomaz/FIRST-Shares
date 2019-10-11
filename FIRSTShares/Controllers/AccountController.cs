@@ -77,7 +77,7 @@ namespace FIRSTShares.Controllers
                 DataCriacao = DateTime.Now,
                 Cargo = BD.Cargos.ToList().Find(cargo => cargo.Tipo == CargoTipo.Usuario),
                 NomeUsuario = usuario.NomeUsuario,
-                Foto = new Foto { FotoBase64 = (fotoBytes == null) ? (BD.Fotos.SingleOrDefault(ft => ft.ID == 4)).FotoBase64 : fotoBytes }
+                Foto = new Foto { FotoBase64 = (fotoBytes == null) ? (BD.Fotos.SingleOrDefault(ft => ft.ID == 2)).FotoBase64 : fotoBytes }
             };
 
             SalvarUsuario(usuarioDb);
