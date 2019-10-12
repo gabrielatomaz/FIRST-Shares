@@ -11,11 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../FIRSTShares/FIRSTShares.csproj" />
-  </ItemGroup>
-
-  <!--<ItemGroup>
     <ProjectReference Include="..\FIRSTShares\FIRSTShares.csproj" />
-  </ItemGroup>-->
+  </ItemGroup>
 
 </Project>
