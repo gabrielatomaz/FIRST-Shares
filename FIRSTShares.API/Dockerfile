@@ -2,9 +2,7 @@
 WORKDIR /app
 
 # Copy csproj and restore as distinct layers
-COPY *.sln ./
-COPY  ./FIRSTShares.csproj ./FIRSTShares/
-COPY  ./FIRSTShares.API.csproj ./FIRSTShares.API/
+COPY *.csproj ./
 RUN dotnet restore
 
 # Copy everything else and build
