@@ -1,14 +1,15 @@
 ﻿FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build-env
 WORKDIR /app
 
-COPY ./bin/Debug/netcoreapp2.2/FIRSTShares.dll ./
-# Copy csproj and restore as distinct layers
 COPY *.csproj  ./
+COPY ./bin/Debug/netcoreapp2.2/FIRSTShares.dll 
 RUN dotnet restore
+# Copy csproj and restore as distinct layers
 
 
 # Copy everything else and build
 COPY . ./
+COPY ./bin/Debug/netcoreapp2.2/FIRSTShares.dll 
 RUN dotnet publish -c Release -o out
 
 # Build runtime image
