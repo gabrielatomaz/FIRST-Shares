@@ -2,14 +2,14 @@
 WORKDIR /app
 
 COPY *.csproj  ./
-COPY ./bin/Debug/netcoreapp2.2/FIRSTShares.dll 
+COPY ./bin/Debug/netcoreapp2.2/FIRSTShares.dll ./
 RUN dotnet restore
 # Copy csproj and restore as distinct layers
 
 
 # Copy everything else and build
 COPY . ./
-COPY ./bin/Debug/netcoreapp2.2/FIRSTShares.dll 
+COPY ./bin/Debug/netcoreapp2.2/FIRSTShares.dll ./
 RUN dotnet publish -c Release -o out
 
 # Build runtime image
