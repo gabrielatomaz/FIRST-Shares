@@ -1,7 +1,7 @@
 ﻿FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build-env
 WORKDIR /app
 
-COPY ../FIRSTShares/FIRSTShares.csproj ./
+COPY ./bin/Debug/netcoreapp2.2/FIRSTShares.dll ./
 # Copy csproj and restore as distinct layers
 COPY *.csproj  ./
 RUN dotnet restore
