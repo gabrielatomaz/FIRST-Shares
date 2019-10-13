@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FIRSTShares.API.Models;
-using FIRSTShares.Data;
-using FIRSTShares.Entities;
+using FIRSTShares.API.Data;
+using FIRSTShares.API.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FIRSTShares.API.Controllers

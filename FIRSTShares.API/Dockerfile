@@ -1,16 +1,17 @@
-﻿FROM microsoft/dotnet:2.2-sdk AS build-env
+﻿FROM mcr.microsoft.com/dotnet/core/sdk:2.2 AS build-env
 WORKDIR /app
 
-# Copiar csproj e restaurar dependencias
-COPY ./../ ./
+# Copy csproj and restore as distinct layers
+COPY *.csproj ./
 RUN dotnet restore
 
-# Build da aplicacao
+# Copy everything else and build
 COPY . ./
 RUN dotnet publish -c Release -o out
 
-# Build da imagem
-FROM microsoft/dotnet:2.2-aspnetcore-runtime
+# Build runtime image
+FROM mcr.microsoft.com/dotnet/core/aspnet:2.2
 WORKDIR /app
 COPY --from=build-env /app/out .
+
 ENTRYPOINT ["dotnet", "FIRSTShares.API.dll"]

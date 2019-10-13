@@ -1,15 +1,15 @@
-﻿using FIRSTShares.API.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FIRSTShares.API.Models
+namespace FIRSTShares.API.Entities
 {
-    public class CargoModel
+    public class Permissao
     {
         public int ID { get; set; }
-        public CargoTipo Tipo { get; set; }
+        public string Nome { get; set; }
         public bool Excluido { get; set; }
+        public virtual Cargo Cargo { get; set; }
     }
 }

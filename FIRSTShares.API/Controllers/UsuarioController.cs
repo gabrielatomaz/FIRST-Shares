@@ -1,7 +1,7 @@
 ﻿using FIRSTShares.API.Models;
-using FIRSTShares.Data;
-using FIRSTShares.Entities;
-using FIRSTShares.Util;
+using FIRSTShares.API.Data;
+using FIRSTShares.API.Entities;
+using FIRSTShares.API.Util;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;

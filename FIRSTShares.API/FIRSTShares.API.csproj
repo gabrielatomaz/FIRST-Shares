@@ -6,12 +6,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="CryptSharpOfficial" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\FIRSTShares\FIRSTShares.csproj" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="2.2.4" />
   </ItemGroup>
 
 </Project>
