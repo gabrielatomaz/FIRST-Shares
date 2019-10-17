@@ -148,9 +148,9 @@ namespace FIRSTShares.Controllers
 
                 var ms = new MemoryStream();
                 destImage.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);
-            }
 
-            return ms.ToArray();
+                return ms.ToArray();
+            }
         }
 
         [HttpPost]
