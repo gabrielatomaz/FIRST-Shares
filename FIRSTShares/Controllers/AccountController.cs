@@ -127,7 +127,7 @@ namespace FIRSTShares.Controllers
         public byte[] ResizeImage(Image image, int width, int height)
         {
             var destRect = new Rectangle(0, 0, width, height);
-            using(var destImage = new Bitmap(width, height){
+            using(var destImage = new Bitmap(width, height)){
 
                 destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
 
@@ -149,7 +149,7 @@ namespace FIRSTShares.Controllers
                 var ms = new MemoryStream();
                 destImage.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);
             }
-            
+
             return ms.ToArray();
         }
 
