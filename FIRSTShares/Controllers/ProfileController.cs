@@ -107,7 +107,7 @@ namespace FIRSTShares.Controllers
             {
                 foto.CopyTo(ms);
                 var fotoArray = ms.ToArray();
-                fotoArray = ResizeImage(byteArrayToImage(fotoArray), 400, 400);
+                // fotoArray = ResizeImage(byteArrayToImage(fotoArray), 400, 400);
                 usaurio.Foto.FotoBase64 = fotoArray;
             }
 

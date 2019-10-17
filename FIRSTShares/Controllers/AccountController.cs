@@ -69,7 +69,7 @@ namespace FIRSTShares.Controllers
             }
 
             var fotoBytes = AdicionarUsuarioFoto(foto);
-            fotoBytes = ResizeImage(byteArrayToImage(fotoBytes), 400, 400);
+            // fotoBytes = ResizeImage(byteArrayToImage(fotoBytes), 400, 400);
 
             var usuarioDb = new Usuario
             {
