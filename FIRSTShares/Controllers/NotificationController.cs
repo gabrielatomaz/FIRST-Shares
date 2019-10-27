@@ -69,7 +69,7 @@ namespace FIRSTShares.Controllers
             {
                 var usuario = RetornarUsuarioLogado();
 
-                var foto = Convert.ToBase64String(usuario.Foto.FotoBase64);
+                var foto = usuario.Foto.FotoBase64;
                 ViewData["foto"] = foto;
                 ViewData["temNotificacao"] = usuario.NotificacoesRecebidas.Where(n => !n.Excluido).ToList().Count > 0;
             }

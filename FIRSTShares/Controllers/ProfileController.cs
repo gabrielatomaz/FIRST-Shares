@@ -8,6 +8,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using FIRSTShares.Client;
 using FIRSTShares.Data;
 using FIRSTShares.Entities;
 using FIRSTShares.Models;
@@ -106,53 +107,16 @@ namespace FIRSTShares.Controllers
             using (var ms = new MemoryStream())
             {
                 foto.CopyTo(ms);
-                var fotoArray = ms.ToArray();
-                // fotoArray = ResizeImage(byteArrayToImage(fotoArray), 400, 400);
-                usaurio.Foto.FotoBase64 = fotoArray;
+                var fotoArray = Convert.ToBase64String(ms.ToArray());
+                var imgur = new ImgurClient();
+                var fotoDB = imgur.Upload(fotoArray);
+                usaurio.Foto.FotoBase64 = fotoDB;
             }
 
             BD.Update(usaurio);
 
             return BD.SaveChanges() > 0;
         }
-
-
-        public Image byteArrayToImage(byte[] byteArrayIn)
-        {
-            var ms = new MemoryStream(byteArrayIn);
-            var returnImage = Image.FromStream(ms);
-
-            return returnImage;
-        }
-
-        public byte[] ResizeImage(Image image, int width, int height)
-        {
-            var destRect = new Rectangle(0, 0, width, height);
-            var destImage = new Bitmap(width, height);
-
-            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
-
-            using (var graphics = Graphics.FromImage(destImage))
-            {
-                graphics.CompositingMode = CompositingMode.SourceCopy;
-                graphics.CompositingQuality = CompositingQuality.HighQuality;
-                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                graphics.SmoothingMode = SmoothingMode.HighQuality;
-                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-                using (var wrapMode = new ImageAttributes())
-                {
-                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
-                }
-            }
-
-            MemoryStream ms = new MemoryStream();
-            destImage.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);
-
-            return ms.ToArray();
-        }
-
 
         [HttpPost]
         public async Task<IActionResult> AlterarPerfilAsync([FromBody] ProfileModel profile)
@@ -249,7 +213,7 @@ namespace FIRSTShares.Controllers
                 var claims = (ClaimsIdentity)User.Identity;
                 var usuario = Usuario.RetornarUsuarioPorNomeUsuario(claims.Claims.Single(u => u.Type == "NomeUsuario").Value);
 
-                var foto = Convert.ToBase64String(usuario.Foto.FotoBase64);
+                var foto = usuario.Foto.FotoBase64;
                 ViewData["foto"] = foto;
                 ViewData["temNotificacao"] = usuario.NotificacoesRecebidas.Where(n => !n.Excluido).ToList().Count > 0;
             }

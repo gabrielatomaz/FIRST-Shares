@@ -11,7 +11,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="card-title">
-                        <img src="data:image;base64,@Convert.ToBase64String(@foto)" class="img-fluid img-thumbnail mr-3 mt-1" align="left" width="80" />
+                        <img src="@foto" class="img-fluid img-thumbnail mr-3 mt-1" align="left" width="80" />
                         <span class="badge badge-secondary p-2 mt-2">
                             <a asp-area="" asp-controller="Profile" asp-action="UserProfile" asp-route-idUsuario="@comentario.Usuario.ID" style="color: white;">@comentario.Usuario.Nome</a>
                         </span>

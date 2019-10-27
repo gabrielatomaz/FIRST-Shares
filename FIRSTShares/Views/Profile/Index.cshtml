@@ -8,7 +8,7 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-4 text-center">
-            <img src="data:image;base64,@Convert.ToBase64String(Model.Item1.Foto.FotoBase64)" class="img-fluid img-thumbnail" width="300" />
+            <img src="@Model.Item1.Foto.FotoBase64" class="img-fluid img-thumbnail" width="300" />
             <a asp-area="" asp-controller="Profile" asp-action="ExcluirPerfilAsync" asp-route-id="@Model.Item1.ID" onclick="return confirm('Você certeza que deseja excluir sua conta?')" class="btn btn-danger mt-3"><i class="fas fa-user-times mr-2"></i> Excluir perfil</a>
         </div>
         <div class="col-8">

@@ -81,7 +81,7 @@ namespace FIRSTShares.Controllers
                 var claims = (ClaimsIdentity)User.Identity;
                 var usuario = Usuario.RetornarUsuarioPorNomeUsuario(claims.Claims.Single(u => u.Type == "NomeUsuario").Value);
 
-                var foto = Convert.ToBase64String(usuario.Foto.FotoBase64);
+                var foto = usuario.Foto.FotoBase64;
                 ViewData["foto"] = foto;
                 ViewData["temNotificacao"] = usuario.NotificacoesRecebidas.Where(n => !n.Excluido).ToList().Count > 0;
             }

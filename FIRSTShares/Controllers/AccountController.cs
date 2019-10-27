@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using FIRSTShares.Client;
 using FIRSTShares.Data;
 using FIRSTShares.Entities;
 using FIRSTShares.Models;
@@ -69,7 +66,6 @@ namespace FIRSTShares.Controllers
             }
 
             var fotoBytes = AdicionarUsuarioFoto(foto);
-            // fotoBytes = ResizeImage(byteArrayToImage(fotoBytes), 400, 400);
 
             var usuarioDb = new Usuario
             {
@@ -81,7 +77,7 @@ namespace FIRSTShares.Controllers
                 DataCriacao = DateTime.Now,
                 Cargo = BD.Cargos.ToList().Find(cargo => cargo.Tipo == CargoTipo.Usuario),
                 NomeUsuario = usuario.NomeUsuario,
-                Foto = new Foto { FotoBase64 = (fotoBytes == null) ? (BD.Fotos.SingleOrDefault(ft => ft.ID == 2)).FotoBase64 : fotoBytes }
+                Foto = new Foto { FotoBase64 = (fotoBytes == null) ? "https://i.imgur.com/dnwLw6q.png" : fotoBytes }
             };
 
             SalvarUsuario(usuarioDb);
@@ -104,15 +100,7 @@ namespace FIRSTShares.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public Image byteArrayToImage(byte[] byteArrayIn)
-        {
-            var ms = new MemoryStream(byteArrayIn);
-            var returnImage = Image.FromStream(ms);
-
-            return returnImage;
-        }
-
-        public byte[] AdicionarUsuarioFoto(IFormFile foto)
+        public string AdicionarUsuarioFoto(IFormFile foto)
         {
             if(foto == null)
                 return null;
@@ -120,36 +108,12 @@ namespace FIRSTShares.Controllers
             using (var ms = new MemoryStream())
             {
                 foto.CopyTo(ms);
-                return ms.ToArray();
-            }
-        }
 
-        public byte[] ResizeImage(Image image, int width, int height)
-        {
-            var destRect = new Rectangle(0, 0, width, height);
-            using(var destImage = new Bitmap(width, height)){
+                var fotoArray = Convert.ToBase64String(ms.ToArray());
+                var imgur = new ImgurClient();
+                var fotoDB = imgur.Upload(fotoArray);
 
-                destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
-
-                using (var graphics = Graphics.FromImage(destImage))
-                {
-                    graphics.CompositingMode = CompositingMode.SourceCopy;
-                    graphics.CompositingQuality = CompositingQuality.HighQuality;
-                    graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                    graphics.SmoothingMode = SmoothingMode.HighQuality;
-                    graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-                    using (var wrapMode = new ImageAttributes())
-                    {
-                        wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                        graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
-                    }
-                }
-
-                var ms = new MemoryStream();
-                destImage.Save(ms, System.Drawing.Imaging.ImageFormat.Gif);
-
-                return ms.ToArray();
+                return fotoDB;
             }
         }
 

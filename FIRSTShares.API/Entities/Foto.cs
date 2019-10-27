@@ -9,7 +9,7 @@ namespace FIRSTShares.API.Entities
     {
         public Foto() { }
         public int ID { get; set; }
-        public byte[] FotoBase64 { get; set; }
+        public string FotoBase64 { get; set; }
         public virtual List<Usuario> Usuarios { get; set; }
     }
 }
